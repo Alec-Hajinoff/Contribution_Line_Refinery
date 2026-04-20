@@ -1,0 +1,24 @@
+import React from "react";
+import "./RegisteredPage.css";
+import UserLogin from "./UserLogin.js";
+
+function RegisteredPage() {
+  return (
+    <div className="container text-center">
+      <div className="row">
+        <div className="col-12 col-md-9">
+          <p>
+            Thank you for verifying your email address! Please log in using your
+            credentials.
+          </p>
+        </div>
+        <div className="col-12 col-md-3">
+          <p className="footer">Registered user login:</p>
+          <UserLogin />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default RegisteredPage;

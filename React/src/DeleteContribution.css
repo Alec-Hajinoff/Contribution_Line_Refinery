@@ -1,0 +1,52 @@
+.btn-outline-danger {
+  color: #dc3545;
+  border-color: #dc3545;
+  background-color: transparent;
+  transition: all 0.2s ease;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-outline-danger:hover {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.delete-confirm {
+  background-color: #fff;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.delete-confirm .btn-danger {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.delete-confirm .btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
+.delete-confirm .btn-link {
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.delete-confirm .btn-link:hover {
+  text-decoration: underline;
+}
+
+.delete-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 0.25rem 0.75rem;
+}
+
+.delete-error .text-danger {
+  color: #721c24 !important;
+}
