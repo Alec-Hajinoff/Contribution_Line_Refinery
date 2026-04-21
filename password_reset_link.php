@@ -99,7 +99,8 @@ try {
 
         error_log('password_reset_link.php: Generated token: ' . $resetToken . ' for user ID: ' . $user['id']);
 
-        $updateSql = 'UPDATE users SET password_reset_token = :token, reset_token_expires_at = :expires_at WHERE id = :id';
+        $updateSql = 'UPDATE users SET password_reset_token = :token, password_token_expires_at = :expires_at WHERE id = :id';
+
         $updateStmt = $conn->prepare($updateSql);
         $updateStmt->bindParam(':token', $resetToken);
         $updateStmt->bindParam(':expires_at', $expiresAt);

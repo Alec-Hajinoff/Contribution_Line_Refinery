@@ -3,7 +3,7 @@
 export const registerUser = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line/form_capture.php",
+      "http://localhost:8001/Contribution_Line_Refinery/form_capture.php",
       {
         method: "POST",
         headers: {
@@ -25,7 +25,7 @@ export const registerUser = async (formData) => {
 export const loginUser = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line/login_capture.php",
+      "http://localhost:8001/Contribution_Line_Refinery/login_capture.php",
       {
         method: "POST",
         headers: {
@@ -196,7 +196,7 @@ export const verifyEmail = async (token) => {
 export const passwordResetLink = async (email) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line/password_reset_link.php",
+      "http://localhost:8001/Contribution_Line_Refinery/password_reset_link.php",
       {
         method: "POST",
         headers: {

@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $servername = '127.0.0.1';
 $username = 'root';
 $passwordServer = '';
-$dbname = 'contribution_line';
+$dbname = 'contribution_line_refinery';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
@@ -106,8 +106,9 @@ try {
 
     $verificationToken = bin2hex(random_bytes(32));
 
-    $sql = 'INSERT INTO users (email, password, name, verification_token, expires_at, is_verified) 
-            VALUES (:email, :password, :name, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 0)';
+    $sql = 'INSERT INTO users (email, password, name, verification_token, verification_token_expires_at, is_verified)
+        VALUES (:email, :password, :name, :token, DATE_ADD(NOW(), INTERVAL 24 HOUR), 0)';
+
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bindParam(':email', $email);
