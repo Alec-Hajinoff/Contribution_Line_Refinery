@@ -215,7 +215,7 @@ function PasswordReset() {
           {successMessage && (
             <div
               id="success-message"
-              className="error success-message"
+              className="error success-message text-center"
               aria-live="polite"
             >
               {successMessage}
