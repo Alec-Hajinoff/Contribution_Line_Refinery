@@ -88,6 +88,13 @@
   margin: 0;
 }
 
+.development-paragraph {
+  color: #1b3e73;
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
 @media (max-width: 768px) {
   .intro-section {
     padding: 30px 20px;
