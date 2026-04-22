@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./UserDashboard.css";
 import LogoutComponent from "./LogoutComponent";
-import AddContribution from "./AddContribution";
-import ContributionsTimeline from "./ContributionsTimeline";
 
 function UserDashboard() {
   const [refreshTrigger, setRefreshTrigger] = useState(0);
@@ -17,15 +15,7 @@ function UserDashboard() {
         <LogoutComponent />
       </div>
 
-      <div className="row mt-4 align-items-start">
-        <div className="col-md-4">
-          <AddContribution onContributionAdded={handleContributionAdded} />
-        </div>
-
-        <div className="col-md-8">
-          <ContributionsTimeline key={refreshTrigger} />
-        </div>
-      </div>
+      <div className="row mt-4 align-items-start"></div>
     </div>
   );
 }
