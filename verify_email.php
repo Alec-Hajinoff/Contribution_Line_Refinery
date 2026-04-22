@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $servername = '127.0.0.1';
 $username = 'root';
 $passwordServer = '';
-$dbname = 'contribution_line';
+$dbname = 'contribution_line_refinery';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
@@ -54,14 +54,14 @@ try {
     $conn->beginTransaction();
 
     $checkSql = 'SELECT id, email, is_verified FROM users 
-                 WHERE verification_token = :token AND expires_at > NOW() 
+                 WHERE verification_token = :token AND verification_token_expires_at > NOW() 
                  LIMIT 1';
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bindParam(':token', $token);
     $checkStmt->execute();
 
     if ($checkStmt->rowCount() === 0) {
-        $expiredSql = 'SELECT id FROM users WHERE verification_token = :token AND expires_at <= NOW() LIMIT 1';
+        $expiredSql = 'SELECT id FROM users WHERE verification_token = :token AND verification_token_expires_at <= NOW() LIMIT 1';
         $expiredStmt = $conn->prepare($expiredSql);
         $expiredStmt->bindParam(':token', $token);
         $expiredStmt->execute();
@@ -86,7 +86,7 @@ try {
     $updateSql = 'UPDATE users 
                   SET is_verified = 1, 
                       verification_token = NULL, 
-                      expires_at = NULL 
+                      verification_token_expires_at = NULL 
                   WHERE id = :id';
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->bindParam(':id', $user['id']);

@@ -47,7 +47,7 @@ export const loginUser = async (formData) => {
 export const logoutUser = async () => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line/logout_component.php",
+      "http://localhost:8001/Contribution_Line_Refinery/logout_component.php",
       {
         method: "POST",
         credentials: "include",
@@ -172,7 +172,7 @@ export const presentationViewGet = async (id) => {
 export const verifyEmail = async (token) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line/verify_email.php",
+      "http://localhost:8001/Contribution_Line_Refinery/verify_email.php",
       {
         method: "POST",
         headers: {
