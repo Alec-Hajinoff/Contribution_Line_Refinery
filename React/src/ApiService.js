@@ -221,7 +221,7 @@ export const passwordResetLink = async (email) => {
 export const passwordResetToken = async (token) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line/password_reset_token.php",
+      "http://localhost:8001/Contribution_Line_Refinery/password_reset_token.php",
       {
         method: "POST",
         headers: {
@@ -248,7 +248,7 @@ export const passwordResetToken = async (token) => {
 export const updatePassword = async (token, newPassword) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line/update_password.php",
+      "http://localhost:8001/Contribution_Line_Refinery/update_password.php",
       {
         method: "POST",
         headers: {

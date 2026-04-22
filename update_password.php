@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $servername = '127.0.0.1';
 $username = 'root';
 $passwordServer = '';
-$dbname = 'contribution_line';
+$dbname = 'contribution_line_refinery';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
@@ -63,7 +63,7 @@ try {
 
     $verifySql = 'SELECT id FROM users 
                   WHERE password_reset_token = :token 
-                  AND reset_token_expires_at > NOW() 
+                  AND password_token_expires_at > NOW() 
                   LIMIT 1';
 
     $verifyStmt = $conn->prepare($verifySql);
@@ -85,7 +85,7 @@ try {
     $updateSql = 'UPDATE users 
                   SET password = :password, 
                       password_reset_token = NULL, 
-                      reset_token_expires_at = NULL 
+                      password_token_expires_at = NULL 
                   WHERE id = :id';
 
     $updateStmt = $conn->prepare($updateSql);
