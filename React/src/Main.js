@@ -5,14 +5,39 @@ function Main() {
   return (
     <div className="main-container">
       <div className="intro-section">
-        <p className="development-paragraph">
-          Contribution Line is a platform designed to transform fragmented raw
-          data into structured and commercially usable data products. By
-          aggregating data from multiple suppliers, applying automated and human
-          validation to ensure quality and provenance, and delivering it
-          seamlessly via API or download, the platform enables organisations to
-          integrate real-world data into their systems.
+        <h1 className="intro-headline">
+          Making external data reliable and ready to use
+        </h1>
+        <p className="intro-text">
+          Contribution Line is an early-stage platform focused on turning
+          fragmented, real-world data into structured, usable data products.
         </p>
+        <p className="intro-text">
+          We work with data suppliers to collect raw datasets, apply validation
+          checks to improve quality and consistency, and make the data easier to
+          integrate into business workflows via API or simple downloads.
+        </p>
+      </div>
+
+      <div className="status-section">
+        <h2 className="section-title">Status</h2>
+        <p className="status-intro">
+          We are currently in development and speaking with organisations
+          interested in:
+        </p>
+        <ul className="status-list">
+          <li>accessing more reliable external data</li>
+          <li>contributing datasets as suppliers</li>
+          <li>exploring early-stage use cases</li>
+        </ul>
+        <p className="status-closing">
+          If this is relevant to you, we would be glad to connect.
+        </p>
+      </div>
+
+      <div className="contact-section">
+        <h2 className="section-title">Contact</h2>
+        <p className="contact-email">team@contributionline.com</p>
       </div>
     </div>
   );
