@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import blue from "./ContributionLineLogoColoured.png";
+import blue from "./ContributionLineLogo.png";
 import "./Header.css";
 
 function Header() {
