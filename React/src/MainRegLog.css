@@ -23,15 +23,6 @@ body {
   border-left: 3px solid #ff8c42;
 }
 
-#logo {
-  height: 150px;
-  transition: transform 0.3s ease;
-}
-
-#logo:hover {
-  transform: scale(1.02);
-}
-
 .container {
   max-width: 1200px;
 }

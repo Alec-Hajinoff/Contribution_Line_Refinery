@@ -16,10 +16,6 @@ body {
   border-radius: 7px;
 }
 
-#logo {
-  height: 150px;
-}
-
 .step-label,
 .table-label {
   font-size: 1.1em;
