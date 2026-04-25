@@ -18,9 +18,6 @@ function Header() {
           </Link>
         </div>
       </div>
-      <div className="row-auto">
-        <br />
-      </div>
     </div>
   );
 }
