@@ -25,7 +25,13 @@ body {
   font-weight: 500;
   border-radius: 8px;
   padding: 12px 32px;
-  transition: all 0.3s ease;
+  transition: none;
   border: 1px solid #e8dfd6;
   cursor: pointer;
+}
+
+.btn-secondary:hover {
+  background-color: #e8dfd6;
+  border-color: #e8dfd6;
+  color: #1b3e73;
 }
