@@ -15,7 +15,7 @@ function Main() {
         <p className="intro-text">
           We work with data suppliers to collect raw datasets, apply validation
           checks to improve quality and consistency, and make the data easier to
-          integrate into business workflows via API or simple downloads.
+          integrate into business workflows via API or downloads.
         </p>
       </div>
 
