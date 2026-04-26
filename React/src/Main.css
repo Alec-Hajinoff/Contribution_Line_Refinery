@@ -59,8 +59,8 @@
   color: #1b3e73;
   font-size: 18px;
   line-height: 1.6;
-  margin: 16px 0 20px 0;
-  padding-left: 24px;
+  padding-left: 0;
+  list-style-position: inside;
 }
 
 .status-list li {
