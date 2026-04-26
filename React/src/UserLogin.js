@@ -119,80 +119,82 @@ function UserLogin() {
   };
 
   return (
-    <form className="row g-2" onSubmit={handleSubmit} noValidate>
-      {" "}
-      {/* noValidate disables browser validation */}
-      <div className="form-group">
-        <input
-          autoComplete="off"
-          type="email"
-          pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
-          className="form-control"
-          id="yourEmailLogin"
-          name="email"
-          required
-          placeholder="Email address"
-          value={formData.email}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="form-group">
-        <input
-          autoComplete="off"
-          type="password"
-          className="form-control"
-          id="yourPasswordLogin"
-          name="password"
-          required
-          minLength="8"
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-        />
-      </div>
-      {unverifiedMessage && (
-        <div id="unverified-message" className="error" aria-live="polite">
-          {unverifiedMessage}
+    <div className="user-login-wrapper">
+      <form className="row g-2" onSubmit={handleSubmit} noValidate>
+        {" "}
+        {/* noValidate disables browser validation */}
+        <div className="form-group">
+          <input
+            autoComplete="off"
+            type="email"
+            pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+            className="form-control"
+            id="yourEmailLogin"
+            name="email"
+            required
+            placeholder="Email address"
+            value={formData.email}
+            onChange={handleChange}
+          />
         </div>
-      )}
-      <div id="error-message-one" className="error" aria-live="polite">
-        {errorMessage}
-      </div>
-      {resetMessage && (
-        <div id="reset-message" className="reset-message" aria-live="polite">
-          {resetMessage}
+        <div className="form-group">
+          <input
+            autoComplete="off"
+            type="password"
+            className="form-control"
+            id="yourPasswordLogin"
+            name="password"
+            required
+            minLength="8"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+          />
         </div>
-      )}
-      <button type="submit" className="btn btn-secondary" id="loginBtn">
-        Login
-        <span
-          className="spinner-border spinner-border-sm"
-          role="status"
-          aria-hidden="true"
-          id="spinnerLogin"
-          style={{ display: loading ? "inline-block" : "none" }}
-        ></span>
-      </button>
-      <div className="forgot-password-link-container">
-        <button
-          type="button"
-          className="forgot-password-link"
-          onClick={handleForgotPassword}
-          disabled={resetLoading}
-        >
-          Forgot your password?
-          {resetLoading && (
-            <span
-              className="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-              id="spinnerReset"
-            ></span>
-          )}
+        {unverifiedMessage && (
+          <div id="unverified-message" className="error" aria-live="polite">
+            {unverifiedMessage}
+          </div>
+        )}
+        <div id="error-message-one" className="error" aria-live="polite">
+          {errorMessage}
+        </div>
+        {resetMessage && (
+          <div id="reset-message" className="reset-message" aria-live="polite">
+            {resetMessage}
+          </div>
+        )}
+        <button type="submit" className="btn btn-secondary" id="loginBtn">
+          Login
+          <span
+            className="spinner-border spinner-border-sm"
+            role="status"
+            aria-hidden="true"
+            id="spinnerLogin"
+            style={{ display: loading ? "inline-block" : "none" }}
+          ></span>
         </button>
-      </div>
-      <div id="liveAlertPlaceholder"></div>
-    </form>
+        <div className="forgot-password-link-container">
+          <button
+            type="button"
+            className="forgot-password-link"
+            onClick={handleForgotPassword}
+            disabled={resetLoading}
+          >
+            Forgot your password?
+            {resetLoading && (
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+                id="spinnerReset"
+              ></span>
+            )}
+          </button>
+        </div>
+        <div id="liveAlertPlaceholder"></div>
+      </form>
+    </div>
   );
 }
 
