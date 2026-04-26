@@ -38,3 +38,19 @@ body {
     font-size: 14px;
   }
 }
+
+.row {
+  align-items: flex-start;
+}
+
+.col-12.col-md-9,
+.col-12.col-md-3 {
+  padding-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .col-12.col-md-9,
+  .col-12.col-md-3 {
+    padding-top: 0;
+  }
+}
