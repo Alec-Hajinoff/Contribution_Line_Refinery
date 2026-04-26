@@ -17,25 +17,15 @@ body {
 }
 
 .btn-secondary {
-  background-color: #f0ede8;
-  border-color: #f0ede8;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
   color: #1b3e73;
+  background-color: #e8dfd6;
+  border-color: #e8dfd6;
   font-weight: 500;
   border-radius: 8px;
   padding: 12px 32px;
-  font-size: 14px;
   transition: all 0.3s ease;
-  border: 1px solid #f0ede8;
+  border: 1px solid #e8dfd6;
   cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background-color: #e8dfd6;
-  border-color: #e8dfd6;
-  color: #1b3e73;
-}
-
-.btn-secondary:active {
-  background-color: #dfd6cd;
-  border-color: #dfd6cd;
 }
