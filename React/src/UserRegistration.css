@@ -31,3 +31,11 @@ body {
   font-size: 18px;
   box-shadow: none;
 }
+
+.error,
+#error-message,
+#success-message {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  color: #1b3e73;
+}
