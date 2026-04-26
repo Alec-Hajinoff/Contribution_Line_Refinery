@@ -30,7 +30,7 @@ function Main() {
           <li>contributing datasets as suppliers</li>
         </ul>
         <p className="status-closing">
-          If this is relevant to you, please email us we would be glad to
+          If this is relevant to you, please email us - we would be glad to
           connect.
         </p>
       </div>
