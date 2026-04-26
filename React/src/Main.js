@@ -28,16 +28,11 @@ function Main() {
         <ul className="status-list">
           <li>accessing more reliable external data</li>
           <li>contributing datasets as suppliers</li>
-          <li>exploring early-stage use cases</li>
         </ul>
         <p className="status-closing">
-          If this is relevant to you, we would be glad to connect.
+          If this is relevant to you, please email us we would be glad to
+          connect.
         </p>
-      </div>
-
-      <div className="contact-section">
-        <h2 className="section-title">Contact</h2>
-        <p className="contact-email">team@contributionline.com</p>
       </div>
     </div>
   );
