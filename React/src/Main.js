@@ -5,9 +5,9 @@ function Main() {
   return (
     <div className="main-container">
       <div className="intro-section">
-        <h1 className="intro-headline">
+        <h2 className="intro-headline">
           Making external data reliable and ready to use
-        </h1>
+        </h2>
         <p className="intro-text">
           Contribution Line is an early-stage platform focused on turning
           fragmented, real-world data into structured, usable data products.
