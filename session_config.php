@@ -9,7 +9,7 @@ if (session_status() === PHP_SESSION_NONE) {
         'samesite' => 'Strict'
     ]);
 
-    session_name('climate_session');
+    session_name('hertford_standard');
     session_start();
 }
 

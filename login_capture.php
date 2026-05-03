@@ -33,7 +33,7 @@ if (isset($input['email'], $input['password'])) {
     }
     $password = $input['password'];
     try {
-        $pdo = new PDO('mysql:host=localhost;dbname=contribution_line_refinery', 'root', '', [
+        $pdo = new PDO('mysql:host=localhost;dbname=hertford_standard', 'root', '', [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false

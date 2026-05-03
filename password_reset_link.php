@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 $servername = '127.0.0.1';
 $username = 'root';
 $passwordServer = '';
-$dbname = 'contribution_line_refinery';
+$dbname = 'hertford_standard';
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
