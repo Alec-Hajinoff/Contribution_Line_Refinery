@@ -3,7 +3,7 @@
 export const registerUser = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line_Refinery/form_capture.php",
+      "http://localhost:8001/Hertford_Standard/form_capture.php",
       {
         method: "POST",
         headers: {
@@ -25,7 +25,7 @@ export const registerUser = async (formData) => {
 export const loginUser = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line_Refinery/login_capture.php",
+      "http://localhost:8001/Hertford_Standard/login_capture.php",
       {
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ export const loginUser = async (formData) => {
 export const logoutUser = async () => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line_Refinery/logout_component.php",
+      "http://localhost:8001/Hertford_Standard/logout_component.php",
       {
         method: "POST",
         credentials: "include",
@@ -68,7 +68,7 @@ export const logoutUser = async () => {
 export const verifyEmail = async (token) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line_Refinery/verify_email.php",
+      "http://localhost:8001/Hertford_Standard/verify_email.php",
       {
         method: "POST",
         headers: {
@@ -92,7 +92,7 @@ export const verifyEmail = async (token) => {
 export const passwordResetLink = async (email) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line_Refinery/password_reset_link.php",
+      "http://localhost:8001/Hertford_Standard/password_reset_link.php",
       {
         method: "POST",
         headers: {
@@ -117,7 +117,7 @@ export const passwordResetLink = async (email) => {
 export const passwordResetToken = async (token) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line_Refinery/password_reset_token.php",
+      "http://localhost:8001/Hertford_Standard/password_reset_token.php",
       {
         method: "POST",
         headers: {
@@ -144,7 +144,7 @@ export const passwordResetToken = async (token) => {
 export const updatePassword = async (token, newPassword) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Contribution_Line_Refinery/update_password.php",
+      "http://localhost:8001/Hertford_Standard/update_password.php",
       {
         method: "POST",
         headers: {
