@@ -9,7 +9,9 @@ function UserDashboard() {
         <LogoutComponent />
       </div>
 
-      <div className="row mt-4 align-items-start"></div>
+      <div className="admin-header">
+        <p>Welcome, User. Submit and manage your projects here.</p>
+      </div>
     </div>
   );
 }
