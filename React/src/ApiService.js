@@ -168,3 +168,23 @@ export const updatePassword = async (token, newPassword) => {
     };
   }
 };
+
+// checkSession() makes the backend call to check if a session exists.
+
+export const checkSession = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Hertford_Standard/check_session.php",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error checking session:", error);
+    return { authenticated: false };
+  }
+};
