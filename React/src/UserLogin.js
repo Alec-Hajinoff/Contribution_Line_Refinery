@@ -70,7 +70,15 @@ function UserLogin() {
     try {
       const data = await loginUser(formData);
       if (data.status === "success") {
-        navigate("/UserDashboard");
+        if (
+          data.is_admin === true ||
+          data.is_admin === 1 ||
+          data.is_admin === "1"
+        ) {
+          navigate("/AdminDashboard");
+        } else {
+          navigate("/UserDashboard");
+        }
       } else if (data.status === "unverified") {
         setUnverifiedMessage(data.message);
         clearUnverifiedMessageAfterDelay();

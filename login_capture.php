@@ -60,7 +60,8 @@ if (isset($input['email'], $input['password'])) {
 
             $response = [
                 'status' => 'success',
-                'message' => 'Login successful'
+                'message' => 'Login successful',
+                'is_admin' => (bool) $user['is_admin']
             ];
 
             $pdo->commit();
