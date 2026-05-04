@@ -14,16 +14,22 @@ export default function AppRoutes() {
     <Routes>
       <Route path="/" element={<MainRegLog />} />
       <Route path="/RegisteredPage" element={<RegisteredPage />} />
-
       <Route path="/LogoutComponent" element={<LogoutComponent />} />
       <Route path="/VerifyEmail" element={<VerifyEmail />} />
       <Route path="/PasswordReset" element={<PasswordReset />} />
-      <Route path="/AdminDashboard" element={<AdminDashboard />} />
       <Route
         path="/UserDashboard"
         element={
           <ProtectedRoute>
             <UserDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/AdminDashboard"
+        element={
+          <ProtectedRoute>
+            <AdminDashboard />
           </ProtectedRoute>
         }
       />
