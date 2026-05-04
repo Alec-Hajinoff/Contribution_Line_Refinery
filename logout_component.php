@@ -47,4 +47,3 @@ try {
         'message' => 'Error during logout: ' . $e->getMessage()
     ));
 }
-?>
