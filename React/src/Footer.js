@@ -11,8 +11,8 @@ function Footer() {
           <em>
             &copy; Copyright 2025 - {currentYear}. Company address: 4 Bridge
             Gate, London, N21 2AH, United Kingdom. Email address:<span> </span>
-            <a href="mailto:team@contributionline.com">
-              team@contributionline.com
+            <a href="mailto:alec@hertfordstandard.com">
+              alec@hertfordstandard.com
             </a>
           </em>
         </p>
@@ -22,4 +22,3 @@ function Footer() {
 }
 
 export default Footer;
-
