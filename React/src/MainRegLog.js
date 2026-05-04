@@ -12,9 +12,9 @@ function MainRegLog() {
           <Main />
         </div>
         <div className="col-12 col-md-3">
-          <p className="footer">New user? Please register:</p>
+          <p className="section-divider">New user? Please register:</p>
           <UserRegistration />
-          <p className="footer">Existing user? Please login:</p>
+          <p className="section-divider">Existing user? Please login:</p>
           <UserLogin />
         </div>
       </div>
@@ -23,4 +23,3 @@ function MainRegLog() {
 }
 
 export default MainRegLog;
-

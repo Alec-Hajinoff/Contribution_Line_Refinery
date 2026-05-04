@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import "./UserLogin.css";
 import "./PasswordReset.css";
 import { passwordResetToken, updatePassword } from "./ApiService";
 

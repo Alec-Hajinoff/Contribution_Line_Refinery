@@ -13,7 +13,7 @@ function RegisteredPage() {
           </p>
         </div>
         <div className="col-12 col-md-3">
-          <p className="footer">Registered user login:</p>
+          <p className="registered-section-divider">Registered user login:</p>
           <UserLogin />
         </div>
       </div>

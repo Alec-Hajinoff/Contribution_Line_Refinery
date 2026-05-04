@@ -1,6 +1,5 @@
 .main-container {
   padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 .intro-section {
@@ -11,19 +10,7 @@
   border-radius: 0;
 }
 
-.intro-headline {
-  color: #1b3e73;
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 20px;
-  margin-top: 0;
-  letter-spacing: 0.3px;
-  line-height: 1.4;
-}
-
 .intro-text {
-  color: #1b3e73;
-  font-size: 18px;
   line-height: 1.6;
   margin-bottom: 16px;
   margin-top: 0;
@@ -31,122 +18,4 @@
 
 .intro-text:last-of-type {
   margin-bottom: 0;
-}
-
-.status-section {
-  margin-top: 48px;
-  margin-bottom: 48px;
-}
-
-.section-title {
-  color: #1b3e73;
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-  margin-top: 0;
-  letter-spacing: 0.3px;
-}
-
-.status-intro {
-  color: #1b3e73;
-  font-size: 18px;
-  line-height: 1.6;
-  margin-bottom: 16px;
-  margin-top: 0;
-}
-
-.status-list {
-  color: #1b3e73;
-  font-size: 18px;
-  line-height: 1.6;
-  padding-left: 0;
-  list-style-position: inside;
-}
-
-.status-list li {
-  margin-bottom: 8px;
-}
-
-.status-closing {
-  color: #1b3e73;
-  font-size: 18px;
-  line-height: 1.6;
-  margin-top: 20px;
-  margin-bottom: 0;
-}
-
-.contact-section {
-  margin-top: 48px;
-  margin-bottom: 20px;
-}
-
-.contact-email {
-  color: #1b3e73;
-  font-size: 18px;
-  line-height: 1.6;
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .intro-section {
-    padding: 30px 20px;
-    margin-bottom: 40px;
-  }
-
-  .intro-headline {
-    font-size: 24px;
-    margin-bottom: 16px;
-  }
-
-  .intro-text {
-    font-size: 16px;
-    margin-bottom: 14px;
-  }
-
-  .section-title {
-    font-size: 20px;
-    margin-bottom: 16px;
-  }
-
-  .status-intro,
-  .status-list,
-  .status-list li,
-  .status-closing,
-  .contact-email {
-    font-size: 16px;
-  }
-
-  .status-list {
-    padding-left: 20px;
-  }
-}
-
-@media (max-width: 576px) {
-  .intro-section {
-    padding: 24px 16px;
-  }
-
-  .intro-headline {
-    font-size: 20px;
-  }
-
-  .intro-text {
-    font-size: 15px;
-  }
-
-  .section-title {
-    font-size: 18px;
-  }
-
-  .status-intro,
-  .status-list,
-  .status-list li,
-  .status-closing,
-  .contact-email {
-    font-size: 15px;
-  }
-
-  .status-list {
-    padding-left: 18px;
-  }
 }

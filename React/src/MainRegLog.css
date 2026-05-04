@@ -1,19 +1,4 @@
-input:valid {
-  background-color: ivory;
-  border: none;
-  outline: 2px solid #1b3e73;
-  border-radius: 5px;
-  accent-color: #ff8c42;
-}
-
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #333;
-  background-color: #fff;
-}
-
-.footer {
+.section-divider {
   background-color: #f0ede8;
   border-radius: 7px;
   padding: 15px;
@@ -23,34 +8,10 @@ body {
   border-left: 3px solid #ff8c42;
 }
 
-.container {
-  max-width: 1200px;
-}
-
 @media (max-width: 768px) {
-  .container {
-    padding: 0 15px;
-  }
-
-  .footer {
+  .section-divider {
     margin-top: 15px;
     padding: 12px;
     font-size: 14px;
-  }
-}
-
-.row {
-  align-items: flex-start;
-}
-
-.col-12.col-md-9,
-.col-12.col-md-3 {
-  padding-top: 30px;
-}
-
-@media (max-width: 768px) {
-  .col-12.col-md-9,
-  .col-12.col-md-3 {
-    padding-top: 0;
   }
 }
