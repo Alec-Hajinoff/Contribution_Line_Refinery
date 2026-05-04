@@ -1,7 +1,5 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+require_once 'session_config.php'; // <-- use the same session setup
 
 $allowed_origins = [
     "http://localhost:3000"
@@ -26,24 +24,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 }
 
 try {
-    $_SESSION = array();
+    // Clear session array
+    $_SESSION = [];
 
-    if (isset($_COOKIE[session_name()])) {
-        setcookie(session_name(), '', time() - 3600, '/');
+    // Delete the session cookie using the SAME params it was created with
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(
+            session_name(),
+            '',
+            time() - 42000,
+            $params['path'],
+            $params['domain'],
+            $params['secure'],
+            $params['httponly']
+        );
     }
 
+    // Destroy the session
     session_destroy();
 
     http_response_code(200);
-    echo json_encode(array(
+    echo json_encode([
         'ok' => true,
         'message' => 'Successfully logged out'
-    ));
+    ]);
 } catch (Exception $e) {
-
     http_response_code(500);
-    echo json_encode(array(
+    echo json_encode([
         'ok' => false,
         'message' => 'Error during logout: ' . $e->getMessage()
-    ));
+    ]);
 }
