@@ -1,8 +1,8 @@
 <?php
-require_once 'session_config.php'; // <-- use the same session setup
+require_once 'session_config.php';
 
 $allowed_origins = [
-    "http://localhost:3000"
+    'http://localhost:3000'
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
@@ -10,25 +10,23 @@ $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
 } else {
-    header("HTTP/1.1 403 Forbidden");
+    header('HTTP/1.1 403 Forbidden');
     exit;
 }
 
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Content-Type: application/json');
 header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With');
-header("Access-Control-Allow-Credentials: true");
+header('Access-Control-Allow-Credentials: true');
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    exit; 
+    exit;
 }
 
 try {
-    // Clear session array
     $_SESSION = [];
 
-    // Delete the session cookie using the SAME params it was created with
-    if (ini_get("session.use_cookies")) {
+    if (ini_get('session.use_cookies')) {
         $params = session_get_cookie_params();
         setcookie(
             session_name(),
@@ -41,7 +39,6 @@ try {
         );
     }
 
-    // Destroy the session
     session_destroy();
 
     http_response_code(200);
