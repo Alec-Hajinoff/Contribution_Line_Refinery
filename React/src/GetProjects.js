@@ -1,4 +1,3 @@
-// GetProjects.js
 import React, { useState, useEffect } from "react";
 import { getProjects } from "./ApiService";
 import "./GetProjects.css";
@@ -52,7 +51,10 @@ const GetProjects = ({ refreshTrigger }) => {
     return (
       <div className="get-projects-container">
         <div className="text-center py-4">
-          <div className="spinner-border spinner-border-sm text-primary me-2" role="status">
+          <div
+            className="spinner-border spinner-border-sm text-primary me-2"
+            role="status"
+          >
             <span className="visually-hidden">Loading...</span>
           </div>
           <span className="text-muted">Loading your projects...</span>
@@ -64,7 +66,10 @@ const GetProjects = ({ refreshTrigger }) => {
   if (error) {
     return (
       <div className="get-projects-container">
-        <div className="alert alert-danger alert-dismissible fade show" role="alert">
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
           {error}
           <button
             type="button"
@@ -82,7 +87,10 @@ const GetProjects = ({ refreshTrigger }) => {
     return (
       <div className="get-projects-container">
         <div className="text-center py-5">
-          <i className="bi bi-folder2-open" style={{ fontSize: "3rem", color: "#ccc" }}></i>
+          <i
+            className="bi bi-folder2-open"
+            style={{ fontSize: "3rem", color: "#ccc" }}
+          ></i>
           <p className="text-muted mt-2 mb-0">Your projects will appear here</p>
         </div>
       </div>
@@ -107,8 +115,12 @@ const GetProjects = ({ refreshTrigger }) => {
                   <h5 className="project-title mb-0">{project.title}</h5>
                 </div>
                 <div className="d-flex gap-3 align-items-center">
-                  <span className={`project-status status-${project.status.toLowerCase()}`}>
-                    {project.status === "in_progress" ? "In progress" : "Completed"}
+                  <span
+                    className={`project-status status-${project.status.toLowerCase()}`}
+                  >
+                    {project.status === "in_progress"
+                      ? "In progress"
+                      : "Completed"}
                   </span>
                   <span className="project-date text-muted small">
                     {formatDate(project.created_at)}

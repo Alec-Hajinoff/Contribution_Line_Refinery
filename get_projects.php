@@ -1,7 +1,6 @@
 <?php
 require_once 'session_config.php';
 
-// Check if user is authenticated
 if (!isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo json_encode(['success' => false, 'message' => 'You must be logged in to view projects.']);
@@ -10,7 +9,6 @@ if (!isset($_SESSION['id'])) {
 
 $user_id = $_SESSION['id'];
 
-// CORS configuration
 $allowed_origins = [
     'http://localhost:3000'
 ];
@@ -33,14 +31,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-// Only accept GET requests
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     header('HTTP/1.1 405 Method Not Allowed');
     echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
     exit;
 }
 
-// Database connection
 $servername = '127.0.0.1';
 $username = 'root';
 $passwordServer = '';
@@ -57,22 +53,20 @@ try {
 }
 
 try {
-    // Fetch projects for the authenticated user, ordered by newest first
     $sql = 'SELECT id, title, description, status, created_at, updated_at 
             FROM projects 
             WHERE user_id = :user_id 
             ORDER BY created_at DESC';
-    
+
     $stmt = $conn->prepare($sql);
     $stmt->execute([':user_id' => $user_id]);
-    
+
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
+
     echo json_encode([
         'success' => true,
         'projects' => $projects
     ]);
-    
 } catch (PDOException $e) {
     error_log('Get projects error: ' . $e->getMessage());
     echo json_encode(['success' => false, 'message' => 'Failed to fetch projects. Please try again.']);
