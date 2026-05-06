@@ -60,8 +60,25 @@ try {
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([':user_id' => $user_id]);
-
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($projects as &$project) {
+        $attachmentSql = 'SELECT id, attachment_name, attachment_type, uploaded_at 
+                          FROM project_attachments 
+                          WHERE project_id = :project_id 
+                          ORDER BY uploaded_at ASC';
+
+        $attachmentStmt = $conn->prepare($attachmentSql);
+        $attachmentStmt->execute([':project_id' => $project['id']]);
+        $attachments = $attachmentStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($attachments as &$attachment) {
+            $attachment['view_url'] = 'http://localhost:8001/Hertford_Standard/view_attachment.php?id=' . $attachment['id'];
+            $attachment['download_url'] = 'http://localhost:8001/Hertford_Standard/download_attachment.php?id=' . $attachment['id'];
+        }
+
+        $project['attachments'] = $attachments;
+    }
 
     echo json_encode([
         'success' => true,

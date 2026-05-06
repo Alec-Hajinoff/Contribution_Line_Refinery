@@ -47,6 +47,15 @@ const GetProjects = ({ refreshTrigger }) => {
     });
   };
 
+  const formatDescription = (description) => {
+    return description.split("\n").map((line, index) => (
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
+
   if (loading) {
     return (
       <div className="get-projects-container">
@@ -130,9 +139,51 @@ const GetProjects = ({ refreshTrigger }) => {
             </div>
             {expandedProjectId === project.id && (
               <div className="project-body card-footer bg-white px-4 py-3">
-                <p className="text-muted mb-0 small">
-                  Click to expand - timeline coming soon
-                </p>
+                {/* Project Description */}
+                <div className="mb-3">
+                  <strong className="text-muted small">Description:</strong>
+                  <div className="project-description mt-1">
+                    {formatDescription(project.description)}
+                  </div>
+                </div>
+
+                {/* Attachments */}
+                <div>
+                  <strong className="text-muted small">Attachments:</strong>
+                  {project.attachments && project.attachments.length > 0 ? (
+                    <ul className="attachment-list mt-1 mb-0">
+                      {project.attachments.map((attachment) => (
+                        <li key={attachment.id} className="attachment-item">
+                          <i className="bi bi-paperclip me-1"></i>
+                          {attachment.attachment_name}
+                          <span className="attachment-links ms-2">
+                            <a
+                              href={attachment.view_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="btn btn-link btn-sm p-0 me-2"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              View
+                            </a>
+                            <a
+                              href={attachment.download_url}
+                              download
+                              className="btn btn-link btn-sm p-0"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              Download
+                            </a>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-muted small mt-1 mb-0">
+                      No attachments uploaded
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </div>
