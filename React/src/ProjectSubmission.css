@@ -47,45 +47,6 @@
   font-size: 0.875rem;
 }
 
-.selected-files .file-item {
-  padding: 0.25rem 0;
-  font-family: monospace;
-  font-size: 0.8125rem;
-  color: #495057;
-}
-
-.selected-files .file-item i {
-  color: #6c757d;
-}
-
-.alert {
-  border-radius: 8px;
-  font-size: 0.875rem;
-}
-
-@media (max-width: 768px) {
-  .project-submission-container {
-    margin: 1rem auto;
-  }
-
-  .project-submission-container .card-body {
-    padding: 1.25rem;
-  }
-
-  .project-submission-container .card-header h3 {
-    font-size: 1.25rem;
-  }
-}
-
-.btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.text-danger {
-  font-size: 1rem;
-}
-
 .file-item {
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.5rem;
@@ -97,6 +58,15 @@
 
 .file-item:hover {
   background-color: #e9ecef;
+}
+
+.selected-files .file-item i {
+  color: #6c757d;
+}
+
+.alert {
+  border-radius: 8px;
+  font-size: 0.875rem;
 }
 
 .btn-remove-file {
@@ -129,4 +99,27 @@
 .btn-remove-file:disabled:hover {
   background-color: transparent;
   color: #adb5bd;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.text-danger {
+  font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .project-submission-container {
+    margin: 1rem auto;
+  }
+
+  .project-submission-container .card-body {
+    padding: 1.25rem;
+  }
+
+  .project-submission-container .card-header h3 {
+    font-size: 1.25rem;
+  }
 }
