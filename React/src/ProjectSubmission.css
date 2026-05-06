@@ -85,3 +85,48 @@
 .text-danger {
   font-size: 1rem;
 }
+
+.file-item {
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.file-item:hover {
+  background-color: #e9ecef;
+}
+
+.btn-remove-file {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-remove-file:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-remove-file:disabled {
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+.btn-remove-file:disabled:hover {
+  background-color: transparent;
+  color: #adb5bd;
+}

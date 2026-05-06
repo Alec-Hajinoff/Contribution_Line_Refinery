@@ -14,7 +14,7 @@ const ProjectSubmission = () => {
   const [fileErrors, setFileErrors] = useState([]);
 
   const ALLOWED_FILE_TYPES = ["image/png", "image/jpeg", "application/pdf"];
-  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
   const MAX_FILES = 5;
 
   const handleInputChange = (e) => {
@@ -23,7 +23,6 @@ const ProjectSubmission = () => {
       ...prev,
       [name]: value,
     }));
-
     if (message.text) setMessage({ text: "", type: "" });
   };
 
@@ -37,25 +36,47 @@ const ProjectSubmission = () => {
     return null;
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const errors = [];
-    const validFiles = [];
+  const removeFile = (indexToRemove) => {
+    setFormData((prev) => ({
+      ...prev,
+      attachments: prev.attachments.filter(
+        (_, index) => index !== indexToRemove,
+      ),
+    }));
 
-    if (files.length > MAX_FILES) {
+    setMessage({
+      text: "File removed successfully.",
+      type: "success",
+    });
+
+    setTimeout(() => {
+      setMessage((prev) =>
+        prev.type === "success" ? { text: "", type: "" } : prev,
+      );
+    }, 2000);
+  };
+
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    const errors = [];
+    const validNewFiles = [];
+
+    const currentFileCount = formData.attachments.length;
+    if (currentFileCount + newFiles.length > MAX_FILES) {
       setMessage({
-        text: `You can only upload up to ${MAX_FILES} files per submission.`,
+        text: `You can only upload up to ${MAX_FILES} files total. You currently have ${currentFileCount} file(s) selected.`,
         type: "error",
       });
+      e.target.value = "";
       return;
     }
 
-    files.forEach((file) => {
+    newFiles.forEach((file) => {
       const error = validateFile(file);
       if (error) {
         errors.push(error);
       } else {
-        validFiles.push(file);
+        validNewFiles.push(file);
       }
     });
 
@@ -67,19 +88,33 @@ const ProjectSubmission = () => {
 
     setFormData((prev) => ({
       ...prev,
-      attachments: validFiles,
+      attachments: [...prev.attachments, ...validNewFiles],
     }));
 
-    if (validFiles.length === 0 && files.length > 0) {
+    e.target.value = "";
+
+    if (validNewFiles.length === 0 && newFiles.length > 0) {
       setMessage({
         text: "No valid files were selected. Please check file types and sizes.",
         type: "error",
       });
-    } else if (validFiles.length < files.length) {
+    } else if (validNewFiles.length < newFiles.length) {
       setMessage({
-        text: `${validFiles.length} of ${files.length} file(s) accepted. ${errors.length} file(s) skipped due to validation errors.`,
+        text: `${validNewFiles.length} of ${newFiles.length} file(s) added. ${errors.length} file(s) skipped due to validation errors.`,
         type: "warning",
       });
+    } else if (validNewFiles.length > 0) {
+      setMessage({
+        text: `${validNewFiles.length} file(s) added successfully. Total: ${
+          formData.attachments.length + validNewFiles.length
+        }/${MAX_FILES}`,
+        type: "success",
+      });
+      setTimeout(() => {
+        setMessage((prev) =>
+          prev.type === "success" ? { text: "", type: "" } : prev,
+        );
+      }, 3000);
     }
   };
 
@@ -107,13 +142,11 @@ const ProjectSubmission = () => {
           text: `Project "${formData.title}" submitted successfully!`,
           type: "success",
         });
-
         setFormData({
           title: "",
           description: "",
           attachments: [],
         });
-
         const fileInput = document.getElementById("project-attachments");
         if (fileInput) fileInput.value = "";
         setFileErrors([]);
@@ -215,12 +248,13 @@ const ProjectSubmission = () => {
                 id="project-attachments"
                 onChange={handleFileChange}
                 disabled={uploadProgress}
-                multiple
+                multiple="multiple"
                 accept=".png,.jpg,.jpeg,.pdf"
               />
               <div className="form-text">
                 Accepted formats: PNG, JPEG, PDF. Max 10MB per file. Up to 5
-                files.
+                files. Hold Ctrl/Cmd to select multiple files at once, or add
+                them one by one.
               </div>
 
               {fileErrors.length > 0 && (
@@ -237,13 +271,28 @@ const ProjectSubmission = () => {
               {formData.attachments.length > 0 && (
                 <div className="selected-files mt-2">
                   <strong>
-                    Selected files ({formData.attachments.length}/5):
+                    Selected files ({formData.attachments.length}/{MAX_FILES}):
                   </strong>
                   <ul className="list-unstyled mt-1">
                     {formData.attachments.map((file, idx) => (
-                      <li key={idx} className="file-item">
-                        <i className="bi bi-paperclip me-1"></i>
-                        {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
+                      <li
+                        key={idx}
+                        className="file-item d-flex justify-content-between align-items-center"
+                      >
+                        <span>
+                          <i className="bi bi-paperclip me-1"></i>
+                          {file.name} ({(file.size / 1024 / 1024).toFixed(2)}{" "}
+                          MB)
+                        </span>
+                        <button
+                          type="button"
+                          className="btn-remove-file"
+                          onClick={() => removeFile(idx)}
+                          disabled={uploadProgress}
+                          aria-label="Remove file"
+                        >
+                          ✕
+                        </button>
                       </li>
                     ))}
                   </ul>
