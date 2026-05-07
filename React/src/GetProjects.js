@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getProjects } from "./ApiService";
 import "./GetProjects.css";
+import ProjectMessages from "./ProjectMessages";
 
 const GetProjects = ({ refreshTrigger }) => {
   const [projects, setProjects] = useState([]);
@@ -139,7 +140,6 @@ const GetProjects = ({ refreshTrigger }) => {
             </div>
             {expandedProjectId === project.id && (
               <div className="project-body card-footer bg-white px-4 py-3">
-                {/* Project Description */}
                 <div className="mb-3">
                   <strong className="text-muted small">Description:</strong>
                   <div className="project-description mt-1">
@@ -147,7 +147,6 @@ const GetProjects = ({ refreshTrigger }) => {
                   </div>
                 </div>
 
-                {/* Attachments */}
                 <div>
                   <strong className="text-muted small">Attachments:</strong>
                   {project.attachments && project.attachments.length > 0 ? (
@@ -184,6 +183,13 @@ const GetProjects = ({ refreshTrigger }) => {
                     </p>
                   )}
                 </div>
+
+                <ProjectMessages
+                  projectId={project.id}
+                  onMessageSubmitted={() => {
+                    fetchProjects();
+                  }}
+                />
               </div>
             )}
           </div>

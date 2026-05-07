@@ -249,3 +249,38 @@ export const getProjects = async () => {
     );
   }
 };
+
+// projectMessages() allows a client to submit messages and attachments for a specific project.
+
+export const projectMessages = async (projectId, formData) => {
+  try {
+    const data = new FormData();
+    data.append("project_id", projectId);
+    data.append("message", formData.message);
+
+    formData.attachments.forEach((file, index) => {
+      data.append("attachments[]", file);
+    });
+
+    const response = await fetch(
+      "http://localhost:8001/Hertford_Standard/project_messages.php",
+      {
+        method: "POST",
+        credentials: "include",
+        body: data,
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("Project message submission error:", error);
+    throw new Error(
+      error.message || "An error occurred during message submission.",
+    );
+  }
+};

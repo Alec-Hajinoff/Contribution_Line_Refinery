@@ -1,0 +1,98 @@
+.project-messages-container {
+  margin-top: 1rem;
+}
+
+.project-messages-container .card {
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.project-messages-container .card-header {
+  padding: 0.75rem 1rem;
+}
+
+.project-messages-container .card-header h5 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.project-messages-container .card-body {
+  padding: 1rem;
+}
+
+.project-messages-container .form-label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-size: 0.875rem;
+}
+
+.project-messages-container .form-control:focus {
+  border-color: #6c757d;
+  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+}
+
+.project-messages-container .form-text {
+  font-size: 0.7rem;
+  color: #6c757d;
+  margin-top: 0.25rem;
+}
+
+.project-messages-container .selected-files {
+  background-color: #f8f9fa;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.project-messages-container .file-item {
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+}
+
+.project-messages-container .file-item:hover {
+  background-color: #e9ecef;
+}
+
+.project-messages-container .alert {
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+
+.project-messages-container .btn-remove-file {
+  background: none;
+  border: none;
+  color: #dc3545;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-messages-container .btn-remove-file:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+.project-messages-container .btn-remove-file:disabled {
+  color: #adb5bd;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .project-messages-container .card-body {
+    padding: 0.75rem;
+  }
+}
