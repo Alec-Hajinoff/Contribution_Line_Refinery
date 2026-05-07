@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import { getProjects } from "./ApiService";
 import "./GetProjects.css";
 import ProjectMessages from "./ProjectMessages";
+import ProjectTimeline from "./ProjectTimeline";
 
 const GetProjects = ({ refreshTrigger }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedProjectId, setExpandedProjectId] = useState(null);
+  const [timelineRefreshTrigger, setTimelineRefreshTrigger] = useState(0);
 
   useEffect(() => {
     fetchProjects();
@@ -188,7 +190,13 @@ const GetProjects = ({ refreshTrigger }) => {
                   projectId={project.id}
                   onMessageSubmitted={() => {
                     fetchProjects();
+                    setTimelineRefreshTrigger((prev) => prev + 1);
                   }}
+                />
+
+                <ProjectTimeline
+                  projectId={project.id}
+                  refreshTrigger={refreshTrigger}
                 />
               </div>
             )}
