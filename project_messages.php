@@ -70,12 +70,24 @@ try {
 }
 
 try {
-    $verifySql = 'SELECT id FROM projects WHERE id = :project_id AND user_id = :user_id';
-    $verifyStmt = $conn->prepare($verifySql);
-    $verifyStmt->execute([
-        ':project_id' => $project_id,
-        ':user_id' => $user_id
-    ]);
+    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminStmt = $conn->prepare($adminSql);
+    $adminStmt->execute([':user_id' => $user_id]);
+    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $is_admin = ($user && $user['is_admin'] == 1);
+
+    if ($is_admin) {
+        $verifySql = 'SELECT id FROM projects WHERE id = :project_id';
+        $verifyStmt = $conn->prepare($verifySql);
+        $verifyStmt->execute([':project_id' => $project_id]);
+    } else {
+        $verifySql = 'SELECT id FROM projects WHERE id = :project_id AND user_id = :user_id';
+        $verifyStmt = $conn->prepare($verifySql);
+        $verifyStmt->execute([
+            ':project_id' => $project_id,
+            ':user_id' => $user_id
+        ]);
+    }
 
     if ($verifyStmt->rowCount() === 0) {
         echo json_encode(['success' => false, 'message' => 'Project not found or access denied.']);

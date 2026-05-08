@@ -1,7 +1,6 @@
 <?php
 require_once 'session_config.php';
 
-// Authentication check first
 if (!isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo 'You must be logged in to download attachments.';
@@ -30,16 +29,30 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = 'SELECT pa.attachment, pa.attachment_name, pa.attachment_type 
-            FROM project_attachments pa
-            JOIN projects p ON pa.project_id = p.id
-            WHERE pa.id = :attachment_id AND p.user_id = :user_id';
+    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminStmt = $conn->prepare($adminSql);
+    $adminStmt->execute([':user_id' => $user_id]);
+    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $is_admin = ($user && $user['is_admin'] == 1);
 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([
-        ':attachment_id' => $attachment_id,
-        ':user_id' => $user_id
-    ]);
+    if ($is_admin) {
+        $sql = 'SELECT pa.attachment, pa.attachment_name, pa.attachment_type 
+                FROM project_attachments pa
+                JOIN projects p ON pa.project_id = p.id
+                WHERE pa.id = :attachment_id';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':attachment_id' => $attachment_id]);
+    } else {
+        $sql = 'SELECT pa.attachment, pa.attachment_name, pa.attachment_type 
+                FROM project_attachments pa
+                JOIN projects p ON pa.project_id = p.id
+                WHERE pa.id = :attachment_id AND p.user_id = :user_id';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            ':attachment_id' => $attachment_id,
+            ':user_id' => $user_id
+        ]);
+    }
 
     $attachment = $stmt->fetch(PDO::FETCH_ASSOC);
 

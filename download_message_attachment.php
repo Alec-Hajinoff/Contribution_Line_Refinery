@@ -29,17 +29,32 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = 'SELECT ma.attachment, ma.attachment_name, ma.attachment_type 
-            FROM message_attachments ma
-            JOIN project_messages pm ON ma.project_message_id = pm.id
-            JOIN projects p ON pm.project_id = p.id
-            WHERE ma.id = :attachment_id AND p.user_id = :user_id';
+    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminStmt = $conn->prepare($adminSql);
+    $adminStmt->execute([':user_id' => $user_id]);
+    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $is_admin = ($user && $user['is_admin'] == 1);
 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([
-        ':attachment_id' => $attachment_id,
-        ':user_id' => $user_id
-    ]);
+    if ($is_admin) {
+        $sql = 'SELECT ma.attachment, ma.attachment_name, ma.attachment_type 
+                FROM message_attachments ma
+                JOIN project_messages pm ON ma.project_message_id = pm.id
+                JOIN projects p ON pm.project_id = p.id
+                WHERE ma.id = :attachment_id';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':attachment_id' => $attachment_id]);
+    } else {
+        $sql = 'SELECT ma.attachment, ma.attachment_name, ma.attachment_type 
+                FROM message_attachments ma
+                JOIN project_messages pm ON ma.project_message_id = pm.id
+                JOIN projects p ON pm.project_id = p.id
+                WHERE ma.id = :attachment_id AND p.user_id = :user_id';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([
+            ':attachment_id' => $attachment_id,
+            ':user_id' => $user_id
+        ]);
+    }
 
     $attachment = $stmt->fetch(PDO::FETCH_ASSOC);
 

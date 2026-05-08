@@ -53,13 +53,27 @@ try {
 }
 
 try {
-    $sql = 'SELECT id, title, description, status, created_at, updated_at 
-            FROM projects 
-            WHERE user_id = :user_id 
-            ORDER BY created_at DESC';
+    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminStmt = $conn->prepare($adminSql);
+    $adminStmt->execute([':user_id' => $user_id]);
+    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $is_admin = ($user && $user['is_admin'] == 1);
 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([':user_id' => $user_id]);
+    if ($is_admin) {
+        $sql = 'SELECT id, title, description, status, created_at, updated_at 
+                FROM projects 
+                ORDER BY created_at DESC';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+    } else {
+        $sql = 'SELECT id, title, description, status, created_at, updated_at 
+                FROM projects 
+                WHERE user_id = :user_id 
+                ORDER BY created_at DESC';
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':user_id' => $user_id]);
+    }
+
     $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     foreach ($projects as &$project) {
