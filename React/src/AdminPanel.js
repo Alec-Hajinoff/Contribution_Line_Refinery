@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import "./AdminPanel.css";
 import GetUsers from "./GetUsers";
+import ManageUsers from "./ManageUsers";
 
 const AdminPanel = () => {
   const [selectedUser, setSelectedUser] = useState(null);
 
   const handleUserSelect = (user) => {
     setSelectedUser(user);
-    console.log("Selected user:", user);
   };
 
   return (
@@ -20,14 +20,7 @@ const AdminPanel = () => {
       </div>
       <div className="admin-panel-content">
         <GetUsers onUserSelect={handleUserSelect} />
-        {selectedUser && (
-          <div className="selected-user-info mt-2">
-            <small className="text-muted">
-              Selected: <strong>{selectedUser.name}</strong> (ID:{" "}
-              {selectedUser.id})
-            </small>
-          </div>
-        )}
+        <ManageUsers selectedUser={selectedUser} />
       </div>
     </div>
   );

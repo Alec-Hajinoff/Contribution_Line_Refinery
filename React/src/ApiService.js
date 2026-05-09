@@ -367,3 +367,29 @@ export const getUsers = async () => {
     throw new Error(error.message || "An error occurred while fetching users.");
   }
 };
+
+// manageUsers() fetches user data for the selected user for display in the admin dashboard.
+
+export const manageUsers = async (userId) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8001/Hertford_Standard/manage_users.php?user_id=${userId}`,
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Manage users error:", error);
+    throw new Error(
+      error.message || "An error occurred while fetching user data.",
+    );
+  }
+};
