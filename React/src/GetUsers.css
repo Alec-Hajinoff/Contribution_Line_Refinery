@@ -1,0 +1,34 @@
+.get-users-container {
+  margin-bottom: 1rem;
+}
+
+.get-users-container .form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.get-users-container .form-select {
+  font-size: 0.875rem;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  background-color: #fff;
+  cursor: pointer;
+}
+
+.get-users-container .form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.get-users-container .alert {
+  font-size: 0.75rem;
+  margin-bottom: 0;
+}
+
+.get-users-container .spinner-border {
+  width: 0.75rem;
+  height: 0.75rem;
+}

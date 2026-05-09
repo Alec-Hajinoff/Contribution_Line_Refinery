@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import "./AdminPanel.css";
+import GetUsers from "./GetUsers";
 
 const AdminPanel = () => {
+  const [selectedUser, setSelectedUser] = useState(null);
+
+  const handleUserSelect = (user) => {
+    setSelectedUser(user);
+    console.log("Selected user:", user);
+  };
+
   return (
     <div className="admin-panel-container">
       <div className="admin-panel-header">
@@ -10,14 +18,16 @@ const AdminPanel = () => {
           Manage system users and their permissions
         </p>
       </div>
-      <div className="admin-panel-placeholder">
-        <i
-          className="bi bi-people"
-          style={{ fontSize: "2rem", color: "#ccc" }}
-        ></i>
-        <p className="text-muted mt-2 mb-0">
-          User management controls will appear here
-        </p>
+      <div className="admin-panel-content">
+        <GetUsers onUserSelect={handleUserSelect} />
+        {selectedUser && (
+          <div className="selected-user-info mt-2">
+            <small className="text-muted">
+              Selected: <strong>{selectedUser.name}</strong> (ID:{" "}
+              {selectedUser.id})
+            </small>
+          </div>
+        )}
       </div>
     </div>
   );

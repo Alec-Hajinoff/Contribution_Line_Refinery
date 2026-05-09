@@ -343,3 +343,27 @@ export const statusUpdate = async (projectId, status) => {
     );
   }
 };
+
+// getUsers() fetches all user names for the admin dropdown selection.
+
+export const getUsers = async () => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Hertford_Standard/get_users.php",
+      {
+        method: "GET",
+        credentials: "include",
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Get users error:", error);
+    throw new Error(error.message || "An error occurred while fetching users.");
+  }
+};
