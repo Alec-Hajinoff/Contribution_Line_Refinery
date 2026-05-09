@@ -23,16 +23,16 @@ const StatusUpdate = ({ projectId, currentStatus, onStatusUpdated }) => {
         }
       } else {
         setError(result.message || "Failed to update status.");
-        // Revert the toggle visually (since state hasn't changed yet)
+
         e.target.checked = !e.target.checked;
       }
     } catch (err) {
       setError(err.message || "An error occurred while updating status.");
-      // Revert the toggle visually
+
       e.target.checked = !e.target.checked;
     } finally {
       setUpdating(false);
-      // Clear error after 3 seconds
+
       setTimeout(() => setError(null), 3000);
     }
   };

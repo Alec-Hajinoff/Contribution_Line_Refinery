@@ -61,7 +61,6 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
   };
 
   const handleStatusUpdated = (projectId, newStatus) => {
-    // Update local state for the specific project
     setProjects((prevProjects) =>
       prevProjects.map((project) =>
         project.id === projectId ? { ...project, status: newStatus } : project,
