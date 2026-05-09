@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./AdminDashboard.css";
 import LogoutComponent from "./LogoutComponent";
 import GetProjects from "./GetProjects";
+import AdminPanel from "./AdminPanel";
 
 function AdminDashboard() {
   const [refreshProjects, setRefreshProjects] = useState(0);
@@ -20,6 +21,7 @@ function AdminDashboard() {
         <p>Welcome, Admin. Manage users and system settings here.</p>
       </div>
 
+      <AdminPanel />
       <GetProjects refreshTrigger={refreshProjects} isAdminView={true} />
     </div>
   );

@@ -1,0 +1,47 @@
+.admin-panel-container {
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.admin-panel-header {
+  padding: 1rem 1.5rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.admin-panel-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #212529;
+  margin-bottom: 0.25rem;
+}
+
+.admin-panel-subtitle {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-bottom: 0;
+}
+
+.admin-panel-placeholder {
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-panel-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .admin-panel-title {
+    font-size: 1rem;
+  }
+
+  .admin-panel-placeholder {
+    padding: 1.5rem 1rem;
+  }
+}
