@@ -3,8 +3,9 @@ import { getProjects } from "./ApiService";
 import "./GetProjects.css";
 import ProjectMessages from "./ProjectMessages";
 import ProjectTimeline from "./ProjectTimeline";
+import StatusUpdate from "./StatusUpdate";
 
-const GetProjects = ({ refreshTrigger }) => {
+const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -59,6 +60,15 @@ const GetProjects = ({ refreshTrigger }) => {
     ));
   };
 
+  const handleStatusUpdated = (projectId, newStatus) => {
+    // Update local state for the specific project
+    setProjects((prevProjects) =>
+      prevProjects.map((project) =>
+        project.id === projectId ? { ...project, status: newStatus } : project,
+      ),
+    );
+  };
+
   if (loading) {
     return (
       <div className="get-projects-container">
@@ -69,7 +79,7 @@ const GetProjects = ({ refreshTrigger }) => {
           >
             <span className="visually-hidden">Loading...</span>
           </div>
-          <span className="text-muted">Loading your projects...</span>
+          <span className="text-muted">Loading projects...</span>
         </div>
       </div>
     );
@@ -111,7 +121,7 @@ const GetProjects = ({ refreshTrigger }) => {
 
   return (
     <div className="get-projects-container">
-      <h4 className="mb-3">My Projects</h4>
+      <h4 className="mb-3">{isAdminView ? "All Projects" : "My Projects"}</h4>
       <div className="projects-list">
         {projects.map((project) => (
           <div key={project.id} className="project-item card mb-2">
@@ -142,6 +152,14 @@ const GetProjects = ({ refreshTrigger }) => {
             </div>
             {expandedProjectId === project.id && (
               <div className="project-body card-footer bg-white px-4 py-3">
+                {isAdminView && (
+                  <StatusUpdate
+                    projectId={project.id}
+                    currentStatus={project.status}
+                    onStatusUpdated={handleStatusUpdated}
+                  />
+                )}
+
                 <div className="mb-3">
                   <strong className="text-muted small">Description:</strong>
                   <div className="project-description mt-1">
@@ -196,7 +214,7 @@ const GetProjects = ({ refreshTrigger }) => {
 
                 <ProjectTimeline
                   projectId={project.id}
-                  refreshTrigger={refreshTrigger}
+                  refreshTrigger={timelineRefreshTrigger}
                 />
               </div>
             )}

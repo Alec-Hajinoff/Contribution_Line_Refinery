@@ -20,7 +20,7 @@ function AdminDashboard() {
         <p>Welcome, Admin. Manage users and system settings here.</p>
       </div>
 
-      <GetProjects refreshTrigger={refreshProjects} />
+      <GetProjects refreshTrigger={refreshProjects} isAdminView={true} />
     </div>
   );
 }

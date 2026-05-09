@@ -3,7 +3,7 @@
 
   // Zencoder lockdown
   "zencoder.enableRepoIndexing": false,
-  "zencoder.shellTool.commandConfirmationPolicy": "alwaysAsk",
+  "zencoder.shellTool.commandConfirmationPolicy": "doNotAskForSpecified",
   "zencoder.enableCodeLenses": false,
   "zencoder.enableShellTool": false,
   "zencoder.inlineSuggestions.enable": false,
