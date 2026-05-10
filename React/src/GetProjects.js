@@ -152,6 +152,13 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
             {expandedProjectId === project.id && (
               <div className="project-body card-footer bg-white px-4 py-3">
                 {isAdminView && (
+                  <div className="mb-2 pb-1 border-bottom">
+                    <strong className="text-muted small">Client:</strong>
+                    <span className="ms-2 small">{project.client_name}</span>
+                  </div>
+                )}
+
+                {isAdminView && (
                   <StatusUpdate
                     projectId={project.id}
                     currentStatus={project.status}

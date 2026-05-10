@@ -28,7 +28,7 @@ header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    exit;
+    exit(0);
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
@@ -60,16 +60,18 @@ try {
     $is_admin = ($user && $user['is_admin'] == 1);
 
     if ($is_admin) {
-        $sql = 'SELECT id, title, description, status, created_at, updated_at 
-                FROM projects 
-                ORDER BY created_at DESC';
+        $sql = 'SELECT p.id, p.title, p.description, p.status, p.created_at, p.updated_at, u.name as client_name
+                FROM projects p
+                JOIN users u ON p.user_id = u.id
+                ORDER BY p.created_at DESC';
         $stmt = $conn->prepare($sql);
         $stmt->execute();
     } else {
-        $sql = 'SELECT id, title, description, status, created_at, updated_at 
-                FROM projects 
-                WHERE user_id = :user_id 
-                ORDER BY created_at DESC';
+        $sql = 'SELECT p.id, p.title, p.description, p.status, p.created_at, p.updated_at, u.name as client_name
+                FROM projects p
+                JOIN users u ON p.user_id = u.id
+                WHERE p.user_id = :user_id
+                ORDER BY p.created_at DESC';
         $stmt = $conn->prepare($sql);
         $stmt->execute([':user_id' => $user_id]);
     }
@@ -96,7 +98,8 @@ try {
 
     echo json_encode([
         'success' => true,
-        'projects' => $projects
+        'projects' => $projects,
+        'is_admin' => $is_admin
     ]);
 } catch (PDOException $e) {
     error_log('Get projects error: ' . $e->getMessage());
