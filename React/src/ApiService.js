@@ -426,3 +426,33 @@ export const updateUserName = async (userId, newName) => {
     );
   }
 };
+
+// userDeletion() deletes a user and all associated data (cascade).
+
+export const userDeletion = async (userId) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Hertford_Standard/user_deletion.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          user_id: userId,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("User deletion error:", error);
+    throw new Error(error.message || "An error occurred while deleting user.");
+  }
+};

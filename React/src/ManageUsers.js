@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { manageUsers, updateUserName } from "./ApiService";
+import { manageUsers, updateUserName, userDeletion } from "./ApiService";
 import "./ManageUsers.css";
 
-const ManageUsers = ({ selectedUser, onUserUpdated }) => {
+const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -10,13 +10,16 @@ const ManageUsers = ({ selectedUser, onUserUpdated }) => {
   const [editValue, setEditValue] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
+  const [isDeleteConfirming, setIsDeleteConfirming] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
-    console.log("ManageUsers - selectedUser changed:", selectedUser);
     if (selectedUser && selectedUser.id) {
       fetchUserData(selectedUser.id);
     } else {
       setUserData(null);
       setIsEditing(false);
+      setIsDeleteConfirming(false);
     }
   }, [selectedUser]);
 
@@ -25,7 +28,6 @@ const ManageUsers = ({ selectedUser, onUserUpdated }) => {
     setError(null);
     try {
       const result = await manageUsers(userId);
-
       if (result.success) {
         setUserData(result.user);
       } else {
@@ -61,7 +63,6 @@ const ManageUsers = ({ selectedUser, onUserUpdated }) => {
 
     try {
       const result = await updateUserName(userData.id, editValue.trim());
-
       if (result.success) {
         setUserData({ ...userData, name: editValue.trim() });
         setIsEditing(false);
@@ -78,6 +79,42 @@ const ManageUsers = ({ selectedUser, onUserUpdated }) => {
       setTimeout(() => setError(null), 3000);
     } finally {
       setIsUpdating(false);
+    }
+  };
+
+  const handleDeleteClick = () => {
+    setIsDeleteConfirming(true);
+  };
+
+  const handleCancelDelete = () => {
+    setIsDeleteConfirming(false);
+  };
+
+  const handleConfirmDelete = async () => {
+    setIsDeleting(true);
+    setError(null);
+
+    try {
+      const result = await userDeletion(userData.id);
+      if (result.success) {
+        setIsDeleteConfirming(false);
+        if (onUserUpdated) {
+          onUserUpdated();
+        }
+        if (onUserDeleted) {
+          onUserDeleted();
+        }
+      } else {
+        setError(result.message || "Failed to delete user");
+        setTimeout(() => setError(null), 3000);
+        setIsDeleteConfirming(false);
+      }
+    } catch (err) {
+      setError("An error occurred while deleting user");
+      setTimeout(() => setError(null), 3000);
+      setIsDeleteConfirming(false);
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -180,6 +217,39 @@ const ManageUsers = ({ selectedUser, onUserUpdated }) => {
         <div className="user-info-row">
           <span className="user-info-label">Email:</span>
           <span className="user-info-value">{userData.email}</span>
+        </div>
+
+        <div className="user-info-row delete-row">
+          <span className="user-info-label">Delete User:</span>
+          <div className="delete-controls">
+            {!isDeleteConfirming ? (
+              <button
+                className="btn-delete"
+                onClick={handleDeleteClick}
+                disabled={isDeleting}
+              >
+                🗑️ Delete user
+              </button>
+            ) : (
+              <div className="delete-confirmation">
+                <span className="confirm-message">Sure?</span>
+                <button
+                  className="btn-confirm-delete"
+                  onClick={handleConfirmDelete}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete user"}
+                </button>
+                <button
+                  className="btn-cancel-delete"
+                  onClick={handleCancelDelete}
+                  disabled={isDeleting}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

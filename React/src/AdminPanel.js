@@ -15,6 +15,11 @@ const AdminPanel = () => {
     setRefreshUsersTrigger((prev) => prev + 1);
   };
 
+  const handleUserDeleted = () => {
+    setSelectedUser(null);
+    setRefreshUsersTrigger((prev) => prev + 1);
+  };
+
   return (
     <div className="admin-panel-container">
       <div className="admin-panel-header">
@@ -31,6 +36,7 @@ const AdminPanel = () => {
         <ManageUsers
           selectedUser={selectedUser}
           onUserUpdated={handleUserUpdated}
+          onUserDeleted={handleUserDeleted}
         />
       </div>
     </div>
