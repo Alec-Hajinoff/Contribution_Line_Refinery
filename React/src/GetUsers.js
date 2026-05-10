@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getUsers } from "./ApiService";
 import "./GetUsers.css";
 
-const GetUsers = ({ onUserSelect }) => {
+const GetUsers = ({ onUserSelect, refreshTrigger }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ const GetUsers = ({ onUserSelect }) => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [refreshTrigger]);
 
   const fetchUsers = async () => {
     setLoading(true);

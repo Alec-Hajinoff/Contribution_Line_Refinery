@@ -15,7 +15,7 @@ if (in_array($origin, $allowed_origins)) {
 }
 
 header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Methods: GET, OPTIONS');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Content-Type: application/json');
 
@@ -25,22 +25,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 if (!isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
-    echo json_encode(['success' => false, 'message' => 'You must be logged in to view user data.']);
+    echo json_encode(['success' => false, 'message' => 'You must be logged in to update user names.']);
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('HTTP/1.1 405 Method Not Allowed');
     echo json_encode(['success' => false, 'message' => 'Method not allowed.']);
     exit;
 }
 
-if (!isset($_GET['user_id']) || !is_numeric($_GET['user_id'])) {
+$input = json_decode(file_get_contents('php://input'), true);
+
+if ($input === null) {
+    echo json_encode(['success' => false, 'message' => 'Invalid JSON input.']);
+    exit;
+}
+
+if (!isset($input['user_id']) || !is_numeric($input['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'User ID is required.']);
     exit;
 }
 
-$target_user_id = (int) $_GET['user_id'];
+if (!isset($input['name']) || empty(trim($input['name']))) {
+    echo json_encode(['success' => false, 'message' => 'Name cannot be empty.']);
+    exit;
+}
+
+$target_user_id = (int) $input['user_id'];
+$new_name = trim($input['name']);
+
+if (strlen($new_name) > 255) {
+    echo json_encode(['success' => false, 'message' => 'Name cannot exceed 255 characters.']);
+    exit;
+}
 
 $servername = '127.0.0.1';
 $username = 'root';
@@ -58,30 +76,31 @@ try {
 }
 
 try {
-    $sql = 'SELECT id, name, email 
-            FROM users 
-            WHERE id = :target_user_id';
+    $checkSql = 'SELECT id FROM users WHERE id = :target_user_id';
+    $checkStmt = $conn->prepare($checkSql);
+    $checkStmt->execute([':target_user_id' => $target_user_id]);
 
-    $stmt = $conn->prepare($sql);
-    $stmt->execute([':target_user_id' => $target_user_id]);
-    $targetUser = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$targetUser) {
+    if ($checkStmt->rowCount() === 0) {
         echo json_encode(['success' => false, 'message' => 'User not found.']);
         exit;
     }
 
+    $updateSql = 'UPDATE users SET name = :name WHERE id = :target_user_id';
+    $updateStmt = $conn->prepare($updateSql);
+    $updateStmt->execute([
+        ':name' => $new_name,
+        ':target_user_id' => $target_user_id
+    ]);
+
     echo json_encode([
         'success' => true,
-        'user' => [
-            'id' => $targetUser['id'],
-            'name' => $targetUser['name'],
-            'email' => $targetUser['email']
-        ]
+        'message' => 'User name updated successfully.',
+        'user_id' => $target_user_id,
+        'new_name' => $new_name
     ]);
 } catch (PDOException $e) {
-    error_log('Manage users error: ' . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Failed to fetch user data. Please try again.']);
+    error_log('Update user name error: ' . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Failed to update user name. Please try again.']);
 } finally {
     $conn = null;
 }

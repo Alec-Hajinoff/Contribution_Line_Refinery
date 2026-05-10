@@ -5,9 +5,14 @@ import ManageUsers from "./ManageUsers";
 
 const AdminPanel = () => {
   const [selectedUser, setSelectedUser] = useState(null);
+  const [refreshUsersTrigger, setRefreshUsersTrigger] = useState(0);
 
   const handleUserSelect = (user) => {
     setSelectedUser(user);
+  };
+
+  const handleUserUpdated = () => {
+    setRefreshUsersTrigger((prev) => prev + 1);
   };
 
   return (
@@ -19,8 +24,14 @@ const AdminPanel = () => {
         </p>
       </div>
       <div className="admin-panel-content">
-        <GetUsers onUserSelect={handleUserSelect} />
-        <ManageUsers selectedUser={selectedUser} />
+        <GetUsers
+          onUserSelect={handleUserSelect}
+          refreshTrigger={refreshUsersTrigger}
+        />
+        <ManageUsers
+          selectedUser={selectedUser}
+          onUserUpdated={handleUserUpdated}
+        />
       </div>
     </div>
   );

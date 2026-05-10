@@ -368,7 +368,7 @@ export const getUsers = async () => {
   }
 };
 
-// manageUsers() fetches user data for the selected user for display in the admin dashboard.
+// manageUsers() fetches user data for the selected user.
 
 export const manageUsers = async (userId) => {
   try {
@@ -390,6 +390,39 @@ export const manageUsers = async (userId) => {
     console.error("Manage users error:", error);
     throw new Error(
       error.message || "An error occurred while fetching user data.",
+    );
+  }
+};
+
+// updateUserName() updates a user's name.
+
+export const updateUserName = async (userId, newName) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Hertford_Standard/update_user_name.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          user_id: userId,
+          name: newName,
+        }),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Update user name error:", error);
+    throw new Error(
+      error.message || "An error occurred while updating user name.",
     );
   }
 };
