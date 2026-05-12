@@ -133,12 +133,12 @@ try {
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
-            $mail->setFrom($mailUsername, 'Contribution Line');
+            $mail->setFrom($mailUsername, 'Hertford Standard');
             $mail->addAddress($email, $name);
 
             $mail->isHTML(false);
-            $mail->Subject = 'Verify your email address - Contribution Line';
-            $mail->Body = "Thank you for creating an account with Contribution Line.\n\n"
+            $mail->Subject = 'Verify your email address - Hertford Standard';
+            $mail->Body = "Thank you for creating an account with Hertford Standard.\n\n"
                 . "Please click the link below to verify your email address:\n"
                 . $verificationLink . "\n\n"
                 . "Once verified, you will be able to sign in to your account.\n\n"

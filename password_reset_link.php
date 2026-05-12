@@ -129,12 +129,12 @@ try {
             $mail->Port = 587;
             $mail->Timeout = 30;
 
-            $mail->setFrom($mailUsername, 'Contribution Line');
+            $mail->setFrom($mailUsername, 'Hertford Standard');
             $mail->addAddress($email, $user['name']);
 
             $mail->isHTML(false);
-            $mail->Subject = 'Reset your password - Contribution Line';
-            $mail->Body = "We received a request to reset your password for your Contribution Line account.\n\n"
+            $mail->Subject = 'Reset your password - Hertford Standard';
+            $mail->Body = "We received a request to reset your password for your Hertford Standard account.\n\n"
                 . "Please click the link below to reset your password:\n"
                 . $resetLink . "\n\n"
                 . "This link will expire in 1 hour.\n\n"
