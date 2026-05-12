@@ -10,3 +10,13 @@
 .logo-container a {
   display: inline-block;
 }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logout-container {
+  margin-left: auto;
+}
