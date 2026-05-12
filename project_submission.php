@@ -1,5 +1,8 @@
 <?php
+
 require_once 'session_config.php';
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 if (!isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
@@ -156,6 +159,92 @@ try {
 
     $conn->commit();
 
+    try {
+        $adminSql = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
+        $adminStmt = $conn->prepare($adminSql);
+        $adminStmt->execute();
+        $adminUsers = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if (!empty($adminUsers)) {
+            $userSql = 'SELECT name, email FROM users WHERE id = :user_id';
+            $userStmt = $conn->prepare($userSql);
+            $userStmt->execute([':user_id' => $user_id]);
+            $submittingUser = $userStmt->fetch(PDO::FETCH_ASSOC);
+
+            $config = parse_ini_file(__DIR__ . '/.env', false, INI_SCANNER_RAW);
+
+            if ($config === false) {
+                error_log('Admin notification: Failed to parse .env file for mail credentials');
+            } else {
+                $mailUsername = $config['MAIL_USERNAME'] ?? '';
+                $mailPassword = $config['MAIL_PASSWORD'] ?? '';
+
+                if (empty($mailUsername) || empty($mailPassword)) {
+                    error_log('Admin notification: Gmail credentials not found in .env file');
+                } else {
+                    $subject = 'New Project Submission - Hertford Standard';
+
+                    $emailBody = "A new project has been submitted to Hertford Standard.\n\n";
+                    $emailBody .= 'Project Title: ' . $title . "\n";
+                    $emailBody .= 'Project ID: ' . $project_id . "\n\n";
+                    $emailBody .= 'Submitted by: ' . ($submittingUser['name'] ?? 'Unknown') . "\n";
+                    $emailBody .= "Submitter's Email: " . ($submittingUser['email'] ?? 'Unknown') . "\n\n";
+                    $emailBody .= "Please log in to the admin dashboard to review this project.\n";
+
+                    $successCount = 0;
+                    $failureCount = 0;
+
+                    foreach ($adminUsers as $admin) {
+                        $adminEmail = $admin['email'];
+                        $adminName = $admin['name'];
+
+                        if (empty($adminEmail) || !filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+                            error_log("Admin notification: Invalid admin email address for user: {$adminName}");
+                            $failureCount++;
+                            continue;
+                        }
+
+                        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
+                        try {
+                            $mail->SMTPDebug = PHPMailer\PHPMailer\SMTP::DEBUG_OFF;  // Disable debug output
+                            $mail->isSMTP();
+                            $mail->Host = 'smtp.gmail.com';
+                            $mail->SMTPAuth = true;
+                            $mail->Username = $mailUsername;
+                            $mail->Password = $mailPassword;
+                            $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+                            $mail->Port = 587;
+
+                            $mail->setFrom($mailUsername, 'Hertford Standard');
+                            $mail->addAddress($adminEmail, $adminName);
+
+                            $mail->isHTML(false);  // Using plain text email
+                            $mail->Subject = $subject;
+                            $mail->Body = $emailBody;
+
+                            $mail->send();
+                            $successCount++;
+                        } catch (PHPMailer\PHPMailer\Exception $e) {
+                            $failureCount++;
+                            error_log("Admin notification failed for {$adminEmail}: " . $mail->ErrorInfo);
+                        }
+                    }
+
+                    if ($successCount > 0) {
+                        error_log("Admin notification: Sent {$successCount} new project alert(s) successfully. Failures: {$failureCount}");
+                    } else {
+                        error_log("Admin notification: Failed to send any admin notifications. All {$failureCount} attempts failed.");
+                    }
+                }
+            }
+        } else {
+            error_log('Admin notification: No admin users found in database to notify about new project submission');
+        }
+    } catch (Exception $e) {
+        error_log('Admin notification unexpected error: ' . $e->getMessage());
+    }
+
     $response_message = "Project '{$title}' submitted successfully.";
     if ($uploaded_files > 0) {
         $response_message .= " {$uploaded_files} file(s) uploaded.";
@@ -181,6 +270,7 @@ try {
     if ($conn->inTransaction()) {
         $conn->rollBack();
     }
+
     error_log('Project submission error: ' . $e->getMessage());
     echo json_encode(['success' => false, 'message' => 'Failed to submit project. Please try again.']);
 } finally {
