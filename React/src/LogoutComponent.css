@@ -1,19 +1,11 @@
-.btn-secondary {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
+/* Add to LogoutComponent.css */
+.btn-text {
+  background: none;
+  border: none;
   color: #1b3e73;
-  background-color: #e8dfd6;
-  border-color: #e8dfd6;
-  font-weight: 500;
-  border-radius: 8px;
-  padding: 12px 32px;
-  transition: none;
-  border: 1px solid #e8dfd6;
   cursor: pointer;
-}
-
-.btn-secondary:hover {
-  background-color: #e8dfd6;
-  border-color: #e8dfd6;
-  color: #1b3e73;
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 0;
+  text-decoration: underline;
 }
