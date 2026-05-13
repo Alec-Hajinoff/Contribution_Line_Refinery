@@ -1,0 +1,17 @@
+.aboutme-container {
+  padding: 20px 0;
+  min-height: 400px;
+}
+
+.aboutme-container h1 {
+  color: #1b3e73;
+  margin-bottom: 20px;
+  font-size: 28px;
+}
+
+.aboutme-container p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 16px;
+}

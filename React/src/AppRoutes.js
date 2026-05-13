@@ -7,12 +7,29 @@ import VerifyEmail from "./VerifyEmail";
 import PasswordReset from "./PasswordReset";
 import AdminDashboard from "./AdminDashboard";
 import ProtectedRoute from "./ProtectedRoute";
+import AboutMe from "./AboutMe";
+import Portfolio from "./Portfolio";
 import React from "react";
+
+function TemporaryDashboard() {
+  return (
+    <div className="container" style={{ padding: "40px 20px" }}>
+      <h1>Dashboard</h1>
+      <p>
+        Temporary dashboard page. Will be replaced with role-based routing
+        later.
+      </p>
+    </div>
+  );
+}
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<MainRegLog />} />
+      <Route path="/Aboutme" element={<AboutMe />} />
+      <Route path="/Portfolio" element={<Portfolio />} />
+      <Route path="/Dashboard" element={<TemporaryDashboard />} />
       <Route path="/RegisteredPage" element={<RegisteredPage />} />
       <Route path="/LogoutComponent" element={<LogoutComponent />} />
       <Route path="/VerifyEmail" element={<VerifyEmail />} />
