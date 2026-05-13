@@ -9,6 +9,8 @@ import AdminDashboard from "./AdminDashboard";
 import ProtectedRoute from "./ProtectedRoute";
 import AboutMe from "./AboutMe";
 import Portfolio from "./Portfolio";
+import PrivacyPolicy from "./PrivacyPolicy";
+import TermsOfService from "./TermsOfService";
 import React from "react";
 
 function TemporaryDashboard() {
@@ -30,6 +32,8 @@ export default function AppRoutes() {
       <Route path="/Aboutme" element={<AboutMe />} />
       <Route path="/Portfolio" element={<Portfolio />} />
       <Route path="/Dashboard" element={<TemporaryDashboard />} />
+      <Route path="/Privacypolicy" element={<PrivacyPolicy />} />
+      <Route path="/Termsofservice" element={<TermsOfService />} />
       <Route path="/RegisteredPage" element={<RegisteredPage />} />
       <Route path="/LogoutComponent" element={<LogoutComponent />} />
       <Route path="/VerifyEmail" element={<VerifyEmail />} />

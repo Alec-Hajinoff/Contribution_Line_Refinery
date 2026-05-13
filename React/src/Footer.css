@@ -1,4 +1,29 @@
 .footer {
   background-color: rgb(236, 230, 230);
   border-radius: 7px;
+  padding: 15px;
+  margin-bottom: 10px;
+}
+
+.footer-links {
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.footer-link {
+  color: #1b3e73;
+  text-decoration: none;
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.footer-link:hover {
+  text-decoration: underline;
+  opacity: 0.7;
+}
+
+.footer-separator {
+  margin: 0 10px;
+  color: #1b3e73;
+  font-size: 14px;
 }
