@@ -3,13 +3,17 @@ import { useNavigate } from "react-router-dom";
 import "./LogoutComponent.css";
 import { logoutUser } from "./ApiService";
 
-const LogoutComponent = () => {
+const LogoutComponent = ({ onLogoutComplete }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await logoutUser();
       navigate("/");
+
+      if (onLogoutComplete) {
+        onLogoutComplete();
+      }
     } catch (error) {
       console.error(error.message);
     }
