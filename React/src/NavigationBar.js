@@ -1,10 +1,8 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./NavigationBar.css";
 
-function NavigationBar() {
-  const location = useLocation();
-
+function NavigationBar({ isAuthenticated, isLoading }) {
   return (
     <nav>
       <div className="container">
@@ -18,9 +16,11 @@ function NavigationBar() {
           <Link to="/Portfolio" className="nav-link btn-text">
             Portfolio
           </Link>
-          <Link to="/Dashboard" className="nav-link btn-text">
-            Dashboard
-          </Link>
+          {!isLoading && isAuthenticated && (
+            <Link to="/Dashboard" className="nav-link btn-text">
+              Dashboard
+            </Link>
+          )}
         </div>
       </div>
     </nav>

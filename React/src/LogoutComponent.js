@@ -10,7 +10,6 @@ const LogoutComponent = ({ onLogoutComplete }) => {
     try {
       await logoutUser();
       navigate("/");
-
       if (onLogoutComplete) {
         onLogoutComplete();
       }
