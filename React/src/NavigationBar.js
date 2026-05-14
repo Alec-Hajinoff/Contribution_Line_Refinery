@@ -1,8 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./NavigationBar.css";
 
 function NavigationBar({ isAuthenticated, isLoading, userRole }) {
+  const location = useLocation();
+
   const getDashboardLink = () => {
     if (userRole === "admin") {
       return "/AdminDashboard";
@@ -10,13 +12,17 @@ function NavigationBar({ isAuthenticated, isLoading, userRole }) {
     return "/UserDashboard";
   };
 
+  const isHomePage = location.pathname === "/";
+
   return (
     <nav>
       <div className="container">
         <div className="nav-buttons">
-          <Link to="/" className="nav-link btn-text">
-            Home
-          </Link>
+          {!isHomePage && (
+            <Link to="/" className="nav-link btn-text">
+              Home
+            </Link>
+          )}
           <Link to="/Aboutme" className="nav-link btn-text">
             About me
           </Link>
