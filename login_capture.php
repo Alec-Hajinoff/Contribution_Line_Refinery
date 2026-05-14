@@ -57,6 +57,7 @@ if (isset($input['email'], $input['password'])) {
 
             session_regenerate_id(true);
             $_SESSION['id'] = $user['id'];
+            $_SESSION['is_admin'] = (bool) $user['is_admin'];
 
             $response = [
                 'status' => 'success',

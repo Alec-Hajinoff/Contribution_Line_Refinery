@@ -26,8 +26,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $isAuthenticated = isset($_SESSION['id']);
+$isAdmin = $isAuthenticated && isset($_SESSION['is_admin']) ? (bool) $_SESSION['is_admin'] : false;
 
 echo json_encode([
     'authenticated' => $isAuthenticated,
-    'userId' => $isAuthenticated ? $_SESSION['id'] : null
+    'userId' => $isAuthenticated ? $_SESSION['id'] : null,
+    'is_admin' => $isAdmin
 ]);
