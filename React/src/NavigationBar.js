@@ -2,7 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./NavigationBar.css";
 
-function NavigationBar({ isAuthenticated, isLoading }) {
+function NavigationBar({ isAuthenticated, isLoading, userRole }) {
+  const getDashboardLink = () => {
+    if (userRole === "admin") {
+      return "/AdminDashboard";
+    }
+    return "/UserDashboard";
+  };
+
   return (
     <nav>
       <div className="container">
@@ -17,7 +24,7 @@ function NavigationBar({ isAuthenticated, isLoading }) {
             Portfolio
           </Link>
           {!isLoading && isAuthenticated && (
-            <Link to="/Dashboard" className="nav-link btn-text">
+            <Link to={getDashboardLink()} className="nav-link btn-text">
               Dashboard
             </Link>
           )}

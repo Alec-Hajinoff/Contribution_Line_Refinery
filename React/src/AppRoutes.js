@@ -13,25 +13,13 @@ import PrivacyPolicy from "./PrivacyPolicy";
 import TermsOfService from "./TermsOfService";
 import React from "react";
 
-function TemporaryDashboard() {
-  return (
-    <div className="container" style={{ padding: "40px 20px" }}>
-      <h1>Dashboard</h1>
-      <p>
-        Temporary dashboard page. Will be replaced with role-based routing
-        later.
-      </p>
-    </div>
-  );
-}
-
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<MainRegLog />} />
       <Route path="/Aboutme" element={<AboutMe />} />
       <Route path="/Portfolio" element={<Portfolio />} />
-      <Route path="/Dashboard" element={<TemporaryDashboard />} />
+
       <Route path="/Privacypolicy" element={<PrivacyPolicy />} />
       <Route path="/Termsofservice" element={<TermsOfService />} />
       <Route path="/RegisteredPage" element={<RegisteredPage />} />
