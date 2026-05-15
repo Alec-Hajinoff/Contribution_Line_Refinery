@@ -13,6 +13,8 @@ function NavigationBar({ isAuthenticated, isLoading, userRole }) {
   };
 
   const isHomePage = location.pathname === "/";
+  const isAdminDashboard = location.pathname === "/AdminDashboard";
+  const isUserDashboard = location.pathname === "/UserDashboard";
 
   return (
     <nav>
@@ -29,11 +31,14 @@ function NavigationBar({ isAuthenticated, isLoading, userRole }) {
           <Link to="/Portfolio" className="nav-link btn-text">
             Portfolio
           </Link>
-          {!isLoading && isAuthenticated && (
-            <Link to={getDashboardLink()} className="nav-link btn-text">
-              Dashboard
-            </Link>
-          )}
+          {!isUserDashboard &&
+            !isAdminDashboard &&
+            !isLoading &&
+            isAuthenticated && (
+              <Link to={getDashboardLink()} className="nav-link btn-text">
+                Dashboard
+              </Link>
+            )}
         </div>
       </div>
     </nav>
