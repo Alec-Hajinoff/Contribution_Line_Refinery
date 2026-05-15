@@ -1,5 +1,6 @@
 import React from "react";
 import "./Main.css";
+import ContactForm from "./ContactForm";
 
 function Main() {
   return (
@@ -10,6 +11,7 @@ function Main() {
           web application designed to showcase the work, capabilities, and
           operational maturity of a freelance software engineer.
         </p>
+        <ContactForm />
       </div>
     </div>
   );

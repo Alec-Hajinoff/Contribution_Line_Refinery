@@ -456,3 +456,33 @@ export const userDeletion = async (userId) => {
     throw new Error(error.message || "An error occurred while deleting user.");
   }
 };
+
+// contactForm() sends contact form data to admin via email without storing the data in database.
+
+export const contactForm = async (formData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:8001/Hertford_Standard/contact_form.php",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          projectDescription: formData.projectDescription,
+          website: formData.website,
+        }),
+        credentials: "include",
+      },
+    );
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Contact form error:", error);
+    throw new Error("An error occurred while sending your message.");
+  }
+};

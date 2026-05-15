@@ -1,0 +1,132 @@
+.contact-form-wrapper {
+  margin-top: 40px;
+  padding: 30px;
+  background: transparent;
+  border-top: 1px solid rgba(27, 62, 115, 0.1);
+}
+
+.contact-form-title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: #1b3e73;
+  margin-bottom: 25px;
+  letter-spacing: 0.5px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-form-group {
+  width: 100%;
+}
+
+.contact-form-control {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #1b3e73;
+  background-color: #fff;
+  border: 1px solid #d4c5b0;
+  border-radius: 4px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.contact-form-control:focus {
+  outline: none;
+  border-color: #1b3e73;
+  box-shadow: 0 0 0 3px rgba(27, 62, 115, 0.1);
+}
+
+.contact-form-control::placeholder {
+  color: #999;
+  opacity: 1;
+}
+
+.contact-form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.contact-form-word-count {
+  display: block;
+  margin-top: 5px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+
+.contact-form-honeypot {
+  display: none;
+}
+
+.contact-form-success-message {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 10px 0;
+}
+
+.contact-form-error-message {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin: 10px 0;
+}
+
+.contact-form-btn-secondary {
+  background-color: #e8dfd6;
+  border: 1px solid #e8dfd6;
+  color: #1b3e73;
+  font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: none;
+}
+
+.contact-form-btn-secondary:hover:not(:disabled) {
+  background-color: #ddd2c6;
+  border-color: #ddd2c6;
+  transform: translateY(-1px);
+}
+
+.contact-form-btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.contact-form-spinner-border {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  margin-left: 8px;
+  vertical-align: middle;
+  border: 0.2em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: contact-form-spinner-border 0.75s linear infinite;
+}
+
+@keyframes contact-form-spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
