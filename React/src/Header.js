@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import blue from "./HertfordStandardLogo.png";
+import blue from "./Hertford_Standard_Logo.svg";
 import LogoutComponent from "./LogoutComponent";
 import "./Header.css";
 
