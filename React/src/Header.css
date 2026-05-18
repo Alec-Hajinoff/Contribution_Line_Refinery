@@ -1,41 +1,5 @@
-.header-wrapper .row {
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.header-wrapper .container {
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-.header-wrapper .logo-container,
-.header-wrapper .logout-container {
-  width: auto;
-  flex-shrink: 0;
-}
-
 #logo {
   width: 100%;
   height: auto;
   min-width: 120px;
-}
-
-.logo-container {
-  display: inline-block;
-}
-
-.logo-container a {
-  display: inline-block;
-}
-
-.logout-container {
-  margin-left: auto;
-}
-
-.btn-text {
-  white-space: nowrap;
 }

@@ -6,24 +6,23 @@ import "./Header.css";
 
 function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
   return (
-    <div className="header-wrapper">
-      <div className="container">
-        <div className="row">
-          <div className="logo-container">
-            <Link to="/">
-              <img
-                id="logo"
-                src={blue}
-                alt="A company logo"
-                title="A company logo"
-              />
-            </Link>
-          </div>
-          <div className="logout-container">
-            {!isLoading && isAuthenticated && (
-              <LogoutComponent onLogoutComplete={onLogoutComplete} />
-            )}
-          </div>
+    <div className="container">
+      <div className="row align-items-center justify-content-between">
+        <div className="col-auto">
+          <Link to="/">
+            <img
+              id="logo"
+              src={blue}
+              alt="A company logo"
+              title="A company logo"
+            />
+          </Link>
+        </div>
+
+        <div className="col-auto">
+          {!isLoading && isAuthenticated && (
+            <LogoutComponent onLogoutComplete={onLogoutComplete} />
+          )}
         </div>
       </div>
     </div>
