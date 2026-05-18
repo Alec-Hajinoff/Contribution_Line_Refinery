@@ -7,8 +7,8 @@ import "./Header.css";
 function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
   return (
     <div className="container">
-      <div className="row align-items-center justify-content-between">
-        <div className="col-auto">
+      <div className="row align-items-center">
+        <div className="col-12 col-md-9">
           <Link to="/">
             <img
               id="logo"
@@ -19,7 +19,7 @@ function Header({ isAuthenticated, isLoading, onLogoutComplete }) {
           </Link>
         </div>
 
-        <div className="col-auto">
+        <div className="col-12 col-md-3 text-end">
           {!isLoading && isAuthenticated && (
             <LogoutComponent onLogoutComplete={onLogoutComplete} />
           )}
