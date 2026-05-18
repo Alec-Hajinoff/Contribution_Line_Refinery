@@ -1,17 +1,29 @@
+:root {
+  --font-family-base: Arial, Helvetica, sans-serif;
+  --font-size-base: 18px;
+  --color-text: #1B2A40;
+  --color-primary-50:  #E9F1FF;
+  --color-primary-100: #D4E5FF;
+  --color-primary-200: #C4DCFF;
+  --color-primary-300: #A7C4EB;
+  --color-primary-400: #89A9D9;
+  --color-primary-500: #1B3E73;
+  --color-primary-600: #17355F;
+  --color-primary-800: #152233;
+  --color-primary-900: #0E1622;
+  --line-height-base: 1.5;
+}
+
 body {
-  margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #1b3e73;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  line-height: var(--line-height-base);
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+/*
+To use the above values in individual components you can do as follows:
+.title {
+  color: var(--color-text);
 }
-
-* {
-  box-sizing: border-box;
-}
+*/
