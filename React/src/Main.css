@@ -11,4 +11,7 @@
 .hero-title {
   font-weight: bold;
   font-style: italic;
+  background-color: var(--color-primary-50);
+  border-radius: 4px;
+  padding: 1rem 1rem;
 }
