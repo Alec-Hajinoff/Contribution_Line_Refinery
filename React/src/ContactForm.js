@@ -117,7 +117,9 @@ function ContactForm() {
 
   return (
     <div className="contact-form-wrapper">
-      <h3 className="contact-form-title">Contact Me</h3>
+      <h3 className="contact-form-title">
+        Provide a brief outline of your project to start the conversation.
+      </h3>
       <form className="contact-form" onSubmit={handleSubmit} noValidate>
         <div className="contact-form-group">
           <input
@@ -167,7 +169,7 @@ function ContactForm() {
             onChange={handleChange}
             required
             rows="6"
-            placeholder="Please describe your project (max 200 words)"
+            placeholder="Please describe your project (up to 200 words)"
           />
           <small className="contact-form-word-count">
             {
