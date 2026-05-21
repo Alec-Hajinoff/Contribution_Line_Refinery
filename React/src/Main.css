@@ -11,7 +11,14 @@
 .hero-title {
   font-weight: bold;
   font-style: italic;
-  background-color: var(--color-primary-50);
-  border-radius: 4px;
+  background: radial-gradient(
+    circle,
+    var(--color-primary-100) 0%,
+    var(--color-primary-50) 60%,
+    white 100%
+  );
+
+  border-radius: 10px;
   padding: 1rem 1rem;
+  color: var(--color-primary-600);
 }
