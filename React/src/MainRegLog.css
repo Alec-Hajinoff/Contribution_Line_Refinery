@@ -1,11 +1,10 @@
 .section-divider {
-  background-color: #f0ede8;
-  border-radius: 7px;
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
   padding: 15px;
-  color: #1b3e73;
+
   font-weight: 500;
-  margin-top: 20px;
-  border-left: 3px solid #ff8c42;
+  margin-top: 35px;
 }
 
 @media (max-width: 768px) {

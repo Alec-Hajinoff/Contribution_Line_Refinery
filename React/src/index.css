@@ -37,6 +37,6 @@ body {
 /*
 To use the above values in individual components you can do as follows:
 .title {
-  color: var(--color-text);
+  color: var(--color-text); 
 }
 */
