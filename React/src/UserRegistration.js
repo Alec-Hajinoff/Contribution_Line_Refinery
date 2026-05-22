@@ -72,7 +72,8 @@ function UserRegistration() {
         setErrorMessage("");
       } else {
         setErrorMessage(
-          data.message || "We couldn’t complete your registration just now. Please try again.",
+          data.message ||
+            "We couldn’t complete your registration just now. Please try again.",
         );
         clearErrorMessageAfterDelay();
 
@@ -133,14 +134,8 @@ function UserRegistration() {
             placeholder="Choose a strong password"
           />
         </div>
-        {successMessage && (
-          <div id="success-message" className="error" aria-live="polite">
-            {successMessage}
-          </div>
-        )}
-        <div id="error-message" className="error" aria-live="polite">
-          {errorMessage}
-        </div>
+        {successMessage && <div id="success-message">{successMessage}</div>}
+        <div id="error-message">{errorMessage}</div>
         <button type="submit" className="btn btn-secondary">
           Register
           <span
