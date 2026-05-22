@@ -40,7 +40,7 @@ function UserRegistration() {
 
     const namePattern = /^[a-zA-Z ]+$/;
     if (!namePattern.test(formData.name)) {
-      setErrorMessage("Name can only contain letters and spaces");
+      setErrorMessage("Please enter a name using letters and spaces only.");
       clearErrorMessageAfterDelay();
       return;
     }
@@ -48,14 +48,14 @@ function UserRegistration() {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
       setErrorMessage(
-        "Please enter a valid email address (e.g., name@domain.com)",
+        "Please enter a valid email address (for example, name@domain.com).",
       );
       clearErrorMessageAfterDelay();
       return;
     }
 
     if (formData.password.length < 8) {
-      setErrorMessage("Password must be at least 8 characters long");
+      setErrorMessage("Please choose a password with at least 8 characters.");
       clearErrorMessageAfterDelay();
       return;
     }
@@ -65,14 +65,14 @@ function UserRegistration() {
       const data = await registerUser(formData);
       if (data.success) {
         setSuccessMessage(
-          "Check your email to sign in. We've sent you a link to confirm your email address.",
+          "You're almost there! Please check your email for a link to confirm your address and complete sign-in.",
         );
         clearSuccessMessageAfterDelay();
         setFormData({ name: "", email: "", password: "" });
         setErrorMessage("");
       } else {
         setErrorMessage(
-          data.message || "Registration failed. Please try again.",
+          data.message || "We couldn’t complete your registration just now. Please try again.",
         );
         clearErrorMessageAfterDelay();
 

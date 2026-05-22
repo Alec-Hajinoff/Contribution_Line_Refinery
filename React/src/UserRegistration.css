@@ -1,17 +1,13 @@
 .user-registration-wrapper .btn-secondary {
-  background-color: #e8dfd6;
-  border-color: #e8dfd6;
-  color: #1b3e73;
-  font-weight: 500;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  box-shadow: none;
+  background-color: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--btn-text);
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: var(--btn-transition);
 }
 
-.error,
-#error-message,
-#success-message {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
-  color: #1b3e73;
+.btn-secondary:hover {
+  background-color: var(--btn-bg-hover);
 }
