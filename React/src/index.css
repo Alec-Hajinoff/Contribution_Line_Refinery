@@ -12,6 +12,19 @@
   --color-primary-800: #152233;
   --color-primary-900: #0e1622;
   --line-height-base: 1.5;
+  /* Button colours */
+  --btn-bg: var(--color-primary-500);
+  --btn-bg-hover: var(--color-primary-400);
+  --btn-text: var(--color-primary-50);
+  --btn-border: #e8dfd6;
+
+  /* Button shape */
+  --btn-radius: 5px;
+  --btn-padding-y: 12px;
+  --btn-padding-x: 24px;
+
+  /* Button transitions */
+  --btn-transition: all 0.2s ease;
 }
 
 body {

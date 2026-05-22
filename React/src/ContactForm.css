@@ -65,16 +65,17 @@
 }
 
 .contact-form-btn-secondary {
-  background-color: var(--color-primary-500);
-  border: 1px solid #e8dfd6;
-  color: var(--color-primary-50);
-  padding: 12px 24px;
-  border-radius: 5px;
+  background-color: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--btn-text);
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  border-radius: var(--btn-radius);
   cursor: pointer;
+  transition: var(--btn-transition);
 }
 
 .contact-form-btn-secondary:hover {
-  background-color: var(--color-primary-400);
+  background-color: var(--btn-bg-hover);
 }
 
 .contact-form-spinner-border {
