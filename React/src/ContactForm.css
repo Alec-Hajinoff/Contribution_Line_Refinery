@@ -8,7 +8,7 @@
   font-size: 24px;
   font-weight: 600;
   font-style: italic;
-  /*color: #1b3e73;*/
+
   margin-bottom: 25px;
   letter-spacing: 0.5px;
   color: var(--color-primary-600);
@@ -27,11 +27,7 @@
 .contact-form-control {
   width: 100%;
   padding: 12px 16px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  line-height: 1.5;
-  color: #1b3e73;
-  background-color: #fff;
+
   border: 1px solid #d4c5b0;
   border-radius: 4px;
   transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
@@ -56,9 +52,7 @@
 .contact-form-word-count {
   display: block;
   margin-top: 5px;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 12px;
-  color: #666;
+
   text-align: right;
 }
 
@@ -66,51 +60,17 @@
   display: none;
 }
 
-.contact-form-success-message {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #155724;
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  border-radius: 4px;
-  padding: 12px 16px;
-  margin: 10px 0;
-}
-
-.contact-form-error-message {
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
-  color: #721c24;
-  background-color: #f8d7da;
-  border: 1px solid #f5c6cb;
-  border-radius: 4px;
-  padding: 12px 16px;
-  margin: 10px 0;
-}
-
 .contact-form-btn-secondary {
   background-color: #e8dfd6;
   border: 1px solid #e8dfd6;
   color: #1b3e73;
   font-weight: 500;
-  font-family: Arial, Helvetica, sans-serif;
-  font-size: 18px;
+
   padding: 12px 24px;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: none;
-}
-
-.contact-form-btn-secondary:hover:not(:disabled) {
-  background-color: #ddd2c6;
-  border-color: #ddd2c6;
-  transform: translateY(-1px);
-}
-
-.contact-form-btn-secondary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
 }
 
 .contact-form-spinner-border {
