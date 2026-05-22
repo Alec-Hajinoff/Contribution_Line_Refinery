@@ -1,6 +1,5 @@
 .contact-form-wrapper {
   margin-top: 0px;
-
   background: transparent;
 }
 
@@ -8,10 +7,16 @@
   font-size: 24px;
   font-weight: 600;
   font-style: italic;
-
   margin-bottom: 25px;
   letter-spacing: 0.5px;
-  color: var(--color-primary-600);
+  color: var(--color-primary-50);
+  background: radial-gradient(
+    circle,
+    var(--color-primary-500) 0%,
+    var(--color-primary-400) 60%,
+    white 100%
+  );
+  padding: 0.5rem 0.5rem;
 }
 
 .contact-form {
