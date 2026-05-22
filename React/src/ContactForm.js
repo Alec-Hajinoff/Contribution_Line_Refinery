@@ -171,12 +171,10 @@ function ContactForm() {
                   </div>
                 </div>
                 <div className="col-md-8">
-                  {/* Removed the h-100 wrapper div - flex containers block textarea resize handle */}
                   <div className="contact-form-group">
                     <textarea
                       autoComplete="off"
                       className="contact-form-control contact-form-textarea"
-                      // Removed h-100 class - allows native resize to work properly
                       name="projectDescription"
                       value={formData.projectDescription}
                       onChange={handleChange}
