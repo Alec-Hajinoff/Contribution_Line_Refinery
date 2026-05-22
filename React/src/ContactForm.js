@@ -46,7 +46,7 @@ function ContactForm() {
     const namePattern = /^[a-zA-Z\s\-']+$/;
     if (!namePattern.test(formData.name)) {
       setErrorMessage(
-        "Name can only contain letters, spaces, hyphens, and apostrophes",
+        "Please enter a valid name using letters, spaces, hyphens, or apostrophes only.",
       );
       clearErrorMessageAfterDelay();
       return;
@@ -55,7 +55,7 @@ function ContactForm() {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
       setErrorMessage(
-        "Please enter a valid email address (e.g., name@domain.com)",
+        "Please enter a valid email address (for example, name@domain.com).",
       );
       clearErrorMessageAfterDelay();
       return;
@@ -64,20 +64,20 @@ function ContactForm() {
     const phonePattern = /^[\+\d\s\-\(\)]{8,20}$/;
     if (!phonePattern.test(formData.phone)) {
       setErrorMessage(
-        "Please enter a valid phone number (8-20 digits, can include +, -, spaces, and parentheses)",
+        "Please enter a valid phone number (8–20 digits, including optional +, -, spaces, or parentheses).",
       );
       clearErrorMessageAfterDelay();
       return;
     }
 
     if (!formData.projectDescription.trim()) {
-      setErrorMessage("Project description is required");
+      setErrorMessage("Please provide a brief description of your project.");
       clearErrorMessageAfterDelay();
       return;
     }
 
     if (!validateWordCount(formData.projectDescription)) {
-      setErrorMessage("Project description must be 200 words or less");
+      setErrorMessage("Your project description should be 200 words or fewer.");
       clearErrorMessageAfterDelay();
       return;
     }
@@ -89,7 +89,7 @@ function ContactForm() {
 
       if (data.success) {
         setSuccessMessage(
-          "Thank you for your message. I will be in touch within 24 hours. Please keep an eye on your spam folder in case my email is filtered there.",
+          "Thank you for your message. I’ll be in touch within 24 hours. Please check your spam or junk folder just in case my reply is filtered there.",
         );
         clearSuccessMessageAfterDelay();
 
@@ -103,12 +103,16 @@ function ContactForm() {
         setErrorMessage("");
       } else {
         setErrorMessage(
-          data.message || "Failed to send message. Please try again.",
+          data.message ||
+            "We weren’t able to send your message. Please try again.",
         );
         clearErrorMessageAfterDelay();
       }
     } catch (error) {
-      setErrorMessage(error.message || "An error occurred. Please try again.");
+      setErrorMessage(
+        error.message ||
+          "Something went wrong while sending your message. Please try again.",
+      );
       clearErrorMessageAfterDelay();
     } finally {
       setLoading(false);
@@ -162,7 +166,7 @@ function ContactForm() {
                       value={formData.phone}
                       onChange={handleChange}
                       required
-                      placeholder="Phone number (e.g., +44 123 456 789)"
+                      placeholder="Phone number"
                     />
                   </div>
                 </div>
