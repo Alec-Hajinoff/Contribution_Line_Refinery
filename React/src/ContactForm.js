@@ -126,7 +126,7 @@ function ContactForm() {
 
             <form className="contact-form" onSubmit={handleSubmit} noValidate>
               <div className="row g-3">
-                <div className="col-md-6">
+                <div className="col-md-4">
                   <div className="contact-form-group mb-3">
                     <input
                       autoComplete="off"
@@ -166,7 +166,7 @@ function ContactForm() {
                     />
                   </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-8">
                   <div className="contact-form-group h-100">
                     <textarea
                       autoComplete="off"
