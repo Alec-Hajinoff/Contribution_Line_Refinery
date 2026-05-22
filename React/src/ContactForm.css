@@ -64,13 +64,13 @@
 }
 
 .contact-form-btn-secondary {
-  background-color: #e8dfd6;
+  background-color: var(--color-primary-100);
   border: 1px solid #e8dfd6;
-  color: #1b3e73;
+  color: var(--color-text);
   font-weight: 500;
 
   padding: 12px 24px;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: none;

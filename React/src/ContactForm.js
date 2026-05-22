@@ -236,7 +236,7 @@ function ContactForm() {
                     className="contact-form-btn-secondary w-100"
                     disabled={loading}
                   >
-                    Send Message
+                    Send
                     <span
                       className={`contact-form-spinner-border spinner-border-sm ${
                         loading ? "d-inline-block" : "d-none"
