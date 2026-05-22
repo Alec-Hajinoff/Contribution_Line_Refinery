@@ -43,13 +43,14 @@
 }
 
 .contact-form-control::placeholder {
-color: #999;
+  color: #999;
   opacity: 1;
 }
 
 .contact-form-textarea {
   resize: vertical;
   min-height: 120px;
+  overflow: auto;
 }
 
 .contact-form-word-count {
@@ -91,14 +92,4 @@ color: #999;
   to {
     transform: rotate(360deg);
   }
-}
-
-.contact-form-group.h-100 {
-  display: flex;
-  flex-direction: column;
-  height: 200%;
-}
-
-.contact-form-group.h-100 textarea {
-  flex: 1;
 }
