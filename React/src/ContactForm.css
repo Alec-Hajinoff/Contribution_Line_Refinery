@@ -29,31 +29,6 @@
   width: 100%;
 }
 
-.contact-form-control {
-  width: 100%;
-  padding: 12px 16px;
-  border: 1px solid #d4c5b0;
-  border-radius: 5px;
-  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-}
-
-.contact-form-control:focus {
-  outline: none;
-  border-color: #1b3e73;
-  box-shadow: 0 0 0 3px rgba(27, 62, 115, 0.1);
-}
-
-.contact-form-control::placeholder {
-  color: #999;
-  opacity: 1;
-}
-
-.contact-form-textarea {
-  resize: vertical;
-  min-height: 120px;
-  overflow: auto;
-}
-
 .contact-form-word-count {
   display: block;
   margin-top: 5px;

@@ -135,7 +135,7 @@ function ContactForm() {
                     <input
                       autoComplete="off"
                       type="text"
-                      className="contact-form-control"
+                      className="form-control"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
@@ -148,7 +148,7 @@ function ContactForm() {
                     <input
                       autoComplete="off"
                       type="email"
-                      className="contact-form-control"
+                      className="form-control"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
@@ -161,7 +161,7 @@ function ContactForm() {
                     <input
                       autoComplete="off"
                       type="tel"
-                      className="contact-form-control"
+                      className="form-control"
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
@@ -174,7 +174,7 @@ function ContactForm() {
                   <div className="contact-form-group">
                     <textarea
                       autoComplete="off"
-                      className="contact-form-control contact-form-textarea"
+                      className="form-control"
                       name="projectDescription"
                       value={formData.projectDescription}
                       onChange={handleChange}
