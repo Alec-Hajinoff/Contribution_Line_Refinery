@@ -50,7 +50,7 @@ function UserLogin() {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(formData.email)) {
       setErrorMessage(
-        "Please enter a valid email address (e.g., name@domain.com)",
+        "Please enter a valid email address (for example, name@domain.com).",
       );
       clearErrorMessageAfterDelay();
       setLoading(false);
@@ -58,7 +58,7 @@ function UserLogin() {
     }
 
     if (formData.password.length < 8) {
-      setErrorMessage("Password must be at least 8 characters long");
+      setErrorMessage("Please ensure your password is at least 8 characters long.");
       clearErrorMessageAfterDelay();
       setLoading(false);
       return;
@@ -84,7 +84,7 @@ function UserLogin() {
         clearUnverifiedMessageAfterDelay();
         setFormData({ password: "" });
       } else {
-        setErrorMessage(data.message || "Sign in failed. Please try again.");
+        setErrorMessage(data.message || "We couldn’t sign you in at the moment. Please check your details and try again.");
         clearErrorMessageAfterDelay();
         setFormData({ password: "" });
       }
@@ -102,7 +102,7 @@ function UserLogin() {
     const email = emailInput ? emailInput.value : formData.email;
 
     if (!email || !email.trim()) {
-      setErrorMessage("Please enter your email address first");
+      setErrorMessage("Please enter your email address so we can help you reset your password.");
       clearErrorMessageAfterDelay();
       return;
     }
@@ -113,12 +113,12 @@ function UserLogin() {
     try {
       await passwordResetLink(email);
       setResetMessage(
-        "If an account exists for that email, we've sent a password reset link.",
+        "If an account exists for this email address, a password reset link has been sent.",
       );
       clearResetMessageAfterDelay();
     } catch (error) {
       setResetMessage(
-        "If an account exists for that email, we've sent a password reset link.",
+        "If an account exists for this email address, a password reset link has been sent.",
       );
       clearResetMessageAfterDelay();
     } finally {
