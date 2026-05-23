@@ -37,7 +37,7 @@ function ContactForm() {
 
   const validateWordCount = (text) => {
     const words = text.trim().split(/\s+/);
-    return words.length <= 200;
+    return words.length <= 100;
   };
 
   const handleSubmit = async (e) => {
@@ -77,7 +77,7 @@ function ContactForm() {
     }
 
     if (!validateWordCount(formData.projectDescription)) {
-      setErrorMessage("Your project description should be 200 words or fewer.");
+      setErrorMessage("Your project description should be 100 words or fewer.");
       clearErrorMessageAfterDelay();
       return;
     }
@@ -180,7 +180,7 @@ function ContactForm() {
                       onChange={handleChange}
                       required
                       rows="6"
-                      placeholder="Please describe your project (up to 200 words)"
+                      placeholder="Please describe your project (up to 100 words)"
                     />
 
                     <small className="contact-form-word-count">
@@ -190,7 +190,7 @@ function ContactForm() {
                           .split(/\s+/)
                           .filter((word) => word.length > 0).length
                       }
-                      /200 words
+                      /100 words
                     </small>
                   </div>
                 </div>

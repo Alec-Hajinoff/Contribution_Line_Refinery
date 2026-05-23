@@ -85,8 +85,8 @@ if (empty($projectDescription)) {
 }
 
 $wordCount = str_word_count($projectDescription);
-if ($wordCount > 200) {
-    echo json_encode(['success' => false, 'message' => 'Project description must be 200 words or less']);
+if ($wordCount > 100) {
+    echo json_encode(['success' => false, 'message' => 'Project description must be 100 words or less']);
     exit;
 }
 
