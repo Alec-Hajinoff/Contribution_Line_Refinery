@@ -102,7 +102,7 @@ try {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
-    $mail->setFrom($mailUsername, 'Hertford Standard Contact Form');
+    $mail->setFrom($mailUsername, 'Hertford Standard Project Submission Form');
     $mail->addAddress($adminEmail, 'Admin');
     $mail->addReplyTo($email, $name);
 
@@ -116,7 +116,7 @@ try {
         . "Project Description:\n"
         . $projectDescription . "\n\n"
         . "---\n"
-        . 'This message was sent from the Hertford Standard contact form.';
+        . 'This message was sent from the Hertford Standard project submission form.';
 
     $mail->send();
 
