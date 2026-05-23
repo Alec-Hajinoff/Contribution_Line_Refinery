@@ -102,7 +102,7 @@ try {
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port = 587;
 
-    $mail->setFrom($mailUsername, 'Hertford Standard Project Submission Form');
+    $mail->setFrom($mailUsername, 'Hertford Standard');
     $mail->addAddress($adminEmail, 'Admin');
     $mail->addReplyTo($email, $name);
 
