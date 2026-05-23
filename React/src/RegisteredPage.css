@@ -2,3 +2,7 @@
   background-color: rgb(236, 230, 230);
   border-radius: 7px;
 }
+
+.container {
+  margin-top: 2rem;
+}

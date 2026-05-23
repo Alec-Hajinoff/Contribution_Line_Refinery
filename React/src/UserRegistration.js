@@ -137,7 +137,7 @@ function UserRegistration() {
         {successMessage && <div id="success-message">{successMessage}</div>}
         <div id="error-message">{errorMessage}</div>
         <button type="submit" className="btn btn-secondary">
-          Register
+          {loading ? "Registering" : "Register"}
           <span
             className="spinner-border spinner-border-sm"
             role="status"
