@@ -1,12 +1,14 @@
 .verify-email-container {
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .verify-email-container .card {
   border: none;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
 }
 
 .verify-email-container .spinner-border {
