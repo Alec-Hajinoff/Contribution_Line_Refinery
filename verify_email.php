@@ -33,20 +33,20 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
-    echo json_encode(['success' => false, 'message' => 'Database connection failed']);
+    echo json_encode(['success' => false, 'message' => 'We’re sorry, but we’re unable to connect to the database at the moment. Please try again shortly.']);
     exit;
 }
 
 $input = json_decode(file_get_contents('php://input'), true);
 if ($input === null) {
-    echo json_encode(['success' => false, 'message' => 'Invalid JSON input']);
+    echo json_encode(['success' => false, 'message' => 'We couldn’t process your request due to invalid data. Please check and try again.']);
     exit;
 }
 
 $token = $input['token'] ?? null;
 
 if (!$token) {
-    echo json_encode(['success' => false, 'message' => 'No verification token provided']);
+    echo json_encode(['success' => false, 'message' => 'It looks like the verification link is incomplete. Please use the full link from your email.']);
     exit;
 }
 
@@ -67,9 +67,9 @@ try {
         $expiredStmt->execute();
 
         if ($expiredStmt->rowCount() > 0) {
-            echo json_encode(['success' => false, 'message' => 'This link has now expired']);
+            echo json_encode(['success' => false, 'message' => 'This verification link has expired. Please request a new one to continue.']);
         } else {
-            echo json_encode(['success' => false, 'message' => 'This account was not found in the database']);
+            echo json_encode(['success' => false, 'message' => 'We couldn’t find an account matching this verification link. Please check the link or contact support.']);
         }
         $conn->rollBack();
         exit;
@@ -78,7 +78,7 @@ try {
     $user = $checkStmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user['is_verified'] == 1) {
-        echo json_encode(['success' => false, 'message' => 'This account has already been verified']);
+        echo json_encode(['success' => false, 'message' => 'This account has already been successfully verified. You can now log in.']);
         $conn->rollBack();
         exit;
     }
@@ -94,13 +94,13 @@ try {
 
     $conn->commit();
 
-    echo json_encode(['success' => true, 'message' => 'Email verified successfully']);
+    echo json_encode(['success' => true, 'message' => 'Your email has been successfully verified. You’re all set to log in.']);
 } catch (Exception $e) {
     if ($conn->inTransaction()) {
         $conn->rollBack();
     }
     error_log('Verification Error: ' . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Database error']);
+    echo json_encode(['success' => false, 'message' => 'Something went wrong while processing your request. Please try again later.']);
 } finally {
     $conn = null;
 }

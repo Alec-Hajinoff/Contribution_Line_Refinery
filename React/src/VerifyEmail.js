@@ -66,7 +66,7 @@ function VerifyEmail() {
                     className="btn btn-primary mt-3"
                     onClick={handleRegisterClick}
                   >
-                    Register a new account
+                    Go to home page
                   </button>
                 </>
               )}
