@@ -4,17 +4,19 @@ import UserLogin from "./UserLogin.js";
 
 function RegisteredPage() {
   return (
-    <div className="container text-center">
-      <div className="row">
-        <div className="col-12 col-md-9">
-          <p>
-            Thank you for verifying your email address! Please log in using your
-            credentials.
-          </p>
-        </div>
-        <div className="col-12 col-md-3">
-          <p className="registered-section-divider">Registered user login:</p>
-          <UserLogin />
+    <div className="registered-page-wrapper">
+      <div className="container text-center">
+        <div className="row">
+          <div className="col-12 col-md-9">
+            <p>
+              Thank you for verifying your email address! Please log in using
+              your credentials.
+            </p>
+          </div>
+          <div className="col-12 col-md-3">
+            <p className="registered-section-divider">Registered user login:</p>
+            <UserLogin />
+          </div>
         </div>
       </div>
     </div>
