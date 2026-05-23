@@ -107,9 +107,9 @@ try {
     $mail->addReplyTo($email, $name);
 
     $mail->isHTML(false);
-    $mail->Subject = 'New Contact Form Submission - Hertford Standard';
+    $mail->Subject = 'New Project Submission - Hertford Standard';
 
-    $mail->Body = "A new message has been received from the contact form:\n\n"
+    $mail->Body = "A new message has been received:\n\n"
         . 'Name: ' . $name . "\n"
         . 'Email: ' . $email . "\n"
         . 'Phone: ' . $phone . "\n\n"
