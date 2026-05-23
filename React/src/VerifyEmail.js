@@ -46,32 +46,25 @@ function VerifyEmail() {
     <div className="container text-center verify-email-container">
       <div className="row justify-content-center">
         <div className="col-12 col-md-6">
-          <div className="card mt-5">
-            <div className="card-body">
-              {status === "loading" && (
-                <>
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                  </div>
-                  <p className="mt-3">Verifying your email address...</p>
-                </>
-              )}
+          {status === "loading" && (
+            <>
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <p className="mt-3">Verifying your email address...</p>
+            </>
+          )}
 
-              {status === "error" && (
-                <>
-                  <div className="alert alert-danger" role="alert">
-                    {message}
-                  </div>
-                  <button
-                    className="btn btn-primary mt-3"
-                    onClick={handleRegisterClick}
-                  >
-                    Go to home page
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
+          {status === "error" && (
+            <>
+              <p>{message}</p>
+              <div className="button-wrapper">
+                <button className="btn-secondary" onClick={handleRegisterClick}>
+                  Go to home page
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
