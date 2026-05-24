@@ -29,7 +29,7 @@ function PasswordReset() {
           isValid: false,
           checking: false,
           message:
-            "This link may have expired or been used already. For your security, password reset links only work once and for a limited time.\n\nIf you need help, you can reach our support team@contributionline.com.",
+            "This password reset link is no longer valid. For security reasons, links can only be used once and are time-limited.\n\nIf you need any assistance, please contact me at alec@hertfordstandard.com.",
         });
         return;
       }
@@ -48,7 +48,7 @@ function PasswordReset() {
             checking: false,
             message:
               data.message ||
-              "This link may have expired or been used already. For your security, password reset links only work once and for a limited time.\n\nIf you need help, you can reach our support team@contributionline.com.",
+              "This password reset link is no longer valid. For security reasons, links can only be used once and are time-limited.\n\nIf you need any assistance, please contact me at alec@hertfordstandard.com.",
           });
         }
       } catch (error) {
@@ -56,7 +56,7 @@ function PasswordReset() {
           isValid: false,
           checking: false,
           message:
-            "This link may have expired or been used already. For your security, password reset links only work once and for a limited time.\n\nIf you need help, you can reach our support team@contributionline.com.",
+            "This password reset link is no longer valid. For security reasons, links can only be used once and are time-limited.\n\nIf you need any assistance, please contact me at alec@hertfordstandard.com.",
         });
       }
     };
@@ -84,14 +84,18 @@ function PasswordReset() {
     setErrorMessage("");
     setSuccessMessage("");
     if (formData.newPassword.length < 8) {
-      setErrorMessage("Password must be at least 8 characters long ");
+      setErrorMessage(
+        "Please enter a password that is at least 8 characters long.",
+      );
       clearErrorMessageAfterDelay();
       setLoading(false);
       return;
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      setErrorMessage("Passwords do not match ");
+      setErrorMessage(
+        "The passwords you entered do not match. Please try again.",
+      );
       clearErrorMessageAfterDelay();
       setLoading(false);
       return;
@@ -102,7 +106,7 @@ function PasswordReset() {
 
       if (data.success) {
         setSuccessMessage(
-          "Your password has been updated.\nYou can now sign in using your new credentials. ",
+          "Your password has been updated successfully.\nYou can now sign in using your new details.",
         );
 
         setPasswordUpdated(true);
@@ -113,12 +117,15 @@ function PasswordReset() {
         });
       } else {
         setErrorMessage(
-          data.message || "Failed to update password. Please try again. ",
+          data.message ||
+            "We were unable to update your password at the moment. Please try again.",
         );
         clearErrorMessageAfterDelay();
       }
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again. ");
+      setErrorMessage(
+        "Something went wrong while updating your password. Please try again shortly.",
+      );
       clearErrorMessageAfterDelay();
     } finally {
       setLoading(false);
@@ -134,9 +141,11 @@ function PasswordReset() {
       <div className="password-reset-container text-center">
         <div className="password-reset-wrapper">
           <div className="spinner-border text-primary" role="status">
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Loading, please wait...</span>
           </div>
-          <p className="verifying-text">Verifying your link...</p>
+          <p className="verifying-text">
+            We are verifying your password reset link. Please wait...
+          </p>
         </div>
       </div>
     );
