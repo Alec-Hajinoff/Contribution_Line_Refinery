@@ -146,7 +146,7 @@ function PasswordReset() {
     return (
       <div className="password-reset-container">
         <div className="password-reset-wrapper">
-          <p className="password-reset-divider">Reset your password</p>
+          <p className="password-reset-divider">Please reset your password</p>
           <div className="error token-error" aria-live="polite">
             {tokenStatus.message}
           </div>
