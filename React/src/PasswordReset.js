@@ -6,21 +6,17 @@ import { passwordResetToken, updatePassword } from "./ApiService";
 function PasswordReset() {
   const navigate = useNavigate();
   const location = useLocation();
-
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get("token");
-
   const [tokenStatus, setTokenStatus] = useState({
     isValid: false,
     checking: true,
     message: "",
   });
-
   const [formData, setFormData] = useState({
     newPassword: "",
     confirmPassword: "",
   });
-
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -37,7 +33,6 @@ function PasswordReset() {
         });
         return;
       }
-
       try {
         const data = await passwordResetToken(token);
 
@@ -88,16 +83,15 @@ function PasswordReset() {
     setLoading(true);
     setErrorMessage("");
     setSuccessMessage("");
-
     if (formData.newPassword.length < 8) {
-      setErrorMessage("Password must be at least 8 characters long");
+      setErrorMessage("Password must be at least 8 characters long ");
       clearErrorMessageAfterDelay();
       setLoading(false);
       return;
     }
 
     if (formData.newPassword !== formData.confirmPassword) {
-      setErrorMessage("Passwords do not match");
+      setErrorMessage("Passwords do not match ");
       clearErrorMessageAfterDelay();
       setLoading(false);
       return;
@@ -108,23 +102,23 @@ function PasswordReset() {
 
       if (data.success) {
         setSuccessMessage(
-          "Your password has been updated.\nYou can now sign in using your new credentials.",
+          "Your password has been updated.\nYou can now sign in using your new credentials. ",
         );
 
         setPasswordUpdated(true);
 
         setFormData({
-          newPassword: "",
-          confirmPassword: "",
+          newPassword: " ",
+          confirmPassword: " ",
         });
       } else {
         setErrorMessage(
-          data.message || "Failed to update password. Please try again.",
+          data.message || "Failed to update password. Please try again. ",
         );
         clearErrorMessageAfterDelay();
       }
     } catch (error) {
-      setErrorMessage("An error occurred. Please try again.");
+      setErrorMessage("An error occurred. Please try again. ");
       clearErrorMessageAfterDelay();
     } finally {
       setLoading(false);
@@ -137,14 +131,12 @@ function PasswordReset() {
 
   if (tokenStatus.checking) {
     return (
-      <div className="password-reset-container">
-        <div className="password-reset-card">
-          <div className="text-center">
-            <div className="spinner-border text-primary" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
-            <p className="verifying-text">Verifying your link...</p>
+      <div className="password-reset-container text-center">
+        <div className="password-reset-wrapper">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden">Loading...</span>
           </div>
+          <p className="verifying-text">Verifying your link...</p>
         </div>
       </div>
     );
@@ -153,7 +145,8 @@ function PasswordReset() {
   if (!tokenStatus.isValid) {
     return (
       <div className="password-reset-container">
-        <div className="password-reset-card">
+        <div className="password-reset-wrapper">
+          <p className="password-reset-divider">Reset your password</p>
           <div className="error token-error" aria-live="polite">
             {tokenStatus.message}
           </div>
@@ -169,10 +162,9 @@ function PasswordReset() {
 
   return (
     <div className="password-reset-container">
-      <div className="password-reset-card">
-        <h3 className="password-reset-title">Reset your password</h3>
-
-        <form onSubmit={handleSubmit} noValidate>
+      <div className="password-reset-wrapper">
+        <p className="password-reset-divider">Reset your password</p>
+        <form className="row g-2" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <input
               autoComplete="off"
