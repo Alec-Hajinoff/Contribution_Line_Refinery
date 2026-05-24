@@ -163,7 +163,7 @@ function PasswordReset() {
   return (
     <div className="password-reset-container">
       <div className="password-reset-wrapper">
-        <p className="password-reset-divider">Reset your password</p>
+        <p className="password-reset-divider">Please reset your password</p>
         <form className="row g-2" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
             <input
