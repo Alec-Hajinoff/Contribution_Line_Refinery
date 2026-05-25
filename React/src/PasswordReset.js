@@ -230,21 +230,23 @@ function PasswordReset() {
             </div>
           )}
 
-          <button
-            type="submit"
-            className="btn btn-secondary update-password-button"
-            disabled={loading || passwordUpdated}
-          >
-            Update password
-            {loading && (
-              <span
-                className="spinner-border spinner-border-sm"
-                role="status"
-                aria-hidden="true"
-                id="spinnerUpdate"
-              ></span>
-            )}
-          </button>
+          {!passwordUpdated && (
+            <button
+              type="submit"
+              className="btn btn-secondary update-password-button"
+              disabled={loading}
+            >
+              Update password
+              {loading && (
+                <span
+                  className="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                  id="spinnerUpdate"
+                ></span>
+              )}
+            </button>
+          )}
         </form>
       </div>
     </div>
