@@ -4,6 +4,9 @@ import "./Footer.css";
 
 function Footer() {
   const currentYear = new Date().getFullYear();
+  const user = ["a", "l", "e", "c"].join("");
+  const domain = ["hertfordstandard", "com"].join(".");
+  const email = `${user}@${domain}`;
   return (
     <div className="container text-center">
       <br />
@@ -13,9 +16,7 @@ function Footer() {
             <em>
               &copy; Copyright 2025 - {currentYear}. Office address: 4 Bridge
               Gate, London, N21 2AH, United Kingdom. Email address:{" "}
-              <a href="mailto:alec@hertfordstandard.com">
-                alec@hertfordstandard.com
-              </a>
+              <a href={`mailto:${email}`}>{email}</a>
             </em>
           </p>
           <div className="footer-links">
