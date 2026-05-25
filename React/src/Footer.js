@@ -11,7 +11,7 @@ function Footer() {
         <div className="col-12">
           <p className="footer">
             <em>
-              &copy; Copyright 2025 - {currentYear}. Company address: 4 Bridge
+              &copy; Copyright 2025 - {currentYear}. Office address: 4 Bridge
               Gate, London, N21 2AH, United Kingdom. Email address:{" "}
               <a href="mailto:alec@hertfordstandard.com">
                 alec@hertfordstandard.com
