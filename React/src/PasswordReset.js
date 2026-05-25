@@ -112,8 +112,8 @@ function PasswordReset() {
         setPasswordUpdated(true);
 
         setFormData({
-          newPassword: " ",
-          confirmPassword: " ",
+          newPassword: "",
+          confirmPassword: "",
         });
       } else {
         setErrorMessage(
