@@ -1,8 +1,9 @@
 .footer {
-  background-color: rgb(236, 230, 230);
-  border-radius: 7px;
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
   padding: 15px;
-  margin-bottom: 10px;
+  font-weight: 500;
+  margin-top: 35px;
 }
 
 .footer-links {
