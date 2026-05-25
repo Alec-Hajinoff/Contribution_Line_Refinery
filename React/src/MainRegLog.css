@@ -14,3 +14,60 @@
     font-size: 14px;
   }
 }
+
+.custom-tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.tooltip-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.tooltip-btn:focus {
+  outline: none;
+}
+
+.custom-tooltip-content {
+  position: absolute;
+  bottom: 135%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #2b2b2b;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 400;
+  width: 220px;
+  white-space: normal;
+  z-index: 1050;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: left;
+}
+
+.custom-tooltip-content::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #2b2b2b transparent transparent transparent;
+}
+
+@media (max-width: 576px) {
+  .custom-tooltip-content {
+    width: 170px;
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+}
