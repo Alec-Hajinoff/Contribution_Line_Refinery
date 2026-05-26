@@ -49,9 +49,9 @@ function MainRegLog() {
               </button>
               {showTooltip && (
                 <span className="custom-tooltip-content">
-                  Submit your requirements with text and files, request changes
-                  as work progresses, and track every update through a clear,
-                  chronological timeline.
+                  Registered users can submit requirements with text and files,
+                  request changes as work progresses, and track every update
+                  through a clear, chronological timeline.
                 </span>
               )}
             </span>
