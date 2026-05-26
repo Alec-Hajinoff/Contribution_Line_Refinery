@@ -9,7 +9,6 @@ function Footer() {
   const email = `${user}@${domain}`;
   return (
     <div className="container text-center">
-      <br />
       <div className="row">
         <div className="col-12">
           <p className="footer">

@@ -32,7 +32,7 @@ function TechnologyStack() {
 
   return (
     <div className="tech-stack-container">
-      <h5 className="tech-stack-title">Technology stack:</h5>
+      <h5 className="tech-stack-title">Technology stack</h5>
 
       <div className="tech-categories-wrapper">
         {techCategories.map((group) => (

@@ -5,17 +5,16 @@
   gap: 15px;
   margin-top: 25px;
   padding: 15px;
-  background-color: #f8f9fa;
-  border-radius: 8px;
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
   text-align: left;
 }
 
 .tech-stack-title {
-  font-weight: 700;
-  font-size: 16px;
-  color: #333333;
+  font-weight: 500;
+
   margin: 0;
-  text-transform: uppercase;
+
   letter-spacing: 0.5px;
 }
 
@@ -33,9 +32,8 @@
 }
 
 .tech-category-label {
-  font-weight: 600;
-  font-size: 14px;
-  color: #666666;
+  font-size: 16px;
+
   min-width: 85px;
   text-align: left;
 }
