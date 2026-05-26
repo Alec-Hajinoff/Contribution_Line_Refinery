@@ -3,6 +3,7 @@ import "./MainRegLog.css";
 import Main from "./Main.js";
 import UserRegistration from "./UserRegistration.js";
 import UserLogin from "./UserLogin.js";
+import TechnologyStack from "./TechnologyStack.js";
 
 function MainRegLog() {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -34,7 +35,9 @@ function MainRegLog() {
       <div className="row">
         <div className="col-12 col-md-9">
           <Main />
+          <TechnologyStack />
         </div>
+
         <div className="col-12 col-md-3">
           <p className="section-divider">
             New client? Please register:
