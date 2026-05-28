@@ -43,12 +43,9 @@ function AboutMe() {
           <p>
             The logical structure of code, the precision of how systems behave,
             and the ability to build something tangible from first principles
-            immediately resonated with me.
-          </p>
-          <p>
-            Since then, I have committed to developing my skills in a focused
-            and consistent way, building both theoretical understanding and
-            practical capability.
+            immediately resonated with me. Since then, I have committed to
+            developing my skills in a focused and consistent way, building both
+            theoretical understanding and practical capability.
           </p>
           <h2 className="h4 mt-4">Approach to Software Development</h2>{" "}
           {/*mt-4 is margin top*/}
@@ -56,9 +53,8 @@ function AboutMe() {
             I approach software development through the lens of engineering
             principles. This provides a structured way to think about problems,
             make decisions, and deliver outcomes that are robust and
-            maintainable.
+            maintainable. My work typically follows a sequence of:
           </p>
-          <p>My work typically follows a sequence of:</p>
           <ul>
             <li>
               <strong>Requirements engineering</strong> - understanding the
@@ -136,15 +132,25 @@ function AboutMe() {
           <h2 className="h4 mt-4">Working With Me</h2>
           <p>
             Clients can expect a professional, organised approach combined with
-            openness and flexibility.
+            openness and flexibility. I aim to provide:
           </p>
-          <p>I aim to provide:</p>
           <ul>
-            <li>Clear communication and straightforward discussions</li>
-            <li>A logical and well-organised development process</li>
-            <li>Transparency in how work progresses</li>
             <li>
-              A willingness to engage, refine, and improve ideas collaboratively
+              <strong>
+                Clear communication and straightforward discussions
+              </strong>
+            </li>
+            <li>
+              <strong>A logical and well-organised development process</strong>
+            </li>
+            <li>
+              <strong>Transparency in how work progresses</strong>
+            </li>
+            <li>
+              <strong>
+                A willingness to engage, refine, and improve ideas
+                collaboratively
+              </strong>
             </li>
           </ul>
           <p>

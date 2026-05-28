@@ -1,17 +1,5 @@
-.aboutme-container {
-  padding: 20px 0;
-  min-height: 400px;
-  color: var(--color-text);
-}
-
-.aboutme-container h1 {
-  color: var(--color-primary-500);
-  font-size: 28px;
-  margin-top: 0;
-}
-
 .aboutme-container h2 {
-  color: var(--color-primary-600);
+  color: var(--color-primary-500);
 }
 
 .aboutme-container p,
