@@ -4,6 +4,8 @@ import "./AboutMe.css";
 function AboutMe() {
   return (
     <div className="aboutme-container container my-5">
+      {" "}
+      {/*my-5 is the margin on the y axis, space at the top and the bottom*/}
       <div className="row">
         <div className="col-12 clearfix-custom">
           <img
@@ -11,13 +13,11 @@ function AboutMe() {
             alt="Alec Hajinoff"
             className="aboutme-photo img-fluid rounded"
           />
-
           <p>
             My name is Alec Hajinoff, and I am a freelance software engineer
             based in London, United Kingdom. I design and build modern and
             secure web applications for businesses and development teams.
           </p>
-
           <p>
             My work centres on creating systems that are not only functional,
             but well-organised beneath the surface - where front-end, back-end,
@@ -34,27 +34,24 @@ function AboutMe() {
             interested in finding a way to apply that way of thinking in a
             practical context.
           </p>
-
           <p>
             After coming across a software engineering course, I decided to
             explore whether programming could provide that outlet. I enrolled in
             a course at the end of 2023, and from the very first lesson it
             became clear that this was exactly what I had been looking for.
           </p>
-
           <p>
             The logical structure of code, the precision of how systems behave,
             and the ability to build something tangible from first principles
             immediately resonated with me.
           </p>
-
           <p>
             Since then, I have committed to developing my skills in a focused
             and consistent way, building both theoretical understanding and
             practical capability.
           </p>
-
-          <h2 className="h4 mt-4">Approach to Software Development</h2>
+          <h2 className="h4 mt-4">Approach to Software Development</h2>{" "}
+          {/*mt-4 is margin top*/}
           <p>
             I approach software development through the lens of engineering
             principles. This provides a structured way to think about problems,
@@ -95,7 +92,6 @@ function AboutMe() {
             separated and well-managed allows the system to remain
             understandable, adaptable, and reliable over time.
           </p>
-
           <h2 className="h4 mt-4">Professional Characteristics</h2>
           <p>My working style is defined by a small number of traits:</p>
           <ul>
@@ -121,7 +117,6 @@ function AboutMe() {
             them directly in how I design systems, write code, and communicate
             throughout a project.
           </p>
-
           <h2 className="h4 mt-4">Continuous Development</h2>
           <p>
             I place a strong emphasis on continuous learning. Software
@@ -138,7 +133,6 @@ function AboutMe() {
             completions are included on this page as part of that ongoing
             development.
           </p>
-
           <h2 className="h4 mt-4">Working With Me</h2>
           <p>
             Clients can expect a professional, organised approach combined with
