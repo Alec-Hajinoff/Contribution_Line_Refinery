@@ -6,8 +6,8 @@ function AboutMe() {
     <div className="aboutme-container container my-5">
       {" "}
       {/*my-5 is the margin on the y axis, space at the top and the bottom*/}
-      <div className="row">
-        <div className="col-12 clearfix-custom">
+      <div className="row justify-content-center">
+        <div className="col-12 col-lg-9 clearfix-custom">
           <img
             src="https://via.placeholder.com/320x400.png?text=Alec+Hajinoff"
             alt="Alec Hajinoff"
