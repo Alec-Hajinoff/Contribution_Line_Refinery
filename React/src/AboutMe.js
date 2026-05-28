@@ -26,7 +26,7 @@ function AboutMe() {
             ad hoc tasks, with an emphasis on structure, transparency, and
             consistency.
           </p>
-          <h2 className="h4 mt-4">Background</h2>
+          <h2 className="h5 mt-4">Background</h2>
           <p>
             My path into software engineering began while working at a food
             wholesale company, where I was looking for a more intellectually
@@ -47,7 +47,7 @@ function AboutMe() {
             developing my skills in a focused and consistent way, building both
             theoretical understanding and practical capability.
           </p>
-          <h2 className="h4 mt-4">Approach to Software Development</h2>{" "}
+          <h2 className="h5 mt-4">Approach to Software Development</h2>{" "}
           {/*mt-4 is margin top*/}
           <p>
             I approach software development through the lens of engineering
@@ -88,7 +88,7 @@ function AboutMe() {
             separated and well-managed allows the system to remain
             understandable, adaptable, and reliable over time.
           </p>
-          <h2 className="h4 mt-4">Professional Characteristics</h2>
+          <h2 className="h5 mt-4">Professional Characteristics</h2>
           <p>My working style is defined by a small number of traits:</p>
           <ul>
             <li>
@@ -113,7 +113,7 @@ function AboutMe() {
             them directly in how I design systems, write code, and communicate
             throughout a project.
           </p>
-          <h2 className="h4 mt-4">Continuous Development</h2>
+          <h2 className="h5 mt-4">Continuous Development</h2>
           <p>
             I place a strong emphasis on continuous learning. Software
             engineering evolves quickly, and maintaining relevance requires
@@ -129,7 +129,7 @@ function AboutMe() {
             completions are included on this page as part of that ongoing
             development.
           </p>
-          <h2 className="h4 mt-4">Working With Me</h2>
+          <h2 className="h5 mt-4">Working With Me</h2>
           <p>
             Clients can expect a professional, organised approach combined with
             openness and flexibility. I aim to provide:
