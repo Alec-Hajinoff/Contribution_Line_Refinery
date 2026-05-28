@@ -9,11 +9,13 @@ function AboutMe() {
       {/*my-5 is the margin on the y axis, space at the top and the bottom*/}
       <div className="row justify-content-center">
         <div className="col-12 col-lg-9 clearfix-custom">
-          <img
-            src={myphoto}
-            alt="Alec Hajinoff"
-            className="aboutme-photo img-fluid rounded"
-          />
+          <div className="photo-container rounded">
+            <img
+              src={myphoto}
+              alt="Alec Hajinoff"
+              className="aboutme-photo img-fluid"
+            />
+          </div>
           <p>
             My name is Alec Hajinoff, and I am a freelance software engineer
             based in London, United Kingdom. I design and build modern and
