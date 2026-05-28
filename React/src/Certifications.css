@@ -1,7 +1,7 @@
 .certification-link {
   background: none;
   border: none;
-
+  color: var(--color-text);
   cursor: pointer;
 
   padding: 0;
@@ -10,4 +10,8 @@
 
 .certification-link:hover {
   text-decoration: underline;
+}
+
+.certifications-container h2 {
+  color: var(--color-primary-500);
 }
