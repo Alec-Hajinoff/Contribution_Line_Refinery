@@ -1,0 +1,25 @@
+.certifications-container {
+  margin-top: 24px;
+}
+
+.certifications-list {
+  padding-left: 20px;
+  list-style-type: disc;
+}
+
+.certifications-list li {
+  margin-bottom: 8px;
+}
+
+.certification-link {
+  color: var(--color-primary-500);
+  font-size: var(--font-size-base);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.certification-link:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}

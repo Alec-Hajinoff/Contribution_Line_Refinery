@@ -1,6 +1,7 @@
 import React from "react";
 import "./AboutMe.css";
 import myphoto from "./my_edited_photo.jpg";
+import Certifications from "./Certifications";
 
 function AboutMe() {
   return (
@@ -162,6 +163,7 @@ function AboutMe() {
             in a way that is reliable and aligned with the long-term success of
             the project.
           </p>
+          <Certifications />
         </div>
       </div>
     </div>
