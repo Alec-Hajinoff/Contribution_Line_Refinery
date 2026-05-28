@@ -1,5 +1,6 @@
 import React from "react";
 import "./AboutMe.css";
+import myphoto from "./my_edited_photo.jpg";
 
 function AboutMe() {
   return (
@@ -9,7 +10,7 @@ function AboutMe() {
       <div className="row justify-content-center">
         <div className="col-12 col-lg-9 clearfix-custom">
           <img
-            src="https://via.placeholder.com/320x400.png?text=Alec+Hajinoff"
+            src={myphoto}
             alt="Alec Hajinoff"
             className="aboutme-photo img-fluid rounded"
           />
