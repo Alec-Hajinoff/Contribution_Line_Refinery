@@ -4,8 +4,28 @@ import "./Certifications.css";
 function Certifications() {
   const certificationsList = [
     {
+      name: "Full Stack Engineering",
+      path: "/Certifications/Completion_Certificate_Full_Stack_Engineering.pdf",
+    },
+    {
+      name: "PHP",
+      path: "/Certifications/Completion_Certificate_PHP.pdf",
+    },
+    {
+      name: "Python",
+      path: "/Certifications/Completion_Certificate_Python_3.pdf",
+    },
+    {
       name: "React",
       path: "/Certifications/Completion_Certificate_Learn_React.pdf",
+    },
+    {
+      name: "jQuery",
+      path: "/Certifications/Completion_Certificate_jQuery.pdf",
+    },
+    {
+      name: "Bootstrap",
+      path: "/Certifications/Completion_Certificate_Learn_Bootstrap.pdf",
     },
   ];
 
