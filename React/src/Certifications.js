@@ -1,7 +1,7 @@
 import React from "react";
 import "./Certifications.css";
 
-import { ReactComponent as CertificationIcon } from "./certification_icon.svg";
+import { ReactComponent as CertificationIcon } from "./Images/certification_icon.svg";
 
 function Certifications() {
   const certificationsList = [

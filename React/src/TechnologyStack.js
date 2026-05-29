@@ -1,12 +1,12 @@
 import React from "react";
 import "./TechnologyStack.css";
-import reactLogo from "./react_light.svg";
-import bootstrapLogo from "./bootstrap.svg";
-import cssLogo from "./css_old.svg";
-import htmlLogo from "./html5.svg";
-import jsLogo from "./javascript.svg";
-import mysqlLogo from "./mysql-wordmark-light.svg";
-import phpLogo from "./php.svg";
+import reactLogo from "./Images/react_light.svg";
+import bootstrapLogo from "./Images/bootstrap.svg";
+import cssLogo from "./Images/css_old.svg";
+import htmlLogo from "./Images/html5.svg";
+import jsLogo from "./Images/javascript.svg";
+import mysqlLogo from "./Images/mysql-wordmark-light.svg";
+import phpLogo from "./Images/php.svg";
 
 function TechnologyStack() {
   const techCategories = [

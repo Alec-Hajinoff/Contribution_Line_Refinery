@@ -1,6 +1,6 @@
 import React from "react";
 import "./AboutMe.css";
-import myphoto from "./my_edited_photo.jpg";
+import myphoto from "./Images/my_edited_photo.jpg";
 import Certifications from "./Certifications";
 
 function AboutMe() {
