@@ -71,3 +71,12 @@
     padding: 6px 10px;
   }
 }
+
+@media (min-width: 768px) {
+  .sticky-sidebar {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 20px;
+    align-self: start;
+  }
+}

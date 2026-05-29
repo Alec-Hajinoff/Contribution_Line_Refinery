@@ -38,7 +38,7 @@ function MainRegLog() {
           <TechnologyStack />
         </div>
 
-        <div className="col-12 col-md-3">
+        <div className="col-12 col-md-3 sticky-sidebar">
           <p className="section-divider">
             New client? Please register:
             <span className="custom-tooltip-wrapper" ref={tooltipRef}>
