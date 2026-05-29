@@ -1,6 +1,8 @@
 import React from "react";
 import "./Certifications.css";
 
+import { ReactComponent as CertificationIcon } from "./certification_icon.svg";
+
 function Certifications() {
   const certificationsList = [
     {
@@ -32,20 +34,25 @@ function Certifications() {
   return (
     <div className="certifications-container">
       <h2 className="h5 mt-4">Certifications</h2>
-      <ul className="certifications-list">
+
+      <div className="certifications-list-horizontal">
         {certificationsList.map((cert, index) => (
-          <li key={index}>
-            <a
-              href={cert.path}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="certification-link"
-            >
-              {cert.name}
-            </a>
-          </li>
+          <React.Fragment key={index}>
+            {index > 0 && <CertificationIcon className="certification-icon" />}
+
+            <p className="certification-item">
+              <a
+                href={cert.path}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="certification-link"
+              >
+                {cert.name}
+              </a>
+            </p>
+          </React.Fragment>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
