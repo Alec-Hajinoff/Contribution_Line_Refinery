@@ -97,10 +97,8 @@ function Portfolio() {
               </li>
             </ul>
 
-            <h2 className="h5 mt-4">5. Outcome / Impact</h2>
-            <p>
-              <strong>For Organisations & Training Managers</strong>
-            </p>
+            <h2 className="h5 mt-4">5. Outcome</h2>
+            <p>For Organisations & Training Managers</p>
             <ul>
               <li>
                 <strong>Immediate access</strong> - to a curated catalogue of
@@ -116,9 +114,7 @@ function Portfolio() {
               </li>
             </ul>
 
-            <p>
-              <strong>For Training Providers</strong>
-            </p>
+            <p>For Training Providers</p>
             <ul>
               <li>
                 <strong>Streamlined delivery</strong> - to organisations seeking
