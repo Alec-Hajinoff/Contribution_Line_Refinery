@@ -129,7 +129,7 @@ function Portfolio() {
             <p className="github-inspection-block">
               Interested in the implementation details?{" "}
               <a
-                href="https://github.com/yourusername/trainingapi-repo"
+                href="https://github.com/Alec-Hajinoff/TrainingAPI"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-link"
