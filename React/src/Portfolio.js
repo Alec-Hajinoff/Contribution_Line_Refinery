@@ -125,6 +125,19 @@ function Portfolio() {
                 overhead through standardised programme submission and review
               </li>
             </ul>
+
+            <p className="github-inspection-block">
+              Interested in the implementation details?{" "}
+              <a
+                href="https://github.com/yourusername/trainingapi-repo"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-link"
+              >
+                Browse code on GitHub
+                <span className="external-icon">&#x2197;</span>
+              </a>
+            </p>
           </div>
         </div>
       </div>
