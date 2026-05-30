@@ -7,7 +7,7 @@ function PrivacyPolicy() {
       <div className="container">
         <h1>Privacy Policy</h1>
         <p>
-          <em>Last updated: {new Date().toLocaleDateString()}</em>
+          <em>Effective Date: {new Date().toLocaleDateString()}</em>
         </p>
 
         <h2>1. Introduction</h2>
