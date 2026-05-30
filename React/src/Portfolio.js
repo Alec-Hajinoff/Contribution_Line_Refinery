@@ -1,7 +1,7 @@
 import React from "react";
 import "./Portfolio.css";
-// Placeholder import for the TrainingApi logo - to be updated with the real asset path later
-//import trainingApiLogo from "./Images/trainingapi_logo.png";
+
+import trainingApiLogo from "./Images/trainingapi_logo.png";
 
 function Portfolio() {
   return (
@@ -14,13 +14,17 @@ function Portfolio() {
 
           <div className="clearfix-custom">
             <div className="logo-container rounded">
-              {/*<a href="https://trainingapi.com/" target="_blank" rel="noopener noreferrer">
+              <a
+                href="https://trainingapi.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <img
                   src={trainingApiLogo}
                   alt="TrainingApi Logo"
                   className="portfolio-logo img-fluid"
                 />
-              </a>*/}
+              </a>
             </div>
 
             <h2 className="h5 mt-4">1. Business Purpose</h2>
