@@ -35,7 +35,7 @@ function Portfolio() {
                 rel="noopener noreferrer"
                 className="inline-link"
               >
-                TrainingApi
+                TrainingApi<span className="external-icon">&#x2197;</span>
               </a>{" "}
               is a platform for delivering virtual instructor‑led technology
               workshops, helping organisations rapidly develop practical skills

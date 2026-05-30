@@ -74,6 +74,13 @@
   text-decoration: none;
 }
 
+.external-icon {
+  font-size: 0.75rem;
+  margin-left: 2px;
+  vertical-align: super;
+  display: inline-block;
+}
+
 .inline-link:hover {
   color: inherit;
   text-decoration: underline;
