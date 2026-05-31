@@ -35,37 +35,44 @@ function PrivacyPolicy() {
           <h2 className="h5 mt-4">3.1 Information You Provide</h2>
           <ul>
             <li>
-              <strong>Name and contact details</strong> – e.g. email address
+              <strong>Name and contact details (e.g. email address)</strong>
             </li>
             <li>
-              <strong>Account registration details</strong> – for application
-              access
+              <strong>
+                Account registration details for application access
+              </strong>
             </li>
             <li>
-              <strong>Project enquiry and specification information</strong> –
-              submitted by prospective clients
+              <strong>
+                Project enquiry and specification information submitted by
+                prospective clients
+              </strong>
             </li>
             <li>
-              <strong>Communications and correspondence</strong> – sent via our
-              contact channels
+              <strong>
+                Communications and correspondence sent via our contact channels
+              </strong>
             </li>
           </ul>
 
           <h2 className="h5 mt-4">3.2 Technical Data</h2>
           <ul>
             <li>
-              <strong>IP address</strong> – network identifiers
+              <strong>IP address, network identifiers</strong>
             </li>
             <li>
-              <strong>Browser type and version</strong> – application
-              compatibility data
+              <strong>
+                Browser type and version, application compatibility data
+              </strong>
             </li>
             <li>
-              <strong>Device and operating system information</strong> –
-              hardware characteristics
+              <strong>
+                Device and operating system information, hardware
+                characteristics
+              </strong>
             </li>
             <li>
-              <strong>Usage data</strong> – e.g. pages visited, actions taken
+              <strong>Usage data (e.g. pages visited, actions taken)</strong>
             </li>
           </ul>
 
@@ -79,24 +86,26 @@ function PrivacyPolicy() {
           <p>We use personal data for the following purposes:</p>
           <ul>
             <li>
-              <strong>To respond to enquiries</strong> – and communicate with
-              prospective clients
+              <strong>
+                To respond to enquiries and communicate with prospective clients
+              </strong>
             </li>
             <li>
-              <strong>To provide and manage</strong> – client accounts
+              <strong>To provide and manage client accounts</strong>
             </li>
             <li>
-              <strong>To deliver and manage</strong> – projects
+              <strong>To deliver and manage projects</strong>
             </li>
             <li>
-              <strong>To maintain and improve</strong> – the application
+              <strong>To maintain and improve the application</strong>
             </li>
             <li>
-              <strong>To ensure security</strong> – and prevent unauthorised
-              access
+              <strong>
+                To ensure security and prevent unauthorised access
+              </strong>
             </li>
             <li>
-              <strong>To comply</strong> – with legal obligations
+              <strong>To comply with legal obligations</strong>
             </li>
           </ul>
 
@@ -104,20 +113,25 @@ function PrivacyPolicy() {
           <p>We rely on the following lawful bases under UK GDPR:</p>
           <ul>
             <li>
-              <strong>Contractual necessity</strong> – to provide services
-              requested by you
+              <strong>
+                Contractual necessity to provide services requested by you
+              </strong>
             </li>
             <li>
-              <strong>Legitimate interests</strong> – to operate, improve, and
-              secure the application
+              <strong>
+                Legitimate interests to operate, improve, and secure the
+                application
+              </strong>
             </li>
             <li>
-              <strong>Legal obligation</strong> – where processing is required
-              by law
+              <strong>
+                Legal obligation where processing is required by law
+              </strong>
             </li>
             <li>
-              <strong>Consent</strong> – where explicitly obtained (e.g.
-              optional communications)
+              <strong>
+                Consent where explicitly obtained (e.g. optional communications)
+              </strong>
             </li>
           </ul>
 
@@ -125,14 +139,16 @@ function PrivacyPolicy() {
           <p>We do not sell or rent personal data. We may share data with:</p>
           <ul>
             <li>
-              <strong>Service providers</strong> – supporting hosting,
-              infrastructure, or application functionality
+              <strong>
+                Service providers supporting hosting, infrastructure, or
+                application functionality
+              </strong>
             </li>
             <li>
-              <strong>Professional advisers</strong> – where necessary
+              <strong>Professional advisers where necessary</strong>
             </li>
             <li>
-              <strong>Authorities</strong> – where required by law
+              <strong>Authorities where required by law</strong>
             </li>
           </ul>
           <p>
@@ -147,15 +163,17 @@ function PrivacyPolicy() {
           </p>
           <ul>
             <li>
-              <strong>Secure server environments</strong> – protecting
-              infrastructure
+              <strong>
+                Secure server environments protecting infrastructure
+              </strong>
             </li>
             <li>
-              <strong>Access controls</strong> – and authentication mechanisms
+              <strong>Access controls and authentication mechanisms</strong>
             </li>
             <li>
-              <strong>Separation of application layers</strong> – frontend,
-              backend, database
+              <strong>
+                Separation of application layers - frontend, backend, database
+              </strong>
             </li>
           </ul>
           <p>
@@ -167,13 +185,13 @@ function PrivacyPolicy() {
           <p>We retain personal data only for as long as necessary to:</p>
           <ul>
             <li>
-              <strong>Fulfil the purposes</strong> – for which it was collected
+              <strong>Fulfil the purposes for which it was collected</strong>
             </li>
             <li>
-              <strong>Comply</strong> – with legal and regulatory obligations
+              <strong>Comply with legal and regulatory obligations</strong>
             </li>
             <li>
-              <strong>Resolve disputes</strong> – and enforce agreements
+              <strong>Resolve disputes and enforce agreements</strong>
             </li>
           </ul>
           <p>
@@ -186,38 +204,38 @@ function PrivacyPolicy() {
           <p>Under UK GDPR, you have the right to:</p>
           <ul>
             <li>
-              <strong>Access</strong> – your personal data
+              <strong>Access your personal data</strong>
             </li>
             <li>
-              <strong>Request correction</strong> – of inaccurate data
+              <strong>Request correction of inaccurate data</strong>
             </li>
             <li>
-              <strong>Request deletion</strong> – of your data
+              <strong>Request deletion of your data</strong>
             </li>
             <li>
-              <strong>Restrict or object</strong> – to processing
+              <strong>Restrict or object to processing</strong>
             </li>
             <li>
-              <strong>Request data portability</strong> – where applicable
+              <strong>Request data portability where applicable</strong>
             </li>
           </ul>
           <p>
             To exercise your rights, please contact us using our contact email
             address. You also have the right to lodge a complaint with the
-            Information Commissioner’s Office (ICO).
+            Information Commissioner's Office (ICO).
           </p>
 
           <h2 className="h5 mt-4">10. Cookies</h2>
           <p>The application may use cookies or similar technologies to:</p>
           <ul>
             <li>
-              <strong>Maintain</strong> – session functionality
+              <strong>Maintain session functionality</strong>
             </li>
             <li>
-              <strong>Improve</strong> – user experience
+              <strong>Improve user experience</strong>
             </li>
             <li>
-              <strong>Analyse</strong> – usage patterns
+              <strong>Analyse usage patterns</strong>
             </li>
           </ul>
           <p>
