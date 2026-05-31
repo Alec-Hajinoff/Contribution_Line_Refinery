@@ -1,3 +1,8 @@
+.privacy-policy-title {
+  margin-bottom: 16px;
+}
+
+.privacy-policy-container h1,
 .privacy-policy-container h2 {
   color: var(--color-primary-500);
 }

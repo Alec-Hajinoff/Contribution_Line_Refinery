@@ -6,6 +6,7 @@ function PrivacyPolicy() {
     <div className="privacy-policy-container container my-5">
       <div className="row justify-content-center">
         <div className="col-12 col-lg-9 clearfix-custom">
+          <h1 className="privacy-policy-title h5">Privacy Policy</h1>
           <p>Effective Date: {new Date().toLocaleDateString()}</p>
 
           <h2 className="h5 mt-4">1. Introduction</h2>
