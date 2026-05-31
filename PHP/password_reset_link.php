@@ -2,13 +2,13 @@
 
 require_once 'session_config.php';
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-$config = parse_ini_file(__DIR__ . '/.env', false, INI_SCANNER_RAW);
+$config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
 if ($config === false) {
     error_log('password_reset_link.php: Failed to parse .env file');
     echo json_encode(['success' => false, 'message' => 'Server configuration error']);

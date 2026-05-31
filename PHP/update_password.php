@@ -2,7 +2,7 @@
 
 require_once 'session_config.php';
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $allowed_origins = [
     'http://localhost:3000'

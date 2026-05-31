@@ -2,7 +2,7 @@
 
 require_once 'session_config.php';
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
 if (!isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
@@ -171,7 +171,7 @@ try {
             $userStmt->execute([':user_id' => $user_id]);
             $submittingUser = $userStmt->fetch(PDO::FETCH_ASSOC);
 
-            $config = parse_ini_file(__DIR__ . '/.env', false, INI_SCANNER_RAW);
+            $config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
 
             if ($config === false) {
                 error_log('Admin notification: Failed to parse .env file for mail credentials');
