@@ -52,7 +52,7 @@ function MainRegLog() {
               </button>
               {showTooltip && (
                 <span className="custom-tooltip-content">
-                  Registered users can submit requirements with text and files,
+                  Registered clients can submit requirements with text and files,
                   request changes as work progresses, and track every update
                   through a clear, chronological timeline.
                 </span>
