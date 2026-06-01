@@ -16,9 +16,8 @@ if ($config === false) {
 
 $mailUsername = $config['MAIL_USERNAME'];
 $mailPassword = $config['MAIL_PASSWORD'];
-$adminEmail = $config['ADMIN_EMAIL'];
 
-if (empty($mailUsername) || empty($mailPassword) || empty($adminEmail)) {
+if (empty($mailUsername) || empty($mailPassword)) {
     error_log('Email configuration not found in .env file');
     echo json_encode(['success' => false, 'message' => 'Server configuration error']);
     exit;
@@ -55,7 +54,6 @@ if ($input === null) {
 $honeypot = $input['website'] ?? '';
 if (!empty($honeypot)) {
     error_log('Honeypot triggered - possible bot detected');
-
     exit;
 }
 
@@ -90,41 +88,100 @@ if ($wordCount > 100) {
     exit;
 }
 
+$servername = '127.0.0.1';
+$username = 'root';
+$passwordServer = '';
+$dbname = 'hertford_standard';
+
 try {
-    $mail = new PHPMailer(true);
+    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+} catch (PDOException $e) {
+    error_log('Database connection failed in contact form: ' . $e->getMessage());
+    echo json_encode(['success' => false, 'message' => 'Server configuration error.']);
+    exit;
+}
 
-    $mail->SMTPDebug = SMTP::DEBUG_OFF;
-    $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
-    $mail->SMTPAuth = true;
-    $mail->Username = $mailUsername;
-    $mail->Password = $mailPassword;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+try {
+    $adminSql = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
+    $adminStmt = $conn->prepare($adminSql);
+    $adminStmt->execute();
+    $adminUsers = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
 
-    $mail->setFrom($mailUsername, 'Hertford Standard');
-    $mail->addAddress($adminEmail, 'Admin');
-    $mail->addReplyTo($email, $name);
+    if (empty($adminUsers)) {
+        error_log('Contact form: No admin users found in database to notify.');
+        echo json_encode(['success' => false, 'message' => 'Failed to process request. Please try again later.']);
+        exit;
+    }
 
-    $mail->isHTML(false);
-    $mail->Subject = 'New Project Submission - Hertford Standard';
+    $successCount = 0;
+    $failureCount = 0;
 
-    $mail->Body = "A new message has been received:\n\n"
+    $emailSubject = 'New Project Outline Submission - Hertford Standard';
+    $emailBody = "A new project outline has been received:\n\n"
         . 'Name: ' . $name . "\n"
         . 'Email: ' . $email . "\n"
         . 'Phone: ' . $phone . "\n\n"
         . "Project Description:\n"
         . $projectDescription . "\n\n"
         . "---\n"
-        . 'This message was sent from the Hertford Standard project submission form.';
+        . 'This message was sent from the Hertford Standard project outline form.';
 
-    $mail->send();
+    foreach ($adminUsers as $admin) {
+        $adminEmail = $admin['email'];
+        $adminName = $admin['name'];
 
-    echo json_encode(['success' => true]);
+        if (empty($adminEmail) || !filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+            error_log("Contact form notification skipped: Invalid email address for admin user: {$adminName}");
+            $failureCount++;
+            continue;
+        }
+
+        try {
+            $mail = new PHPMailer(true);
+
+            $mail->SMTPDebug = SMTP::DEBUG_OFF;
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = $mailUsername;
+            $mail->Password = $mailPassword;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port = 587;
+
+            $mail->setFrom($mailUsername, 'Hertford Standard');
+            $mail->addAddress($adminEmail, $adminName);
+            $mail->addReplyTo($email, $name);
+
+            $mail->isHTML(false);
+            $mail->Subject = $emailSubject;
+            $mail->Body = $emailBody;
+
+            $mail->send();
+            $successCount++;
+        } catch (Exception $e) {
+            $failureCount++;
+            error_log("Contact form notification failed for admin {$adminEmail}: " . $mail->ErrorInfo);
+        }
+    }
+
+    if ($successCount > 0) {
+        error_log("Contact form: Sent {$successCount} email alert(s) successfully. Failures: {$failureCount}");
+        echo json_encode(['success' => true]);
+    } else {
+        error_log("Contact form: All {$failureCount} admin notification email attempts failed.");
+        echo json_encode([
+            'success' => false,
+            'message' => 'Failed to send message. Please try again later.'
+        ]);
+    }
 } catch (Exception $e) {
-    error_log('Contact Form PHPMailer Error: ' . $e->getMessage());
+    error_log('Contact Form Unexpected Error: ' . $e->getMessage());
     echo json_encode([
         'success' => false,
         'message' => 'Failed to send message. Please try again later.'
     ]);
+} finally {
+    $conn = null;
 }
