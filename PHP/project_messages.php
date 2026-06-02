@@ -78,18 +78,29 @@ try {
     $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
     $is_admin = ($user && $user['is_admin'] == 1);
 
-    if ($is_admin) {
-        $verifySql = 'SELECT id FROM projects WHERE id = :project_id';
-        $verifyStmt = $conn->prepare($verifySql);
-        $verifyStmt->execute([':project_id' => $project_id]);
-    } else {
-        $verifySql = 'SELECT id FROM projects WHERE id = :project_id AND user_id = :user_id';
-        $verifyStmt = $conn->prepare($verifySql);
-        $verifyStmt->execute([
-            ':project_id' => $project_id,
-            ':user_id' => $user_id
-        ]);
+    $verifySql = 'SELECT p.id, p.title, u.email AS owner_email, u.name AS owner_name 
+              FROM projects p 
+              INNER JOIN users u ON p.user_id = u.id 
+              WHERE p.id = :project_id';
+
+    if (!$is_admin) {
+        $verifySql .= ' AND p.user_id = :user_id';
     }
+
+    $verifyStmt = $conn->prepare($verifySql);
+    $params = [':project_id' => $project_id];
+    if (!$is_admin) {
+        $params[':user_id'] = $user_id;
+    }
+    $verifyStmt->execute($params);
+    $projectData = $verifyStmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$projectData) {
+        echo json_encode(['success' => false, 'message' => 'Project not found or access denied.']);
+        exit;
+    }
+
+    $projectTitle = $projectData['title'] ?? 'Unknown Project';
 
     if ($verifyStmt->rowCount() === 0) {
         echo json_encode(['success' => false, 'message' => 'Project not found or access denied.']);
@@ -182,54 +193,57 @@ try {
     $conn->commit();
 
     try {
-        $adminSql = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
-        $adminStmt = $conn->prepare($adminSql);
-        $adminStmt->execute();
-        $adminUsers = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
+        $userSql = 'SELECT name, email FROM users WHERE id = :user_id';
+        $userStmt = $conn->prepare($userSql);
+        $userStmt->execute([':user_id' => $user_id]);
+        $messagingUser = $userStmt->fetch(PDO::FETCH_ASSOC);
 
-        if (!empty($adminUsers)) {
-            $userSql = 'SELECT name, email FROM users WHERE id = :user_id';
-            $userStmt = $conn->prepare($userSql);
-            $userStmt->execute([':user_id' => $user_id]);
-            $messagingUser = $userStmt->fetch(PDO::FETCH_ASSOC);
+        $config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
 
-            $projectSql = 'SELECT title FROM projects WHERE id = :project_id';
-            $projectStmt = $conn->prepare($projectSql);
-            $projectStmt->execute([':project_id' => $project_id]);
-            $projectData = $projectStmt->fetch(PDO::FETCH_ASSOC);
-            $projectTitle = $projectData['title'] ?? 'Unknown Project';
+        if ($config === false) {
+            error_log('Notification system: Failed to parse .env file for mail credentials');
+        } else {
+            $mailUsername = $config['MAIL_USERNAME'] ?? '';
+            $mailPassword = $config['MAIL_PASSWORD'] ?? '';
 
-            $config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
-
-            if ($config === false) {
-                error_log('Admin notification: Failed to parse .env file for mail credentials');
+            if (empty($mailUsername) || empty($mailPassword)) {
+                error_log('Notification system: Gmail credentials not found in .env file');
             } else {
-                $mailUsername = $config['MAIL_USERNAME'] ?? '';
-                $mailPassword = $config['MAIL_PASSWORD'] ?? '';
+                $recipients = [];
 
-                if (empty($mailUsername) || empty($mailPassword)) {
-                    error_log('Admin notification: Gmail credentials not found in .env file');
+                if ($is_admin) {
+                    $recipients[] = [
+                        'email' => $projectData['owner_email'],
+                        'name' => $projectData['owner_name']
+                    ];
                 } else {
-                    $subject = 'New Message Added to Project - Hertford Standard';
+                    $adminSql = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
+                    $adminStmt = $conn->prepare($adminSql);
+                    $adminStmt->execute();
+                    $recipients = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
+                }
 
-                    $emailBody = "A new message has been added to a project on Hertford Standard.\n\n";
-                    $emailBody .= 'Project Title: ' . $projectTitle . "\n";
-                    $emailBody .= 'Project ID: ' . $project_id . "\n";
-                    $emailBody .= 'Message ID: ' . $message_id . "\n\n";
-                    $emailBody .= 'Submitted by: ' . ($messagingUser['name'] ?? 'Unknown') . "\n";
-                    $emailBody .= "Submitter's Email: " . ($messagingUser['email'] ?? 'Unknown') . "\n\n";
-                    $emailBody .= "Message Content:\n\"" . $message . "\"\n\n";
-                    $emailBody .= "Please log in to the admin dashboard to review this message.\n";
+                $subject = 'New Message Added to Project - Hertford Standard';
 
-                    $successCount = 0;
-                    $failureCount = 0;
+                $emailBody = "A new message has been added to a project on Hertford Standard.\n\n";
+                $emailBody .= 'Project Title: ' . $projectTitle . "\n";
+                $emailBody .= 'Project ID: ' . $project_id . "\n";
+                $emailBody .= 'Message ID: ' . $message_id . "\n\n";
+                $emailBody .= 'Submitted by: ' . ($messagingUser['name'] ?? 'Unknown') . "\n";
+                $emailBody .= "Submitter's Email: " . ($messagingUser['email'] ?? 'Unknown') . "\n\n";
+                $emailBody .= "Message Content:\n\"" . $message . "\"\n\n";
+                $emailBody .= "Please log in to your dashboard to review this message.\n";
 
-                    foreach ($adminUsers as $admin) {
-                        $adminEmail = $admin['email'];
-                        $adminName = $admin['name'];
+                $successCount = 0;
+                $failureCount = 0;
 
-                        if (empty($adminEmail) || !filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
-                            error_log("Admin notification: Invalid admin email address for user: {$adminName}");
+                if (!empty($recipients)) {
+                    foreach ($recipients as $recipient) {
+                        $targetEmail = $recipient['email'];
+                        $targetName = $recipient['name'];
+
+                        if (empty($targetEmail) || !filter_var($targetEmail, FILTER_VALIDATE_EMAIL)) {
+                            error_log("Notification: Invalid email address for user: {$targetName}");
                             $failureCount++;
                             continue;
                         }
@@ -247,7 +261,7 @@ try {
                             $mail->Port = 587;
 
                             $mail->setFrom($mailUsername, 'Hertford Standard');
-                            $mail->addAddress($adminEmail, $adminName);
+                            $mail->addAddress($targetEmail, $targetName);
 
                             $mail->isHTML(false);
                             $mail->Subject = $subject;
@@ -257,22 +271,18 @@ try {
                             $successCount++;
                         } catch (\PHPMailer\PHPMailer\Exception $e) {
                             $failureCount++;
-                            error_log("Admin notification failed for {$adminEmail}: " . $mail->ErrorInfo);
+                            error_log("Notification failed for {$targetEmail}: " . $mail->ErrorInfo);
                         }
                     }
 
-                    if ($successCount > 0) {
-                        error_log("Admin notification: Sent {$successCount} new message alert(s) successfully. Failures: {$failureCount}");
-                    } else {
-                        error_log("Admin notification: Failed to send any admin notifications for new message. All {$failureCount} attempts failed.");
-                    }
+                    error_log("Notification system: Sent {$successCount} alert(s) successfully. Failures: {$failureCount}");
+                } else {
+                    error_log('Notification system: No valid recipients found to notify.');
                 }
             }
-        } else {
-            error_log('Admin notification: No admin users found in database to notify about new project message');
         }
     } catch (Exception $e) {
-        error_log('Admin notification unexpected error: ' . $e->getMessage());
+        error_log('Notification system unexpected error: ' . $e->getMessage());
     }
 
     $response_message = 'Message submitted successfully.';
