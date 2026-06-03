@@ -12,13 +12,18 @@ function UserDashboard() {
   };
 
   return (
-    <div className="container">
-      <div className="admin-header">
-        <p>Welcome, User. Submit and manage your projects here.</p>
-      </div>
+    <div className="user-dashboard-container container">
+      {" "}
+      <div className="row justify-content-center">
+        <div className="col-12 col-lg-9">
+          <div className="admin-header">
+            <p>Welcome, User. Submit and manage your projects here.</p>
+          </div>
 
-      <ProjectSubmission onProjectSubmitted={handleProjectSubmitted} />
-      <GetProjects refreshTrigger={refreshProjects} />
+          <ProjectSubmission onProjectSubmitted={handleProjectSubmitted} />
+          <GetProjects refreshTrigger={refreshProjects} />
+        </div>
+      </div>
     </div>
   );
 }
