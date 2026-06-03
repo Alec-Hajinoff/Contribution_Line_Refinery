@@ -226,7 +226,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                 rows="6"
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder="Describe your requirements in detail…"
+                placeholder="Describe your requirements in detail"
                 disabled={uploadProgress}
                 required
               ></textarea>
