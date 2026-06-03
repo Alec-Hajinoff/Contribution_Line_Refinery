@@ -175,7 +175,7 @@ function UserLogin() {
         <button type="submit" className="btn btn-secondary" id="loginBtn">
           Login
           <span
-            className="spinner-border spinner-border-sm"
+            className="spinner-border spinner-border-sm ms-2"
             role="status"
             aria-hidden="true"
             id="spinnerLogin"
@@ -192,7 +192,7 @@ function UserLogin() {
             Forgot your password?
             {resetLoading && (
               <span
-                className="spinner-border spinner-border-sm"
+                className="spinner-border spinner-border-sm ms-2"
                 role="status"
                 aria-hidden="true"
                 id="spinnerReset"

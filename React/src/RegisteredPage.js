@@ -5,7 +5,7 @@ import UserLogin from "./UserLogin.js";
 function RegisteredPage() {
   return (
     <div className="registered-page-wrapper">
-      <div className="container">
+      <div className="container text-center">
         <div className="row">
           <div className="col-12 text-center my-4">
             <p className="w-100 whitespace-nowrap">

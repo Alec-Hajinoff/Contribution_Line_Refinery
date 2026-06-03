@@ -139,7 +139,7 @@ function UserRegistration() {
         <button type="submit" className="btn btn-secondary">
           {loading ? "Registering" : "Register"}
           <span
-            className="spinner-border spinner-border-sm"
+            className="spinner-border spinner-border-sm ms-2"
             role="status"
             aria-hidden="true"
             id="spinnerRegister"
