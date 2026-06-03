@@ -118,6 +118,8 @@ try {
     $successCount = 0;
     $failureCount = 0;
 
+    $urlLink = 'https://hertfordstandard.com';
+
     $emailSubject = 'New Project Outline Submission - Hertford Standard';
     $emailBody = "A new project outline has been received:\n\n"
         . 'Name: ' . $name . "\n"
@@ -126,7 +128,7 @@ try {
         . "Project Description:\n"
         . $projectDescription . "\n\n"
         . "---\n"
-        . 'This message was sent from the Hertford Standard project outline form.';
+        . 'This message was sent from the Hertford Standard project outline form ' . $urlLink;
 
     foreach ($adminUsers as $admin) {
         $adminEmail = $admin['email'];
