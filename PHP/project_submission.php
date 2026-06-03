@@ -182,6 +182,7 @@ try {
                 if (empty($mailUsername) || empty($mailPassword)) {
                     error_log('Admin notification: Gmail credentials not found in .env file');
                 } else {
+                    $urlLink = 'https://hertfordstandard.com';
                     $subject = 'New Project Submission - Hertford Standard';
 
                     $emailBody = "A new project has been submitted to Hertford Standard.\n\n";
@@ -189,7 +190,7 @@ try {
                     $emailBody .= 'Project ID: ' . $project_id . "\n\n";
                     $emailBody .= 'Submitted by: ' . ($submittingUser['name'] ?? 'Unknown') . "\n";
                     $emailBody .= "Submitter's Email: " . ($submittingUser['email'] ?? 'Unknown') . "\n\n";
-                    $emailBody .= "Please log in to the admin dashboard to review this project.\n";
+                    $emailBody .= "Please log in to the admin dashboard to review this project " . $urlLink;
 
                     $successCount = 0;
                     $failureCount = 0;
