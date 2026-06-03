@@ -222,7 +222,7 @@ try {
                     $adminStmt->execute();
                     $recipients = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
                 }
-
+                $urlLink = 'https://hertfordstandard.com';
                 $subject = 'New Message Added to Project - Hertford Standard';
 
                 $emailBody = "A new message has been added to a project on Hertford Standard.\n\n";
@@ -232,7 +232,7 @@ try {
                 $emailBody .= 'Submitted by: ' . ($messagingUser['name'] ?? 'Unknown') . "\n";
                 $emailBody .= "Submitter's Email: " . ($messagingUser['email'] ?? 'Unknown') . "\n\n";
                 $emailBody .= "Message Content:\n\"" . $message . "\"\n\n";
-                $emailBody .= "Please log in to your dashboard to review this message.\n";
+                $emailBody .= 'Please log in to your dashboard to review this message ' . $urlLink;
 
                 $successCount = 0;
                 $failureCount = 0;
