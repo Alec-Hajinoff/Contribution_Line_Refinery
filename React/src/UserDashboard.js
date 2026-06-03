@@ -17,7 +17,10 @@ function UserDashboard() {
       <div className="row justify-content-center">
         <div className="col-12 col-lg-9">
           <div className="admin-header">
-            <p>Welcome, User. Submit and manage your projects here.</p>
+            <p>
+              Welcome to your dashboard. Here you can submit new projects, track
+              progress, and manage your existing work.
+            </p>
           </div>
 
           <ProjectSubmission onProjectSubmitted={handleProjectSubmitted} />

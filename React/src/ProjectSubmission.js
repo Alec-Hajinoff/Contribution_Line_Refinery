@@ -171,7 +171,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
     <div className="project-submission-container">
       <div className="card shadow-sm">
         <div className="card-header bg-primary text-white">
-          <h3 className="mb-0">Submit New Project</h3>
+          <h3 className="mb-0">Submit Project</h3>
         </div>
         <div className="card-body">
           {message.text && (
@@ -199,7 +199,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="title" className="form-label fw-semibold">
-                Project Title <span className="text-danger">*</span>
+                Project name or title <span className="text-danger">*</span>
               </label>
               <input
                 type="text"
@@ -208,7 +208,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
-                placeholder="Enter project title"
+                placeholder="Give your project a name"
                 disabled={uploadProgress}
                 maxLength="255"
                 required
@@ -217,7 +217,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
             <div className="mb-3">
               <label htmlFor="description" className="form-label fw-semibold">
-                Project Description <span className="text-danger">*</span>
+                Project brief <span className="text-danger">*</span>
               </label>
               <textarea
                 className="form-control"
@@ -226,14 +226,10 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                 rows="6"
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder="Provide detailed project specifications..."
+                placeholder="Describe your requirements in detail…"
                 disabled={uploadProgress}
                 required
               ></textarea>
-              <div className="form-text">
-                Be as detailed as possible to help us understand your
-                requirements.
-              </div>
             </div>
 
             <div className="mb-3">
@@ -241,7 +237,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                 htmlFor="project-attachments"
                 className="form-label fw-semibold"
               >
-                Attachments (Optional)
+                Attachments (optional)
               </label>
               <input
                 type="file"
@@ -254,8 +250,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
               />
               <div className="form-text">
                 Accepted formats: PNG, JPEG, PDF. Max 10MB per file. Up to 5
-                files. Hold Ctrl/Cmd to select multiple files at once, or add
-                them one by one.
+                files.
               </div>
 
               {fileErrors.length > 0 && (
@@ -317,7 +312,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                     Submitting Project...
                   </>
                 ) : (
-                  "Submit Project"
+                  "Submit"
                 )}
               </button>
             </div>

@@ -34,12 +34,6 @@
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
 
-.project-submission-container .form-text {
-  font-size: 0.75rem;
-  color: #6c757d;
-  margin-top: 0.25rem;
-}
-
 .selected-files {
   background-color: #f8f9fa;
   padding: 0.75rem;
