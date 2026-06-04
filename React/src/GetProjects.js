@@ -120,7 +120,9 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
 
   return (
     <div className="get-projects-container">
-      <h4 className="mb-3">{isAdminView ? "All Projects" : "My Projects"}</h4>
+      <div className="get-projects-header text-center">
+        <h4>{isAdminView ? "All Projects" : "My Projects"}</h4>
+      </div>
       <div className="projects-list">
         {projects.map((project) => (
           <div key={project.id} className="project-item card mb-2">
@@ -167,7 +169,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                 )}
 
                 <div className="mb-3">
-                  <strong className="text-muted small">Description:</strong>
+                  <strong className="text-muted small">Project brief:</strong>
                   <div className="project-description mt-1">
                     {formatDescription(project.description)}
                   </div>

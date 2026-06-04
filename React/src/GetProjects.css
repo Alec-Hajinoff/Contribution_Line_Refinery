@@ -103,6 +103,27 @@
   text-decoration: underline;
 }
 
+.get-projects-header {
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 35px;
+  margin-bottom: 1.5rem;
+}
+
+.get-projects-header h4 {
+  margin: 0;
+  font-weight: 500;
+  color: inherit;
+}
+
+@media (max-width: 991.98px) {
+  .get-projects-header {
+    margin-top: 15px;
+    padding: 12px;
+  }
+}
+
 @media (max-width: 768px) {
   .project-header .d-flex {
     flex-direction: column;
