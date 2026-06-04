@@ -34,10 +34,10 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
   const validateFile = (file) => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return `Invalid file type for ${file.name}. Allowed: PNG, JPEG, PDF`;
+      return `${file.name} isn’t a supported format. Please upload a PNG, JPEG, or PDF file.`;
     }
     if (file.size > MAX_FILE_SIZE) {
-      return `${file.name} exceeds 10MB limit`;
+      return `${file.name} is too large. Each file must be under 10MB.`;
     }
     return null;
   };
@@ -51,7 +51,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
     }));
 
     setMessage({
-      text: "File removed successfully.",
+      text: "File removed.",
       type: "success",
     });
 
@@ -66,7 +66,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
     const currentFileCount = formData.attachments.length;
     if (currentFileCount + newFiles.length > MAX_FILES) {
       setMessage({
-        text: `You can only upload up to ${MAX_FILES} files total. You currently have ${currentFileCount} file(s) selected.`,
+        text: `ou can upload up to ${MAX_FILES} files in total. You currently have ${currentFileCount} selected—please remove a file before adding more.`,
         type: "error",
       });
       clearMessageAfterDelay();
@@ -98,21 +98,21 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
     if (validNewFiles.length === 0 && newFiles.length > 0) {
       setMessage({
-        text: "No valid files were selected. Please check file types and sizes.",
+        text: "None of the selected files could be added. Please check the file type and size requirements.",
         type: "error",
       });
       clearMessageAfterDelay();
     } else if (validNewFiles.length < newFiles.length) {
       setMessage({
-        text: `${validNewFiles.length} of ${newFiles.length} file(s) added. ${errors.length} file(s) skipped due to validation errors.`,
+        text: `${validNewFiles.length} file(s) added. ${errors.length} file(s) couldn’t be uploaded due to type or size restrictions.`,
         type: "warning",
       });
       clearMessageAfterDelay();
     } else if (validNewFiles.length > 0) {
       setMessage({
-        text: `${validNewFiles.length} file(s) added successfully. Total: ${
+        text: `${validNewFiles.length} file(s) added. You now have ${
           formData.attachments.length + validNewFiles.length
-        }/${MAX_FILES}`,
+        } of ${MAX_FILES} files uploaded.`,
         type: "success",
       });
       clearMessageAfterDelay();
@@ -123,13 +123,16 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
     e.preventDefault();
 
     if (!formData.title.trim()) {
-      setMessage({ text: "Project title is required.", type: "error" });
+      setMessage({ text: "Please enter a project title.", type: "error" });
       clearMessageAfterDelay();
       return;
     }
 
     if (!formData.description.trim()) {
-      setMessage({ text: "Project description is required.", type: "error" });
+      setMessage({
+        text: "Please provide a brief description of your project.",
+        type: "error",
+      });
       clearMessageAfterDelay();
       return;
     }
@@ -142,7 +145,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
       if (result.success) {
         setMessage({
-          text: `Project "${formData.title}" submitted successfully!`,
+          text: `Your project "${formData.title}" has been submitted successfully.`,
           type: "success",
         });
         clearMessageAfterDelay();
@@ -158,14 +161,18 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
         if (onProjectSubmitted) onProjectSubmitted();
       } else {
         setMessage({
-          text: result.message || "Submission failed. Please try again.",
+          text:
+            result.message ||
+            "We couldn’t submit your project. Please try again.",
           type: "error",
         });
         clearMessageAfterDelay();
       }
     } catch (error) {
       setMessage({
-        text: error.message || "An error occurred. Please try again.",
+        text:
+          error.message ||
+          "Something went wrong while submitting your project. Please try again.",
         type: "error",
       });
       clearMessageAfterDelay();
@@ -297,7 +304,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                       role="status"
                       aria-hidden="true"
                     ></span>
-                    Submitting Project...
+                    Submitting your project please wait...
                   </>
                 ) : (
                   "Submit"
