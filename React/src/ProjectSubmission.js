@@ -169,9 +169,9 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
   return (
     <div className="project-submission-container">
-      <div className="card shadow-sm">
-        <div className="card-header bg-primary text-white">
-          <h3 className="mb-0">Submit Project</h3>
+      <div className="card">
+        <div className="project-submission-header">
+          <h3>Submit Project</h3>
         </div>
         <div className="card-body">
           {message.text && (
@@ -198,7 +198,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="title" className="form-label fw-semibold">
+              <label htmlFor="title" className="form-label">
                 Project name or title <span className="text-danger">*</span>
               </label>
               <input
@@ -216,7 +216,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
             </div>
 
             <div className="mb-3">
-              <label htmlFor="description" className="form-label fw-semibold">
+              <label htmlFor="description" className="form-label">
                 Project brief <span className="text-danger">*</span>
               </label>
               <textarea
@@ -233,10 +233,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
             </div>
 
             <div className="mb-3">
-              <label
-                htmlFor="project-attachments"
-                className="form-label fw-semibold"
-              >
+              <label htmlFor="project-attachments" className="form-label">
                 Attachments (optional)
               </label>
               <input
@@ -299,7 +296,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
             <div className="d-grid gap-2">
               <button
                 type="submit"
-                className="btn btn-primary btn-lg"
+                className="project-submission-btn"
                 disabled={uploadProgress}
               >
                 {uploadProgress ? (

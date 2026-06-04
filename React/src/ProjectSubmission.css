@@ -9,13 +9,33 @@
   overflow: hidden;
 }
 
-.project-submission-container .card-header {
-  padding: 1.25rem 1.5rem;
+.project-submission-header {
+  background-color: var(--color-primary-50);
+  border-radius: 5px;
+  padding: 15px;
+  margin-top: 35px;
 }
 
-.project-submission-container .card-header h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
+.project-submission-header h3 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 500;
+}
+
+.project-submission-btn {
+  background-color: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--btn-text);
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: var(--btn-transition);
+  font-size: inherit;
+  font-weight: normal;
+}
+
+.project-submission-btn:hover {
+  background-color: var(--btn-bg-hover);
 }
 
 .project-submission-container .card-body {
@@ -103,6 +123,16 @@
   font-size: 1rem;
 }
 
+@media (max-width: 991.98px) {
+  .project-submission-header {
+    margin-top: 15px;
+    padding: 12px;
+  }
+  .project-submission-header h3 {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 768px) {
   .project-submission-container {
     margin: 1rem auto;
@@ -110,9 +140,5 @@
 
   .project-submission-container .card-body {
     padding: 1.25rem;
-  }
-
-  .project-submission-container .card-header h3 {
-    font-size: 1.25rem;
   }
 }
