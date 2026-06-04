@@ -17,6 +17,12 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
   const MAX_FILES = 5;
 
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage({ text: "", type: "" });
+    }, 5000);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -49,11 +55,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
       type: "success",
     });
 
-    setTimeout(() => {
-      setMessage((prev) =>
-        prev.type === "success" ? { text: "", type: "" } : prev,
-      );
-    }, 2000);
+    clearMessageAfterDelay();
   };
 
   const handleFileChange = (e) => {
@@ -67,6 +69,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
         text: `You can only upload up to ${MAX_FILES} files total. You currently have ${currentFileCount} file(s) selected.`,
         type: "error",
       });
+      clearMessageAfterDelay();
       e.target.value = "";
       return;
     }
@@ -98,11 +101,13 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
         text: "No valid files were selected. Please check file types and sizes.",
         type: "error",
       });
+      clearMessageAfterDelay();
     } else if (validNewFiles.length < newFiles.length) {
       setMessage({
         text: `${validNewFiles.length} of ${newFiles.length} file(s) added. ${errors.length} file(s) skipped due to validation errors.`,
         type: "warning",
       });
+      clearMessageAfterDelay();
     } else if (validNewFiles.length > 0) {
       setMessage({
         text: `${validNewFiles.length} file(s) added successfully. Total: ${
@@ -110,11 +115,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
         }/${MAX_FILES}`,
         type: "success",
       });
-      setTimeout(() => {
-        setMessage((prev) =>
-          prev.type === "success" ? { text: "", type: "" } : prev,
-        );
-      }, 3000);
+      clearMessageAfterDelay();
     }
   };
 
@@ -123,11 +124,13 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
     if (!formData.title.trim()) {
       setMessage({ text: "Project title is required.", type: "error" });
+      clearMessageAfterDelay();
       return;
     }
 
     if (!formData.description.trim()) {
       setMessage({ text: "Project description is required.", type: "error" });
+      clearMessageAfterDelay();
       return;
     }
 
@@ -142,6 +145,8 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
           text: `Project "${formData.title}" submitted successfully!`,
           type: "success",
         });
+        clearMessageAfterDelay();
+
         setFormData({
           title: "",
           description: "",
@@ -156,12 +161,14 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
           text: result.message || "Submission failed. Please try again.",
           type: "error",
         });
+        clearMessageAfterDelay();
       }
     } catch (error) {
       setMessage({
         text: error.message || "An error occurred. Please try again.",
         type: "error",
       });
+      clearMessageAfterDelay();
     } finally {
       setUploadProgress(false);
     }
@@ -174,29 +181,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
           <h4>Submit Project</h4>
         </div>
         <div className="card-body">
-          {message.text && (
-            <div
-              className={`alert alert-${
-                message.type === "error"
-                  ? "danger"
-                  : message.type === "warning"
-                  ? "warning"
-                  : "success"
-              } alert-dismissible fade show`}
-              role="alert"
-            >
-              {message.text}
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-                onClick={() => setMessage({ text: "", type: "" })}
-              ></button>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} noValidate>
             <div className="mb-3">
               <label htmlFor="title" className="form-label">
                 Project name or title <span className="text-danger">*</span>
@@ -211,7 +196,6 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                 placeholder="Give your project a name"
                 disabled={uploadProgress}
                 maxLength="255"
-                required
               />
             </div>
 
@@ -251,7 +235,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
               </div>
 
               {fileErrors.length > 0 && (
-                <div className="alert alert-warning mt-2">
+                <div className="project-file-issues-text mt-2">
                   <strong>File validation issues:</strong>
                   <ul className="mb-0 mt-1">
                     {fileErrors.map((error, idx) => (
@@ -292,6 +276,13 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
                 </div>
               )}
             </div>
+
+            {message.text && message.type === "success" && (
+              <div id="success-message">{message.text}</div>
+            )}
+            {message.text && message.type !== "success" && (
+              <div id="error-message">{message.text}</div>
+            )}
 
             <div className="d-grid gap-2">
               <button

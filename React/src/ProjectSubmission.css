@@ -45,6 +45,7 @@
 .project-submission-container .form-label {
   font-weight: 500;
   margin-bottom: 0.5rem;
+  color: #333;
 }
 
 .project-submission-container .form-control:focus {
@@ -76,9 +77,25 @@
   color: #6c757d;
 }
 
-.alert {
-  border-radius: 8px;
-  font-size: 0.875rem;
+#success-message {
+  color: inherit;
+  font-size: inherit;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: normal;
+}
+
+#error-message {
+  color: inherit;
+  font-size: inherit;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: normal;
+}
+
+.project-file-issues-text {
+  color: inherit;
+  font-size: inherit;
 }
 
 .btn-remove-file {
