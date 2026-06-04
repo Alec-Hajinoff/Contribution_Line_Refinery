@@ -16,9 +16,9 @@
   margin-top: 35px;
 }
 
-.project-submission-header h3 {
+.project-submission-header h4 {
+  text-align: center;
   margin: 0;
-  font-size: inherit;
   font-weight: 500;
 }
 
@@ -127,7 +127,7 @@
     margin-top: 15px;
     padding: 12px;
   }
-  .project-submission-header h3 {
+  .project-submission-header h4 {
     font-size: 14px;
   }
 }

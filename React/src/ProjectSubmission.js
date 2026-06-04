@@ -171,7 +171,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
     <div className="project-submission-container">
       <div className="card">
         <div className="project-submission-header">
-          <h3>Submit Project</h3>
+          <h4>Submit Project</h4>
         </div>
         <div className="card-body">
           {message.text && (
