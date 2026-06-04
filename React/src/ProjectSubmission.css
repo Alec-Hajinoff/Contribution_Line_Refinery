@@ -127,9 +127,6 @@
     margin-top: 15px;
     padding: 12px;
   }
-  .project-submission-header h4 {
-    font-size: 14px;
-  }
 }
 
 @media (max-width: 768px) {
