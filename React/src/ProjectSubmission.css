@@ -57,7 +57,6 @@
   background-color: #f8f9fa;
   padding: 0.75rem;
   border-radius: 6px;
-  font-size: 0.875rem;
 }
 
 .file-item {
@@ -71,10 +70,6 @@
 
 .file-item:hover {
   background-color: #e9ecef;
-}
-
-.selected-files .file-item i {
-  color: #6c757d;
 }
 
 #success-message {

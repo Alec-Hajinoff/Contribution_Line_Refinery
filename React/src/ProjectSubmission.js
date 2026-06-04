@@ -254,9 +254,9 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
               {formData.attachments.length > 0 && (
                 <div className="selected-files mt-2">
-                  <strong>
+                  <p>
                     Selected files ({formData.attachments.length}/{MAX_FILES}):
-                  </strong>
+                  </p>
                   <ul className="list-unstyled mt-1">
                     {formData.attachments.map((file, idx) => (
                       <li
