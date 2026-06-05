@@ -89,8 +89,8 @@ try {
         $attachments = $attachmentStmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($attachments as &$attachment) {
-            $attachment['view_url'] = 'http://localhost:8001/Hertford_Standard/view_attachment.php?id=' . $attachment['id'];
-            $attachment['download_url'] = 'http://localhost:8001/Hertford_Standard/download_attachment.php?id=' . $attachment['id'];
+            $attachment['view_url'] = 'http://localhost:8001/Hertford_Standard/PHP/view_attachment.php?id=' . $attachment['id'];
+            $attachment['download_url'] = 'http://localhost:8001/Hertford_Standard/PHP/download_attachment.php?id=' . $attachment['id'];
         }
 
         $project['attachments'] = $attachments;
