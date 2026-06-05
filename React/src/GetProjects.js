@@ -183,7 +183,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                         <li key={attachment.id} className="attachment-item">
                           <i className="bi bi-paperclip me-1"></i>
                           {attachment.attachment_name}
-                          <span className="attachment-links ms-2">
+                          <span className="attachment-links ms-4">
                             <a
                               href={attachment.view_url}
                               target="_blank"
@@ -192,6 +192,9 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                               onClick={(e) => e.stopPropagation()}
                             >
                               View
+                              <span className="project-external-icon">
+                                &#x2197;
+                              </span>
                             </a>
                             <a
                               href={attachment.download_url}
@@ -200,6 +203,9 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                               onClick={(e) => e.stopPropagation()}
                             >
                               Download
+                              <span className="project-external-icon">
+                                &#x2197;
+                              </span>
                             </a>
                           </span>
                         </li>
