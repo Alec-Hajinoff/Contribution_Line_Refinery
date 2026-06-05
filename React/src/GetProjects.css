@@ -71,9 +71,7 @@
 }
 
 .attachment-item {
-  font-size: 0.8125rem;
   padding: 0.25rem 0;
-  color: #495057;
 }
 
 .attachment-links {
@@ -81,9 +79,7 @@
 }
 
 .attachment-links .btn-link {
-  font-size: 0.75rem;
   text-decoration: none;
-  color: #0d6efd;
 }
 
 .attachment-links .btn-link:hover {

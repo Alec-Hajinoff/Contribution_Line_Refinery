@@ -170,7 +170,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
 
                 <div className="mb-3">
                   <strong className="text-muted">Project brief:</strong>
-                  <div className="project-description mt-1">
+                  <div className="project-description mt-4 mb-4">
                     {formatDescription(project.description)}
                   </div>
                 </div>
@@ -178,7 +178,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                 <div>
                   <strong className="text-muted ">Attachments:</strong>
                   {project.attachments && project.attachments.length > 0 ? (
-                    <ul className="attachment-list mt-1 mb-0">
+                    <ul className="attachment-list mt-4 mb-4">
                       {project.attachments.map((attachment) => (
                         <li key={attachment.id} className="attachment-item">
                           <i className="bi bi-paperclip me-1"></i>
@@ -206,9 +206,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-muted  mt-1 mb-0">
-                      No attachments uploaded
-                    </p>
+                    <p className="mt-4 mb-4">No attachments uploaded</p>
                   )}
                 </div>
 
