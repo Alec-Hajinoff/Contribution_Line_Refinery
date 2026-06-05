@@ -188,7 +188,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                               href={attachment.view_url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="btn btn-link btn-sm p-0 me-2"
+                              className="btn btn-link p-0 me-2"
                               onClick={(e) => e.stopPropagation()}
                             >
                               View
@@ -196,7 +196,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                             <a
                               href={attachment.download_url}
                               download
-                              className="btn btn-link btn-sm p-0"
+                              className="btn btn-link p-0"
                               onClick={(e) => e.stopPropagation()}
                             >
                               Download
