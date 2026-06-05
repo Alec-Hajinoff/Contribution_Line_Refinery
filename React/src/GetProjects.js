@@ -145,7 +145,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                       ? "In progress"
                       : "Completed"}
                   </span>
-                  <span className="project-date text-muted small">
+                  <span className="project-date text-muted">
                     {formatDate(project.created_at)}
                   </span>
                 </div>
