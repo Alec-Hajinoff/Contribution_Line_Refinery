@@ -155,8 +155,8 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
               <div className="project-body card-footer bg-white px-4 py-3">
                 {isAdminView && (
                   <div className="mb-2 pb-1 border-bottom">
-                    <strong className="text-muted small">Client:</strong>
-                    <span className="ms-2 small">{project.client_name}</span>
+                    <strong className="text-muted ">Client:</strong>
+                    <span className="ms-2 ">{project.client_name}</span>
                   </div>
                 )}
 
@@ -169,14 +169,14 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                 )}
 
                 <div className="mb-3">
-                  <strong className="text-muted small">Project brief:</strong>
+                  <strong className="text-muted">Project brief:</strong>
                   <div className="project-description mt-1">
                     {formatDescription(project.description)}
                   </div>
                 </div>
 
                 <div>
-                  <strong className="text-muted small">Attachments:</strong>
+                  <strong className="text-muted ">Attachments:</strong>
                   {project.attachments && project.attachments.length > 0 ? (
                     <ul className="attachment-list mt-1 mb-0">
                       {project.attachments.map((attachment) => (
@@ -206,7 +206,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-muted small mt-1 mb-0">
+                    <p className="text-muted  mt-1 mb-0">
                       No attachments uploaded
                     </p>
                   )}

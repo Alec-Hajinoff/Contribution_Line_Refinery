@@ -145,7 +145,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
 
       if (result.success) {
         setMessage({
-          text: `Your project "${formData.title}" has been submitted successfully.`,
+          text: `Your project "${formData.title}" has been submitted successfully. I’ll be in touch within 24 hours. Please check your spam or junk folder just in case my reply is filtered there.`,
           type: "success",
         });
         clearMessageAfterDelay();
