@@ -59,7 +59,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
           >
             <span className="visually-hidden">Loading...</span>
           </div>
-          <span className="text-muted small">Loading messages...</span>
+          <span className="small">Loading messages...</span>
         </div>
       </div>
     );
@@ -89,13 +89,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
     return (
       <div className="project-timeline-container">
         <div className="text-center py-4">
-          <i
-            className="bi bi-chat-dots"
-            style={{ fontSize: "2rem", color: "#ccc" }}
-          ></i>
-          <p className="text-muted small mt-2 mb-0">
-            No updates or requests yet.
-          </p>
+          <p className="mt-2 mb-0">No updates or requests yet.</p>
         </div>
       </div>
     );
