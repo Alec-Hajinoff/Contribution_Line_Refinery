@@ -87,7 +87,7 @@ const GetUsers = ({ onUserSelect, refreshTrigger }) => {
     <div className="get-users-container">
       <select
         id="user-select"
-        className="form-select form-select-sm"
+        className="form-select"
         value={selectedUserId}
         onChange={handleUserChange}
       >
