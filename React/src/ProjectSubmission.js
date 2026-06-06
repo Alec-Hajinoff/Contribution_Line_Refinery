@@ -185,7 +185,7 @@ const ProjectSubmission = ({ onProjectSubmitted }) => {
     <div className="project-submission-container">
       <div className="card">
         <div className="project-submission-header">
-          <h4>Submit Project</h4>
+          <h4>Start a New Project</h4>
         </div>
         <div className="card-body">
           <form onSubmit={handleSubmit} noValidate>

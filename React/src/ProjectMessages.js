@@ -164,7 +164,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     <div className="project-messages-container">
       <div className="card mt-3">
         <div className="card-header bg-secondary text-white">
-          <h5 className="mb-0">Add Message to Project</h5>
+          <h5 className="mb-0">Share an Update or Request a Change</h5>
         </div>
         <div className="card-body">
           {message.text && (
@@ -192,7 +192,8 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="message" className="form-label fw-semibold">
-                Project Message <span className="text-danger">*</span>
+                Describe your update or request{" "}
+                <span className="text-danger">*</span>
               </label>
               <textarea
                 className="form-control"
@@ -201,7 +202,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
                 rows="4"
                 value={formData.message}
                 onChange={handleInputChange}
-                placeholder="Enter your message for the developer..."
+                placeholder="Describe the update, change, or question — including any relevant details or context…"
                 disabled={uploadProgress}
                 required
               ></textarea>
@@ -292,7 +293,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
                     Sending Message...
                   </>
                 ) : (
-                  "Send Message"
+                  "Send"
                 )}
               </button>
             </div>
