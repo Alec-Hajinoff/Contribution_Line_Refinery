@@ -78,7 +78,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
           >
             <span className="visually-hidden">Loading...</span>
           </div>
-          <span className="text-muted">Loading projects...</span>
+          <span>Loading projects...</span>
         </div>
       </div>
     );
@@ -108,11 +108,7 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
     return (
       <div className="get-projects-container">
         <div className="text-center py-5">
-          <i
-            className="bi bi-folder2-open"
-            style={{ fontSize: "3rem", color: "#ccc" }}
-          ></i>
-          <p className="text-muted mt-2 mb-0">Your projects will appear here</p>
+          <p className="mt-2 mb-0">Your projects will appear here</p>
         </div>
       </div>
     );
