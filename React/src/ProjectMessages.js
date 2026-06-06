@@ -16,6 +16,12 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
   const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
   const MAX_FILES = 5;
 
+  const clearMessageAfterDelay = () => {
+    setTimeout(() => {
+      setMessage({ text: "", type: "" });
+    }, 5000);
+  };
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -27,10 +33,10 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
 
   const validateFile = (file) => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return `Invalid file type for ${file.name}. Allowed: PNG, JPEG, PDF`;
+      return `${file.name} isn’t a supported format. Please upload a PNG, JPEG, or PDF file.`;
     }
     if (file.size > MAX_FILE_SIZE) {
-      return `${file.name} exceeds 10MB limit`;
+      return `${file.name} is too large. Each file must be under 10MB.`;
     }
     return null;
   };
@@ -44,15 +50,11 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     }));
 
     setMessage({
-      text: "File removed successfully.",
+      text: "File removed.",
       type: "success",
     });
 
-    setTimeout(() => {
-      setMessage((prev) =>
-        prev.type === "success" ? { text: "", type: "" } : prev,
-      );
-    }, 2000);
+    clearMessageAfterDelay();
   };
 
   const handleFileChange = (e) => {
@@ -63,9 +65,10 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     const currentFileCount = formData.attachments.length;
     if (currentFileCount + newFiles.length > MAX_FILES) {
       setMessage({
-        text: `You can only upload up to ${MAX_FILES} files total. You currently have ${currentFileCount} file(s) selected.`,
+        text: `You can upload up to ${MAX_FILES} files in total. You currently have ${currentFileCount} selected—please remove a file before adding more.`,
         type: "error",
       });
+      clearMessageAfterDelay();
       e.target.value = "";
       return;
     }
@@ -94,26 +97,24 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
 
     if (validNewFiles.length === 0 && newFiles.length > 0) {
       setMessage({
-        text: "No valid files were selected. Please check file types and sizes.",
+        text: "None of the selected files could be added. Please check the file type and size requirements.",
         type: "error",
       });
+      clearMessageAfterDelay();
     } else if (validNewFiles.length < newFiles.length) {
       setMessage({
-        text: `${validNewFiles.length} of ${newFiles.length} file(s) added. ${errors.length} file(s) skipped due to validation errors.`,
-        type: "warning",
+        text: `${validNewFiles.length} file(s) added. ${errors.length} file(s) couldn’t be uploaded due to type or size restrictions.`,
+        type: "warning", // Styled identically to error per requirements
       });
+      clearMessageAfterDelay();
     } else if (validNewFiles.length > 0) {
       setMessage({
-        text: `${validNewFiles.length} file(s) added successfully. Total: ${
+        text: `${validNewFiles.length} file(s) added. You now have ${
           formData.attachments.length + validNewFiles.length
-        }/${MAX_FILES}`,
+        } of ${MAX_FILES} files uploaded.`,
         type: "success",
       });
-      setTimeout(() => {
-        setMessage((prev) =>
-          prev.type === "success" ? { text: "", type: "" } : prev,
-        );
-      }, 3000);
+      clearMessageAfterDelay();
     }
   };
 
@@ -122,6 +123,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
 
     if (!formData.message.trim()) {
       setMessage({ text: "Project message is required.", type: "error" });
+      clearMessageAfterDelay();
       return;
     }
 
@@ -136,11 +138,12 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
           text: "Message submitted successfully!",
           type: "success",
         });
+        clearMessageAfterDelay();
         setFormData({
           message: "",
           attachments: [],
         });
-        const fileInput = document.getElementById("message-attachments");
+        const fileInput = document.getElementById("pm-attachments");
         if (fileInput) fileInput.value = "";
         setFileErrors([]);
         if (onMessageSubmitted) onMessageSubmitted();
@@ -149,12 +152,14 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
           text: result.message || "Submission failed. Please try again.",
           type: "error",
         });
+        clearMessageAfterDelay();
       }
     } catch (error) {
       setMessage({
         text: error.message || "An error occurred. Please try again.",
         type: "error",
       });
+      clearMessageAfterDelay();
     } finally {
       setUploadProgress(false);
     }
@@ -162,38 +167,16 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
 
   return (
     <div className="project-messages-container">
-      <div className="card mt-3">
-        <div className="card-header bg-secondary text-white">
-          <h5 className="mb-0">Share an Update or Request a Change</h5>
+      <div className="pm-card">
+        <div className="pm-card-header">
+          <h5>Share an Update or Request a Change</h5>
         </div>
-        <div className="card-body">
-          {message.text && (
-            <div
-              className={`alert alert-${
-                message.type === "error"
-                  ? "danger"
-                  : message.type === "warning"
-                  ? "warning"
-                  : "success"
-              } alert-dismissible fade show`}
-              role="alert"
-            >
-              {message.text}
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="alert"
-                aria-label="Close"
-                onClick={() => setMessage({ text: "", type: "" })}
-              ></button>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit}>
+        <div className="pm-card-body">
+          <form onSubmit={handleSubmit} noValidate>
             <div className="mb-3">
-              <label htmlFor="message" className="form-label fw-semibold">
+              <label htmlFor="message" className="pm-form-label">
                 Describe your update or request{" "}
-                <span className="text-danger">*</span>
+                <span className="pm-text-danger">*</span>
               </label>
               <textarea
                 className="form-control"
@@ -209,28 +192,25 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
             </div>
 
             <div className="mb-3">
-              <label
-                htmlFor="message-attachments"
-                className="form-label fw-semibold"
-              >
+              <label htmlFor="pm-attachments" className="pm-form-label">
                 Attachments (Optional)
               </label>
               <input
                 type="file"
                 className="form-control"
-                id="message-attachments"
+                id="pm-attachments"
                 onChange={handleFileChange}
                 disabled={uploadProgress}
                 multiple="multiple"
                 accept=".png,.jpg,.jpeg,.pdf"
               />
-              <div className="form-text">
+              <div className="pm-form-text">
                 Accepted formats: PNG, JPEG, PDF. Max 10MB per file. Up to 5
                 files.
               </div>
 
               {fileErrors.length > 0 && (
-                <div className="alert alert-warning mt-2">
+                <div className="pm-file-issues-text mt-2">
                   <strong>File validation issues:</strong>
                   <ul className="mb-0 mt-1">
                     {fileErrors.map((error, idx) => (
@@ -241,15 +221,15 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
               )}
 
               {formData.attachments.length > 0 && (
-                <div className="selected-files mt-2">
-                  <strong>
+                <div className="pm-selected-files mt-2">
+                  <p>
                     Selected files ({formData.attachments.length}/{MAX_FILES}):
-                  </strong>
+                  </p>
                   <ul className="list-unstyled mt-1">
                     {formData.attachments.map((file, idx) => (
                       <li
                         key={idx}
-                        className="file-item d-flex justify-content-between align-items-center"
+                        className="pm-file-item d-flex justify-content-between align-items-center"
                       >
                         <span>
                           <i className="bi bi-paperclip me-1"></i>
@@ -258,7 +238,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
                         </span>
                         <button
                           type="button"
-                          className="btn-remove-file"
+                          className="pm-btn-remove-file"
                           onClick={() => removeFile(idx)}
                           disabled={uploadProgress}
                           aria-label="Remove file"
@@ -272,10 +252,17 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
               )}
             </div>
 
+            {message.text && message.type === "success" && (
+              <div id="pm-success-message">{message.text}</div>
+            )}
+            {message.text && message.type !== "success" && (
+              <div id="pm-error-message">{message.text}</div>
+            )}
+
             <div className="d-grid gap-2">
               <button
                 type="submit"
-                className="btn btn-secondary btn-lg"
+                className="pm-action-btn"
                 disabled={uploadProgress}
               >
                 {uploadProgress ? (

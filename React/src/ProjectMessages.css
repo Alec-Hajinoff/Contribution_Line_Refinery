@@ -1,52 +1,60 @@
 .project-messages-container {
-  margin-top: 1rem;
+  margin: 1rem 0;
+  padding: 0;
 }
 
-.project-messages-container .card {
-  border: 1px solid #e9ecef;
-  border-radius: 8px;
+.project-messages-container .pm-card {
+  border: none;
+  border-radius: 12px;
   overflow: hidden;
 }
 
-.project-messages-container .card-header {
-  padding: 0.75rem 1rem;
+.project-messages-container .pm-card-header {
+  background-color: var(--color-primary-50);
+  padding: 15px;
 }
 
-.project-messages-container .card-header h5 {
-  font-size: 1rem;
+.project-messages-container .pm-card-header h5 {
+  text-align: center;
+  margin: 0;
+  font-size: 1.15rem;
   font-weight: 500;
+  color: inherit;
 }
 
-.project-messages-container .card-body {
-  padding: 1rem;
+.project-messages-container .pm-card-body {
+  padding: 2rem;
 }
 
-.project-messages-container .form-label {
+.project-messages-container .pm-form-label {
   font-weight: 500;
   margin-bottom: 0.5rem;
   color: #333;
-  font-size: 0.875rem;
 }
 
 .project-messages-container .form-control:focus {
-  border-color: #6c757d;
-  box-shadow: 0 0 0 0.2rem rgba(108, 117, 125, 0.25);
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
 
-.project-messages-container .form-text {
-  font-size: 0.7rem;
+.project-messages-container .pm-form-text {
+  font-size: 0.8rem;
   color: #6c757d;
   margin-top: 0.25rem;
 }
 
-.project-messages-container .selected-files {
+.project-messages-container .pm-selected-files {
   background-color: #f8f9fa;
   padding: 0.75rem;
   border-radius: 6px;
-  font-size: 0.8rem;
 }
 
-.project-messages-container .file-item {
+.project-messages-container .pm-selected-files p {
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.project-messages-container .pm-file-item {
   padding: 0.5rem 0.75rem;
   margin-bottom: 0.5rem;
   background-color: #f8f9fa;
@@ -55,44 +63,87 @@
   transition: all 0.2s ease;
 }
 
-.project-messages-container .file-item:hover {
+.project-messages-container .pm-file-item:hover {
   background-color: #e9ecef;
 }
 
-.project-messages-container .alert {
-  border-radius: 6px;
-  font-size: 0.8rem;
+.project-messages-container .pm-file-issues-text {
+  color: inherit;
+  font-size: inherit;
 }
 
-.project-messages-container .btn-remove-file {
+#pm-success-message,
+#pm-error-message {
+  color: inherit;
+  font-size: inherit;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: normal;
+}
+
+.project-messages-container .pm-action-btn {
+  background-color: var(--btn-bg);
+  border: 1px solid var(--btn-border);
+  color: var(--btn-text);
+  padding: var(--btn-padding-y) var(--btn-padding-x);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: var(--btn-transition);
+  font-size: inherit;
+  font-weight: normal;
+}
+
+.project-messages-container .pm-action-btn:hover {
+  background-color: var(--btn-bg-hover);
+}
+
+.project-messages-container .pm-action-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.project-messages-container .pm-btn-remove-file {
   background: none;
   border: none;
   color: #dc3545;
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: bold;
   cursor: pointer;
   padding: 0 0.5rem;
   border-radius: 4px;
   transition: all 0.2s ease;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.project-messages-container .btn-remove-file:hover {
+.project-messages-container .pm-btn-remove-file:hover {
   background-color: #dc3545;
   color: white;
 }
 
-.project-messages-container .btn-remove-file:disabled {
+.project-messages-container .pm-btn-remove-file:disabled {
   color: #adb5bd;
   cursor: not-allowed;
 }
 
+.project-messages-container .pm-btn-remove-file:disabled:hover {
+  background-color: transparent;
+  color: #adb5bd;
+}
+
+.project-messages-container .pm-text-danger {
+  font-size: 1rem;
+}
+
 @media (max-width: 768px) {
-  .project-messages-container .card-body {
-    padding: 0.75rem;
+  .project-messages-container {
+    margin: 1rem auto;
+  }
+
+  .project-messages-container .pm-card-body {
+    padding: 1.25rem;
   }
 }
