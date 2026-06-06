@@ -20,10 +20,15 @@ const GetUsers = ({ onUserSelect, refreshTrigger }) => {
       if (result.success) {
         setUsers(result.users);
       } else {
-        setError(result.message || "Failed to load users.");
+        setError(
+          result.message ||
+            "We couldn’t load the users right now. Please try again in a moment.",
+        );
       }
     } catch (err) {
-      setError("Unable to fetch users. Please try again later.");
+      setError(
+        "We’re having trouble connecting to the server. Please try again shortly.",
+      );
       console.error(err);
     } finally {
       setLoading(false);
@@ -47,9 +52,11 @@ const GetUsers = ({ onUserSelect, refreshTrigger }) => {
             className="spinner-border spinner-border-sm text-primary me-2"
             role="status"
           >
-            <span className="visually-hidden">Loading...</span>
+            <span className="visually-hidden">Loading, please wait</span>
           </div>
-          <span className="text-muted small">Loading users...</span>
+          <span className="text-muted small">
+            Fetching your users, this will just take a moment...
+          </span>
         </div>
       </div>
     );
@@ -78,7 +85,9 @@ const GetUsers = ({ onUserSelect, refreshTrigger }) => {
   if (users.length === 0) {
     return (
       <div className="get-users-container">
-        <p className="text-muted small mb-0">No users found</p>
+        <p className="text-muted small mb-0">
+          No users yet. Once users are added, they’ll appear here.
+        </p>
       </div>
     );
   }
