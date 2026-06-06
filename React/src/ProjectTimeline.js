@@ -103,7 +103,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
 
   return (
     <div className="project-timeline-container">
-      <h6 className="timeline-title mb-3">Project Timeline</h6>
+      <h6 className="timeline-title mb-3">Project Updates</h6>
       <div className="timeline">
         {messages.map((message, index) => (
           <div
