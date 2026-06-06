@@ -17,7 +17,10 @@ function AdminDashboard() {
       <div className="row justify-content-center">
         <div className="col-12 col-lg-9">
           <div className="admin-header">
-            <p>Welcome, Admin. Manage users and system settings here.</p>
+            <p>
+              Welcome to your admin dashboard. Here you can manage users,
+              projects and system settings.
+            </p>
           </div>
 
           <AdminPanel />
