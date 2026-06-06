@@ -37,12 +37,6 @@
   box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
 }
 
-.project-messages-container .pm-form-text {
-  font-size: 0.8rem;
-  color: #6c757d;
-  margin-top: 0.25rem;
-}
-
 .project-messages-container .pm-selected-files {
   background-color: #f8f9fa;
   padding: 0.75rem;

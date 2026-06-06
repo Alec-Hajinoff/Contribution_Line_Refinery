@@ -109,7 +109,9 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
       clearMessageAfterDelay();
     } else if (validNewFiles.length > 0) {
       setMessage({
-        text: `${validNewFiles.length} file(s) added. You now have ${formData.attachments.length + validNewFiles.length} of ${MAX_FILES} files attached.`,
+        text: `${validNewFiles.length} file(s) added. You now have ${
+          formData.attachments.length + validNewFiles.length
+        } of ${MAX_FILES} files attached.`,
         type: "success",
       });
       clearMessageAfterDelay();
@@ -120,7 +122,10 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     e.preventDefault();
 
     if (!formData.message.trim()) {
-      setMessage({ text: "Please enter a message before submitting.", type: "error" });
+      setMessage({
+        text: "Please enter a message before submitting.",
+        type: "error",
+      });
       clearMessageAfterDelay();
       return;
     }
@@ -147,14 +152,17 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
         if (onMessageSubmitted) onMessageSubmitted();
       } else {
         setMessage({
-          text: result.message || "We couldn’t send your update. Please try again.",
+          text:
+            result.message || "We couldn’t send your update. Please try again.",
           type: "error",
         });
         clearMessageAfterDelay();
       }
     } catch (error) {
       setMessage({
-        text: error.message || "Something went wrong while sending your update. Please try again.",
+        text:
+          error.message ||
+          "Something went wrong while sending your update. Please try again.",
         type: "error",
       });
       clearMessageAfterDelay();
@@ -202,7 +210,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
                 multiple="multiple"
                 accept=".png,.jpg,.jpeg,.pdf"
               />
-              <div className="pm-form-text">
+              <div className="form-text">
                 Accepted formats: PNG, JPEG, PDF. Max 10MB per file. Up to 5
                 files.
               </div>
