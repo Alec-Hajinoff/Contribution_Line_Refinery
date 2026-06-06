@@ -118,7 +118,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
                   {formatDate(message.created_at)}
                 </span>
               </div>
-              <div className="timeline-message">
+              <div className="timeline-message mt-4 mb-4">
                 {formatMessage(message.message)}
               </div>
               {message.attachments && message.attachments.length > 0 && (
@@ -129,7 +129,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
                       <li key={attachment.id} className="attachment-item">
                         <i className="bi bi-paperclip me-1"></i>
                         {attachment.attachment_name}
-                        <span className="attachment-links ms-2">
+                        <span className="attachment-links ms-4">
                           <a
                             href={attachment.view_url}
                             target="_blank"
@@ -138,6 +138,9 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
                             onClick={(e) => e.stopPropagation()}
                           >
                             View
+                            <span className="project-external-icon">
+                              &#x2197;
+                            </span>
                           </a>
                           <a
                             href={attachment.download_url}
@@ -146,6 +149,9 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
                             onClick={(e) => e.stopPropagation()}
                           >
                             Download
+                            <span className="project-external-icon">
+                              &#x2197;
+                            </span>
                           </a>
                         </span>
                       </li>

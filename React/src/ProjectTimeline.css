@@ -117,6 +117,13 @@
   text-decoration: underline;
 }
 
+.project-external-icon {
+  font-size: 0.75rem;
+  margin-left: 2px;
+  vertical-align: super;
+  display: inline-block;
+}
+
 @media (max-width: 768px) {
   .timeline {
     padding-left: 1.5rem;
