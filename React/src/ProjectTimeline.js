@@ -19,10 +19,15 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
       if (result.success) {
         setMessages(result.messages);
       } else {
-        setError(result.message || "Failed to load messages.");
+        setError(
+          result.message ||
+            "We couldn’t load your updates and requests right now. Please try again.",
+        );
       }
     } catch (err) {
-      setError("Unable to fetch project messages. Please try again later.");
+      setError(
+        "We’re having trouble loading your project updates and requests at the moment. Please try again shortly.",
+      );
       console.error(err);
     } finally {
       setLoading(false);
@@ -59,7 +64,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
           >
             <span className="visually-hidden">Loading...</span>
           </div>
-          <span className="small">Loading messages...</span>
+          <span className="small">Loading updates...</span>
         </div>
       </div>
     );
