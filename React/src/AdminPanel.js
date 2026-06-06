@@ -22,8 +22,8 @@ const AdminPanel = () => {
 
   return (
     <div className="admin-panel-container">
-      <div className="admin-panel-header">
-        <h4 className="admin-panel-title">User Management</h4>
+      <div className="admin-panel-header text-center">
+        <h4>User Management</h4>
       </div>
       <div className="admin-panel-content">
         <GetUsers
