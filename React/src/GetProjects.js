@@ -24,10 +24,15 @@ const GetProjects = ({ refreshTrigger, isAdminView = false }) => {
       if (result.success) {
         setProjects(result.projects);
       } else {
-        setError(result.message || "Failed to load projects.");
+        setError(
+          result.message ||
+            "We weren’t able to load your projects at the moment. Please try again shortly.",
+        );
       }
     } catch (err) {
-      setError("Unable to fetch your projects. Please try again later.");
+      setError(
+        "We’re sorry, but we couldn’t retrieve your projects right now. Please try again in a few moments.",
+      );
       console.error(err);
     } finally {
       setLoading(false);
