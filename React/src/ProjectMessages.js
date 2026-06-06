@@ -104,7 +104,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     } else if (validNewFiles.length < newFiles.length) {
       setMessage({
         text: `${validNewFiles.length} file(s) added. ${errors.length} couldn’t be uploaded due to format or size limits.`,
-        type: "warning", // Styled identically to error per requirements
+        type: "warning",
       });
       clearMessageAfterDelay();
     } else if (validNewFiles.length > 0) {
