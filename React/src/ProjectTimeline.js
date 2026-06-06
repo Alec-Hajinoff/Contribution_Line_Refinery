@@ -114,7 +114,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
                 <strong className="timeline-author">
                   {message.author_name}
                 </strong>
-                <span className="timeline-date">
+                <span className="timeline-date text-muted">
                   {formatDate(message.created_at)}
                 </span>
               </div>
@@ -123,7 +123,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
               </div>
               {message.attachments && message.attachments.length > 0 && (
                 <div className="timeline-attachments mt-2">
-                  <small className="text-muted">Attachments:</small>
+                  <div>Attachments:</div>
                   <ul className="attachment-list mt-1 mb-0">
                     {message.attachments.map((attachment) => (
                       <li key={attachment.id} className="attachment-item">
