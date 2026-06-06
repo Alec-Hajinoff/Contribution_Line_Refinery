@@ -118,22 +118,6 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
     }
   };
 
-  if (!selectedUser) {
-    return (
-      <div className="manage-users-container">
-        <div className="manage-users-placeholder">
-          <i
-            className="bi bi-person-circle"
-            style={{ fontSize: "1.5rem", color: "#ccc" }}
-          ></i>
-          <p className="text-muted small mt-2 mb-0">
-            Select a user from the dropdown above
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   if (loading) {
     return (
       <div className="manage-users-container">
