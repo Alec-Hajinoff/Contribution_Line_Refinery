@@ -2,14 +2,6 @@
   margin-bottom: 1rem;
 }
 
-.get-users-container .form-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #495057;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
 .get-users-container .form-select {
   font-size: 0.875rem;
   border-radius: 6px;

@@ -85,9 +85,6 @@ const GetUsers = ({ onUserSelect, refreshTrigger }) => {
 
   return (
     <div className="get-users-container">
-      <label htmlFor="user-select" className="form-label fw-semibold mb-1">
-        Select User
-      </label>
       <select
         id="user-select"
         className="form-select form-select-sm"
