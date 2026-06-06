@@ -285,7 +285,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
                       role="status"
                       aria-hidden="true"
                     ></span>
-                    Sending Message...
+                    Sending...
                   </>
                 ) : (
                   "Send"
