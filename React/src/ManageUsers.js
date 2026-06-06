@@ -169,7 +169,7 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
 
       <div className="user-info-card">
         <div className="user-info-row">
-          <span className="user-info-label">Name:</span>
+          <span>Name:</span>
           <div className="user-info-value-with-edit">
             {isEditing ? (
               <div className="inline-edit-container">
@@ -212,12 +212,12 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
         </div>
 
         <div className="user-info-row">
-          <span className="user-info-label">Email:</span>
+          <span>Email:</span>
           <span className="user-info-value">{userData.email}</span>
         </div>
 
         <div className="user-info-row delete-row">
-          <span className="user-info-label">Delete User:</span>
+          <span>Delete user:</span>
           <div className="delete-controls">
             {!isDeleteConfirming ? (
               <button
