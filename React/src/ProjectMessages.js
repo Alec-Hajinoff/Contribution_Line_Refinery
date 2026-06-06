@@ -202,7 +202,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
                 rows="4"
                 value={formData.message}
                 onChange={handleInputChange}
-                placeholder="Describe the update, change, or question — including any relevant details or context…"
+                placeholder="Describe the update, change, or question - including any relevant details or context…"
                 disabled={uploadProgress}
                 required
               ></textarea>
