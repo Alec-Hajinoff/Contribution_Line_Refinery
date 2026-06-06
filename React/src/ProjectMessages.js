@@ -174,7 +174,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
             <div className="mb-3">
               <label htmlFor="message" className="pm-form-label">
                 Describe your update or request{" "}
-                <span className="pm-text-danger">*</span>
+                <span className="text-danger">*</span>
               </label>
               <textarea
                 className="form-control"
