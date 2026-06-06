@@ -2,12 +2,19 @@
   margin-top: 1.5rem;
 }
 
-.timeline-title {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #495057;
-  border-bottom: 2px solid #e9ecef;
-  padding-bottom: 0.5rem;
+.project-timeline-container .timeline-card-header {
+  background-color: var(--color-primary-50);
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 2rem;
+}
+
+.project-timeline-container .timeline-card-header h5 {
+  text-align: center;
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: inherit;
 }
 
 .timeline {
