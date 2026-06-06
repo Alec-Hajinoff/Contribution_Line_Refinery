@@ -31,11 +31,16 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
       if (result.success) {
         setUserData(result.user);
       } else {
-        setError(result.message || "Failed to load user data.");
+        setError(
+          result.message ||
+            "We couldn’t load this user’s details. Please try again.",
+        );
       }
     } catch (err) {
       console.error("Fetch error:", err);
-      setError("Unable to fetch user data.");
+      setError(
+        "We’re having trouble retrieving this user’s information. Please try again shortly.",
+      );
     } finally {
       setLoading(false);
     }
@@ -53,7 +58,7 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
 
   const handleSave = async () => {
     if (!editValue.trim()) {
-      setError("Name cannot be empty");
+      setError("Please enter a name before saving.");
       setTimeout(() => setError(null), 3000);
       return;
     }
@@ -71,11 +76,13 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
           onUserUpdated();
         }
       } else {
-        setError(result.message || "Failed to update name");
+        setError(
+          result.message || "We couldn’t update the name. Please try again.",
+        );
         setTimeout(() => setError(null), 3000);
       }
     } catch (err) {
-      setError("An error occurred while updating name");
+      setError("Something went wrong while saving the name. Please try again.");
       setTimeout(() => setError(null), 3000);
     } finally {
       setIsUpdating(false);
@@ -105,12 +112,16 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
           onUserDeleted();
         }
       } else {
-        setError(result.message || "Failed to delete user");
+        setError(
+          result.message || "We couldn’t delete this user. Please try again.",
+        );
         setTimeout(() => setError(null), 3000);
         setIsDeleteConfirming(false);
       }
     } catch (err) {
-      setError("An error occurred while deleting user");
+      setError(
+        "Something went wrong while deleting this user. Please try again.",
+      );
       setTimeout(() => setError(null), 3000);
       setIsDeleteConfirming(false);
     } finally {
@@ -126,7 +137,9 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
             className="spinner-border spinner-border-sm text-primary me-2"
             role="status"
           ></div>
-          <span className="text-muted small">Loading user data...</span>
+          <span className="text-muted small">
+            Loading user details, just a moment...
+          </span>
         </div>
       </div>
     );
