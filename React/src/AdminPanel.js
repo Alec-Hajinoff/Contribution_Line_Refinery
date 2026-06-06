@@ -24,9 +24,6 @@ const AdminPanel = () => {
     <div className="admin-panel-container">
       <div className="admin-panel-header">
         <h4 className="admin-panel-title">User Management</h4>
-        <p className="admin-panel-subtitle">
-          Manage system users and their permissions
-        </p>
       </div>
       <div className="admin-panel-content">
         <GetUsers
