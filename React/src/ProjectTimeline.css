@@ -38,7 +38,7 @@
 }
 
 .timeline-item.latest .timeline-content {
-  border-left-color: #0d6efd;
+  border-left-color: var(--color-primary-400);
 }
 
 .timeline-content {
@@ -51,7 +51,7 @@
 
 .timeline-content:hover {
   background-color: #fefefe;
-  border-left-color: #0d6efd;
+  border-left-color: var(--color-primary-400);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
