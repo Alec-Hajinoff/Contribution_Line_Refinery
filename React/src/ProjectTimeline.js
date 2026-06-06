@@ -106,9 +106,6 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
             key={message.id}
             className={`timeline-item ${index === 0 ? "latest" : ""}`}
           >
-            <div className="timeline-badge">
-              <i className="bi bi-person-circle"></i>
-            </div>
             <div className="timeline-content">
               <div className="timeline-header">
                 <strong className="timeline-author">

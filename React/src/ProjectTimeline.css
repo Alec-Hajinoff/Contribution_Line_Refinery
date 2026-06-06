@@ -41,26 +41,6 @@
   border-left-color: #0d6efd;
 }
 
-.timeline-badge {
-  position: absolute;
-  left: -2rem;
-  top: 0;
-  width: 2rem;
-  height: 2rem;
-  background-color: white;
-  border: 2px solid #e9ecef;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
-}
-
-.timeline-badge i {
-  font-size: 0.875rem;
-  color: #6c757d;
-}
-
 .timeline-content {
   background-color: #f8f9fa;
   border-left: 3px solid #dee2e6;
@@ -131,16 +111,6 @@
 
   .timeline::before {
     left: 0.5rem;
-  }
-
-  .timeline-badge {
-    left: -1.5rem;
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .timeline-badge i {
-    font-size: 0.6875rem;
   }
 
   .timeline-header {
