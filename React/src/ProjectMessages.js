@@ -206,10 +206,6 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
                 disabled={uploadProgress}
                 required
               ></textarea>
-              <div className="form-text">
-                Provide any additional information, questions, or updates about
-                this project.
-              </div>
             </div>
 
             <div className="mb-3">
@@ -230,8 +226,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
               />
               <div className="form-text">
                 Accepted formats: PNG, JPEG, PDF. Max 10MB per file. Up to 5
-                files. Hold Ctrl/Cmd to select multiple files at once, or add
-                them one by one.
+                files.
               </div>
 
               {fileErrors.length > 0 && (
