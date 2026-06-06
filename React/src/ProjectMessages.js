@@ -33,10 +33,10 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
 
   const validateFile = (file) => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return `${file.name} isn’t a supported format. Please upload a PNG, JPEG, or PDF file.`;
+      return `${file.name} can’t be uploaded. Please choose a PNG, JPEG, or PDF file.`;
     }
     if (file.size > MAX_FILE_SIZE) {
-      return `${file.name} is too large. Each file must be under 10MB.`;
+      return `${file.name} is too large. Please upload files under 10MB.`;
     }
     return null;
   };
@@ -50,7 +50,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     }));
 
     setMessage({
-      text: "File removed.",
+      text: "Your file has been removed.",
       type: "success",
     });
 
@@ -65,7 +65,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     const currentFileCount = formData.attachments.length;
     if (currentFileCount + newFiles.length > MAX_FILES) {
       setMessage({
-        text: `You can upload up to ${MAX_FILES} files in total. You currently have ${currentFileCount} selected—please remove a file before adding more.`,
+        text: `You can upload up to ${MAX_FILES} files. You already have ${currentFileCount} selected, so please remove one before adding another.`,
         type: "error",
       });
       clearMessageAfterDelay();
@@ -97,21 +97,19 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
 
     if (validNewFiles.length === 0 && newFiles.length > 0) {
       setMessage({
-        text: "None of the selected files could be added. Please check the file type and size requirements.",
+        text: "We couldn’t add any of those files. Please check that they are the correct format and under 10MB.",
         type: "error",
       });
       clearMessageAfterDelay();
     } else if (validNewFiles.length < newFiles.length) {
       setMessage({
-        text: `${validNewFiles.length} file(s) added. ${errors.length} file(s) couldn’t be uploaded due to type or size restrictions.`,
+        text: `${validNewFiles.length} file(s) added. ${errors.length} couldn’t be uploaded due to format or size limits.`,
         type: "warning", // Styled identically to error per requirements
       });
       clearMessageAfterDelay();
     } else if (validNewFiles.length > 0) {
       setMessage({
-        text: `${validNewFiles.length} file(s) added. You now have ${
-          formData.attachments.length + validNewFiles.length
-        } of ${MAX_FILES} files uploaded.`,
+        text: `${validNewFiles.length} file(s) added. You now have ${formData.attachments.length + validNewFiles.length} of ${MAX_FILES} files attached.`,
         type: "success",
       });
       clearMessageAfterDelay();
@@ -122,7 +120,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
     e.preventDefault();
 
     if (!formData.message.trim()) {
-      setMessage({ text: "Project message is required.", type: "error" });
+      setMessage({ text: "Please enter a message before submitting.", type: "error" });
       clearMessageAfterDelay();
       return;
     }
@@ -135,7 +133,7 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
 
       if (result.success) {
         setMessage({
-          text: "Message submitted successfully!",
+          text: "Your update has been sent successfully.",
           type: "success",
         });
         clearMessageAfterDelay();
@@ -149,14 +147,14 @@ const ProjectMessages = ({ projectId, onMessageSubmitted }) => {
         if (onMessageSubmitted) onMessageSubmitted();
       } else {
         setMessage({
-          text: result.message || "Submission failed. Please try again.",
+          text: result.message || "We couldn’t send your update. Please try again.",
           type: "error",
         });
         clearMessageAfterDelay();
       }
     } catch (error) {
       setMessage({
-        text: error.message || "An error occurred. Please try again.",
+        text: error.message || "Something went wrong while sending your update. Please try again.",
         type: "error",
       });
       clearMessageAfterDelay();
