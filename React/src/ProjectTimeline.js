@@ -94,7 +94,7 @@ const ProjectTimeline = ({ projectId, refreshTrigger }) => {
             style={{ fontSize: "2rem", color: "#ccc" }}
           ></i>
           <p className="text-muted small mt-2 mb-0">
-            There are currently no messages
+            No updates or requests yet.
           </p>
         </div>
       </div>
