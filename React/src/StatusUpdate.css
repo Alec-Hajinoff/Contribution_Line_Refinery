@@ -11,14 +11,6 @@
   flex-wrap: wrap;
 }
 
-.status-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #495057;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
 .form-check.form-switch {
   padding-left: 2.5rem;
   margin-bottom: 0;

@@ -40,7 +40,7 @@ const StatusUpdate = ({ projectId, currentStatus, onStatusUpdated }) => {
   return (
     <div className="status-update-container">
       <div className="status-toggle-wrapper">
-        <span className="status-label">Project Status:</span>
+        <span>Project Status:</span>
         <div className="form-check form-switch">
           <input
             className="form-check-input"
