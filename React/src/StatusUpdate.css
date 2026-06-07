@@ -23,8 +23,8 @@
 }
 
 .form-check-input:checked {
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: var(--color-primary-300);
+  border-color: var(--color-primary-300);
 }
 
 .form-check-input:disabled {
@@ -44,7 +44,6 @@
 
 .status-separator {
   margin: 0 0.5rem;
-  /*color: #dee2e6;*/
 }
 
 .status-updating-indicator {
