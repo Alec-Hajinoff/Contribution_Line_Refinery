@@ -33,7 +33,6 @@
 }
 
 .form-check-label {
-  font-size: 0.75rem;
   font-weight: 500;
   cursor: pointer;
   margin-left: 0.5rem;
@@ -52,7 +51,6 @@
 .status-separator {
   margin: 0 0.5rem;
   color: #dee2e6;
-  font-size: 0.6875rem;
 }
 
 .status-updating-indicator {
