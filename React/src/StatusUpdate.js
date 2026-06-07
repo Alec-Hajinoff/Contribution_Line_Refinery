@@ -22,12 +22,18 @@ const StatusUpdate = ({ projectId, currentStatus, onStatusUpdated }) => {
           onStatusUpdated(projectId, newStatus);
         }
       } else {
-        setError(result.message || "Failed to update status.");
+        setError(
+          result.message ||
+            "We weren’t able to update the project status at the moment. Please try again.",
+        );
 
         e.target.checked = !e.target.checked;
       }
     } catch (err) {
-      setError(err.message || "An error occurred while updating status.");
+      setError(
+        err.message ||
+          "Something went wrong while updating the project status. Please try again shortly.",
+      );
 
       e.target.checked = !e.target.checked;
     } finally {
