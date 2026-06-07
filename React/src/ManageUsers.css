@@ -30,8 +30,6 @@
 }
 
 .user-info-value {
-  font-size: 0.875rem;
-  color: #212529;
   text-align: right;
 }
 
@@ -63,12 +61,10 @@
 
 .inline-edit-container .form-control-sm {
   width: 200px;
-  font-size: 0.8125rem;
 }
 
 .inline-edit-container .btn-sm {
   padding: 0.25rem 0.5rem;
-  font-size: 0.75rem;
 }
 
 .btn-success {
