@@ -38,19 +38,13 @@
   margin-left: 0.5rem;
 }
 
-.form-check-label .status-text {
-  color: #6c757d;
-  transition: color 0.2s ease;
-}
-
 .form-check-label .status-text.active {
-  color: #28a745;
   font-weight: 600;
 }
 
 .status-separator {
   margin: 0 0.5rem;
-  color: #dee2e6;
+  /*color: #dee2e6;*/
 }
 
 .status-updating-indicator {
