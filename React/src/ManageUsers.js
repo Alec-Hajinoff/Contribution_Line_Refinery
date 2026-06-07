@@ -225,11 +225,10 @@ const ManageUsers = ({ selectedUser, onUserUpdated, onUserDeleted }) => {
                 onClick={handleDeleteClick}
                 disabled={isDeleting}
               >
-                🗑️ Delete user
+                Delete user
               </button>
             ) : (
               <div className="delete-confirmation">
-                <span className="confirm-message">Sure?</span>
                 <button
                   className="btn-confirm-delete"
                   onClick={handleConfirmDelete}
