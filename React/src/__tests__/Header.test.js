@@ -1,46 +1,81 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
-import { MemoryRouter } from "react-router-dom";
-
+import { BrowserRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 import Header from "../Header";
-import blue from "../ContributionLineLogoColoured.png";
 
-jest.mock("../ContributionLineLogoColoured.png", () => "mock-logo.png");
+jest.mock("../LogoutComponent", () => () => (
+  <div data-testid="mock-logout-component">Logout Trigger Panel</div>
+));
 
-describe("Header", () => {
-  test("renders without crashing", () => {
-    const { container } = render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>,
-    );
-    expect(container).toBeTruthy();
+const renderWithRouter = (ui) => {
+  return render(<BrowserRouter>{ui}</BrowserRouter>);
+};
+
+describe("Header Component Unit and Integration Tests", () => {
+  const mockOnLogoutComplete = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  test("renders the logo image with correct attributes", () => {
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>,
+  test("renders company logo with appropriate accessible alternative text descriptions", () => {
+    renderWithRouter(
+      <Header
+        isAuthenticated={false}
+        isLoading={false}
+        onLogoutComplete={mockOnLogoutComplete}
+      />,
     );
 
-    const logo = screen.getByRole("img", { name: /a company logo/i });
+    const logoImg = screen.getByRole("img", { name: "A company logo" });
+    expect(logoImg).toBeInTheDocument();
+    expect(logoImg).toHaveAttribute("title", "A company logo");
 
-    expect(logo).toBeInTheDocument();
-    expect(logo).toHaveAttribute("src", "mock-logo.png");
-    expect(logo).toHaveAttribute("alt", "A company logo");
-    expect(logo).toHaveAttribute("title", "A company logo");
+    const linkAnchor = screen.getByRole("link");
+    expect(linkAnchor).toBeInTheDocument();
+    expect(linkAnchor).toHaveAttribute("href", "/");
   });
 
-  test("logo links to the home page", () => {
-    render(
-      <MemoryRouter>
-        <Header />
-      </MemoryRouter>,
+  test("hides LogoutComponent completely when the system loading indicator flag is true", () => {
+    renderWithRouter(
+      <Header
+        isAuthenticated={true}
+        isLoading={true}
+        onLogoutComplete={mockOnLogoutComplete}
+      />,
     );
 
-    const link = screen.getByRole("link");
+    expect(
+      screen.queryByTestId("mock-logout-component"),
+    ).not.toBeInTheDocument();
+  });
 
-    expect(link).toHaveAttribute("href", "/");
+  test("hides LogoutComponent completely when the user profile is unauthenticated", () => {
+    renderWithRouter(
+      <Header
+        isAuthenticated={false}
+        isLoading={false}
+        onLogoutComplete={mockOnLogoutComplete}
+      />,
+    );
+
+    expect(
+      screen.queryByTestId("mock-logout-component"),
+    ).not.toBeInTheDocument();
+  });
+
+  test("renders LogoutComponent explicitly when loading concludes and user authentication is true", () => {
+    renderWithRouter(
+      <Header
+        isAuthenticated={true}
+        isLoading={false}
+        onLogoutComplete={mockOnLogoutComplete}
+      />,
+    );
+
+    const logoutSection = screen.getByTestId("mock-logout-component");
+    expect(logoutSection).toBeInTheDocument();
+    expect(logoutSection).toHaveTextContent("Logout Trigger Panel");
   });
 });
