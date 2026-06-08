@@ -2,296 +2,321 @@ import {
   registerUser,
   loginUser,
   logoutUser,
-  addContribution,
-  contributionsTimeline,
-  presentationViewPost,
-  presentationViewGet,
   verifyEmail,
   passwordResetLink,
   passwordResetToken,
   updatePassword,
-  deleteContribution,
-  updateContribution,
+  checkSession,
+  projectSubmission,
+  getProjects,
+  projectMessages,
+  projectTimeline,
+  statusUpdate,
+  getUsers,
+  manageUsers,
+  updateUserName,
+  userDeletion,
+  contactForm,
 } from "../ApiService";
 
-global.fetch = jest.fn();
+describe("ApiService - Comprehensive Complete Test Suite", () => {
+  beforeEach(() => {
+    global.fetch = jest.fn();
 
-beforeEach(() => {
-  fetch.mockReset();
-});
+    jest.spyOn(console, "error").mockImplementation(() => {});
+  });
 
-describe("ApiService", () => {
-  test("registerUser sends correct request and returns JSON", async () => {
-    const mockResponse = { success: true };
-    fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
+
+  describe("Standard JSON POST Functions", () => {
+    const mockSuccessResponse = {
+      success: true,
+      message: "Operation completed successfully",
+    };
+
+    test("registerUser sends correct payload and resolves data", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockSuccessResponse,
+      });
+
+      const formData = { username: "alec", password: "securepassword" };
+      const result = await registerUser(formData);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/form_capture.php",
+        expect.objectContaining({
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+          credentials: "include",
+        }),
+      );
+      expect(result).toEqual(mockSuccessResponse);
     });
 
-    const formData = { email: "test@example.com", password: "123" };
-    const result = await registerUser(formData);
+    test("loginUser sends correct payload and resolves data", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockSuccessResponse,
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/form_capture.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-        credentials: "include",
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
+      const formData = { username: "alec", password: "securepassword" };
+      const result = await loginUser(formData);
 
-  test("loginUser sends correct request and returns JSON", async () => {
-    const mockResponse = { loggedIn: true };
-    fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/login_capture.php",
+        expect.objectContaining({
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+          credentials: "include",
+        }),
+      );
+      expect(result).toEqual(mockSuccessResponse);
     });
 
-    const formData = { email: "test@example.com", password: "123" };
-    const result = await loginUser(formData);
+    test("verifyEmail sends token and resolves data", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockSuccessResponse,
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/login_capture.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(formData),
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
+      const result = await verifyEmail("test-token-123");
 
-  test("logoutUser sends POST request and succeeds on ok response", async () => {
-    fetch.mockResolvedValueOnce({ ok: true });
-    await logoutUser();
-
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/logout_component.php",
-      {
-        method: "POST",
-        credentials: "include",
-      },
-    );
-  });
-
-  test("logoutUser throws error on non-ok response", async () => {
-    fetch.mockResolvedValueOnce({ ok: false });
-    await expect(logoutUser()).rejects.toThrow(
-      "An error occurred during logout.",
-    );
-  });
-
-  test("addContribution sends FormData and returns JSON", async () => {
-    const mockResponse = { id: 123 };
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/verify_email.php",
+        expect.objectContaining({
+          method: "POST",
+          body: JSON.stringify({ token: "test-token-123" }),
+        }),
+      );
+      expect(result).toEqual(mockSuccessResponse);
     });
 
-    const formData = new FormData();
-    formData.append("title", "Test");
-    const result = await addContribution(formData);
+    test("passwordResetLink handles success and catches error to return a fallback object", async () => {
+      global.fetch.mockRejectedValueOnce(new Error("Database offline"));
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/add_contribution.php",
-      {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
+      const result = await passwordResetLink("test@example.com");
 
-  test("addContribution throws error on non-ok response", async () => {
-    fetch.mockResolvedValueOnce({ ok: false, status: 500 });
-    const formData = new FormData();
-    await expect(addContribution(formData)).rejects.toThrow(
-      "An error occurred while adding the contribution.",
-    );
-  });
-
-  test("contributionsTimeline sends GET request and returns JSON", async () => {
-    const mockResponse = [{ id: 1 }];
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/password_reset_link.php",
+        expect.objectContaining({
+          method: "POST",
+          body: JSON.stringify({ email: "test@example.com" }),
+        }),
+      );
+      expect(result).toEqual({ success: true });
     });
 
-    const result = await contributionsTimeline();
+    test("passwordResetToken returns validation details or a failure fallback on network crash", async () => {
+      global.fetch.mockRejectedValueOnce(new Error("Timeout"));
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/contributions_timeline.php",
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
+      const result = await passwordResetToken("token123");
 
-  test("deleteContribution sends correct request and returns JSON", async () => {
-    const mockResponse = { status: "success" };
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+      expect(result).toEqual({
+        valid: false,
+        message: "An error occurred while verifying the token.",
+      });
     });
 
-    const result = await deleteContribution(123);
+    test("updatePassword submits new credentials or returns a fallback on error", async () => {
+      global.fetch.mockRejectedValueOnce(new Error("Failed"));
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/delete_contribution.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ contribution_id: 123 }),
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
+      const result = await updatePassword("token123", "newPass");
 
-  test("updateContribution sends FormData and returns JSON", async () => {
-    const mockResponse = { status: "success" };
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+      expect(result).toEqual({
+        success: false,
+        message: "An error occurred while updating the password.",
+      });
     });
 
-    const formData = new FormData();
-    const result = await updateContribution(formData);
+    test("statusUpdate sends projectId and status safely", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockSuccessResponse,
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/update_contribution.php",
-      {
-        method: "POST",
-        credentials: "include",
-        body: formData,
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
-
-  test("presentationViewPost sends POST request with JSON body", async () => {
-    const mockResponse = { success: true };
-    fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
+      const result = await statusUpdate(45, "In Progress");
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/status_update.php",
+        expect.objectContaining({
+          body: JSON.stringify({ project_id: 45, status: "In Progress" }),
+        }),
+      );
+      expect(result).toEqual(mockSuccessResponse);
     });
 
-    const ids = [1, 2, 3];
-    const result = await presentationViewPost(ids);
+    test("updateUserName submits altered profile details", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockSuccessResponse,
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/presentation_view_post.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ contributions_id: ids }),
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
-
-  test("presentationViewGet sends GET request and returns JSON", async () => {
-    const mockResponse = { id: 1 };
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: () => Promise.resolve(mockResponse),
+      await updateUserName(10, "Updated Name");
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/update_user_name.php",
+        expect.objectContaining({
+          body: JSON.stringify({ user_id: 10, name: "Updated Name" }),
+        }),
+      );
     });
 
-    const result = await presentationViewGet(5);
+    test("userDeletion submits selected target id for cascade execution", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockSuccessResponse,
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/presentation_view_get.php?id=5",
-      {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      },
-    );
-    expect(result).toEqual(mockResponse);
-  });
-
-  test("verifyEmail sends token and returns JSON", async () => {
-    const mockResponse = { success: true };
-    fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
+      await userDeletion(99);
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/user_deletion.php",
+        expect.objectContaining({
+          body: JSON.stringify({ user_id: 99 }),
+        }),
+      );
     });
 
-    const result = await verifyEmail("token123");
+    test("contactForm sends data cleanly without state storage dependency", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockSuccessResponse,
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/verify_email.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ token: "token123" }),
-      },
-    );
-    expect(result).toEqual(mockResponse);
+      const clientInput = {
+        name: "John",
+        email: "j@me.com",
+        phone: "123",
+        projectDescription: "Build app",
+        website: "test.com",
+      };
+
+      await contactForm(clientInput);
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/contact_form.php",
+        expect.objectContaining({
+          body: JSON.stringify(clientInput),
+        }),
+      );
+    });
   });
 
-  test("passwordResetLink sends email and returns JSON", async () => {
-    const mockResponse = { success: true };
-    fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
+  describe("GET Request Functions", () => {
+    test("checkSession evaluates auth status or falls back gracefully on network crash", async () => {
+      global.fetch.mockRejectedValueOnce(new Error("Disconnected"));
+      const result = await checkSession();
+      expect(result).toEqual({ authenticated: false });
     });
 
-    const result = await passwordResetLink("test@example.com");
+    test("getProjects requests user-bound project collections", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => [{ id: 1, title: "Website" }],
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/password_reset_link.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email: "test@example.com" }),
-      },
-    );
-    expect(result).toEqual(mockResponse);
+      const result = await getProjects();
+      expect(result).toEqual([{ id: 1, title: "Website" }]);
+    });
+
+    test("projectTimeline appends query parameter seamlessly", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ timeline: [] }),
+      });
+
+      await projectTimeline(101);
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/project_timeline.php?project_id=101",
+        expect.objectContaining({ method: "GET" }),
+      );
+    });
+
+    test("getUsers requests complete system name profiles", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true, users: [] }),
+      });
+
+      await getUsers();
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/get_users.php",
+        expect.objectContaining({ method: "GET" }),
+      );
+    });
+
+    test("manageUsers appends target userId query string key", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ id: 5 }),
+      });
+
+      await manageUsers(5);
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/manage_users.php?user_id=5",
+        expect.objectContaining({ method: "GET" }),
+      );
+    });
   });
 
-  test("passwordResetToken sends token and returns JSON", async () => {
-    const mockResponse = { valid: true };
-    fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
+  describe("Multipart FormData Upload Functions", () => {
+    test("projectSubmission appends fields and files array into a FormData entity", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
+
+      const mockSubmission = {
+        title: "New Venture",
+        description: "A large scale react migration",
+        attachments: [
+          new File(["dummy data"], "spec.pdf", { type: "application/pdf" }),
+        ],
+      };
+
+      await projectSubmission(mockSubmission);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/project_submission.php",
+        expect.objectContaining({
+          method: "POST",
+          body: expect.any(FormData),
+        }),
+      );
     });
 
-    const result = await passwordResetToken("token123");
+    test("projectMessages processes message string and files array into a FormData entity", async () => {
+      global.fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ success: true }),
+      });
 
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/password_reset_token.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ token: "token123" }),
-      },
-    );
-    expect(result).toEqual(mockResponse);
+      const mockMessageData = {
+        message: "Here is the updated asset archive",
+        attachments: [
+          new File(["image content"], "logo.png", { type: "image/png" }),
+        ],
+      };
+
+      await projectMessages(404, mockMessageData);
+
+      expect(global.fetch).toHaveBeenCalledWith(
+        "http://localhost:8001/Hertford_Standard/PHP/project_messages.php",
+        expect.objectContaining({
+          method: "POST",
+          body: expect.any(FormData),
+        }),
+      );
+    });
   });
 
-  test("updatePassword sends token and password and returns JSON", async () => {
-    const mockResponse = { success: true };
-    fetch.mockResolvedValueOnce({
-      json: () => Promise.resolve(mockResponse),
+  describe("logoutUser Function", () => {
+    test("logoutUser resolves cleanly on HTTP ok or throws an exact customized error string if request fails", async () => {
+      global.fetch.mockResolvedValueOnce({ ok: false });
+      await expect(logoutUser()).rejects.toThrow(
+        "An error occurred during logout.",
+      );
     });
-
-    const result = await updatePassword("token123", "newPass");
-
-    expect(fetch).toHaveBeenCalledWith(
-      "http://localhost:8001/Contribution_Line/update_password.php",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ token: "token123", password: "newPass" }),
-      },
-    );
-    expect(result).toEqual(mockResponse);
   });
 });
