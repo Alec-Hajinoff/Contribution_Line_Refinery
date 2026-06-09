@@ -1,58 +1,47 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import Main from "../Main";
 
-describe("Main", () => {
-  test("renders without crashing", () => {
+jest.mock("../ContactForm", () => () => (
+  <div data-testid="mock-contact-form">Mocked Contact Form Interface</div>
+));
+
+describe("Main Component Layout and Structural Tests", () => {
+  test("renders the structural container with correct styling hooks", () => {
     const { container } = render(<Main />);
-    expect(container).toBeTruthy();
+
+    const outerContainer = container.querySelector(".main-container");
+    const introSection = container.querySelector(".intro-section");
+
+    expect(outerContainer).toBeInTheDocument();
+    expect(introSection).toBeInTheDocument();
   });
 
-  test("renders the intro headline", () => {
+  test("renders the headline portfolio introduction copy and company mission messaging text", () => {
     render(<Main />);
 
-    expect(
-      screen.getByText(/Capture your real work contributions as they happen/i),
-    ).toBeInTheDocument();
+    const heroHeading = screen.getByRole("heading", { level: 2 });
+    expect(heroHeading).toBeInTheDocument();
+    expect(heroHeading).toHaveClass("hero-title");
+    expect(heroHeading).toHaveTextContent(
+      "I build modern and secure web applications for businesses and development teams",
+    );
+
+    const introductoryParagraph = screen.getByText(
+      /Hertford Standard is a portfolio and client‑management application/i,
+    );
+    expect(introductoryParagraph).toBeInTheDocument();
+    expect(introductoryParagraph).toHaveClass("intro-text");
   });
 
-  test("renders all six value points with correct titles and descriptions", () => {
+  test("mounts the standalone child ContactForm component inside the introduction layout panel", () => {
     render(<Main />);
 
-    const titles = [
-      "Private Record",
-      "Capture As It Happens",
-      "Flexible Views",
-      "Evidence-Based",
-      "Portable & Independent",
-      "Always Prepared",
-    ];
-
-    const descriptions = [
-      /Capture contributions in a secure, private system/i,
-      /Log meaningful contributions at the moment/i,
-      /Assemble custom views for different purposes/i,
-      /Ground conversations in factual, well-organized evidence/i,
-      /Records are portable and persist independently/i,
-      /Maintain an up-to-date record/i,
-    ];
-
-    titles.forEach((title) => {
-      expect(screen.getByText(title)).toBeInTheDocument();
-    });
-
-    descriptions.forEach((desc) => {
-      expect(screen.getByText(desc)).toBeInTheDocument();
-    });
-  });
-
-  test("renders all six icons", () => {
-    render(<Main />);
-
-    const icons = ["📋", "⏱️", "🎯", "📊", "🚀", "✅"];
-
-    icons.forEach((icon) => {
-      expect(screen.getByText(icon)).toBeInTheDocument();
-    });
+    const contactFormBoundary = screen.getByTestId("mock-contact-form");
+    expect(contactFormBoundary).toBeInTheDocument();
+    expect(contactFormBoundary).toHaveTextContent(
+      "Mocked Contact Form Interface",
+    );
   });
 });
