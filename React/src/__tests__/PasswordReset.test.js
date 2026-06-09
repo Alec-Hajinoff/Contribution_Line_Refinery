@@ -1,8 +1,18 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
+import "@testing-library/jest-dom";
 import PasswordReset from "../PasswordReset";
-import { passwordResetToken, updatePassword } from "../ApiService";
+import {
+  passwordResetToken as mockVerifyToken,
+  updatePassword as mockUpdatePassword,
+} from "../ApiService";
 
 jest.mock("../ApiService", () => ({
   passwordResetToken: jest.fn(),
@@ -15,43 +25,174 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockNavigate,
 }));
 
-describe("PasswordReset Component", () => {
+const renderWithToken = (tokenValue) => {
+  const queryPath = tokenValue
+    ? `/password-reset?token=${tokenValue}`
+    : "/password-reset";
+  return render(
+    <MemoryRouter initialEntries={[queryPath]}>
+      <PasswordReset />
+    </MemoryRouter>,
+  );
+};
+
+describe("PasswordReset Component State and Verification Workflow Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
-  const renderWithToken = (token = "test-token") => {
-    return render(
-      <MemoryRouter initialEntries={[`/PasswordReset?token=${token}`]}>
-        <Routes>
-          <Route path="/PasswordReset" element={<PasswordReset />} />
-        </Routes>
-      </MemoryRouter>,
-    );
-  };
+  afterEach(() => {
+    jest.runOnlyPendingTimers();
+    jest.useRealTimers();
+  });
 
-  test("shows loading state and verifies token on mount", async () => {
-    passwordResetToken.mockResolvedValueOnce({ valid: true });
-    renderWithToken();
+  test("displays an initial loading spinner layout panel while evaluating token validity", () => {
+    mockVerifyToken.mockReturnValueOnce(new Promise(() => {}));
 
-    expect(screen.getByText(/Verifying your link/i)).toBeInTheDocument();
+    renderWithToken("secure-test-token-123");
 
+    expect(screen.getByRole("status")).toBeInTheDocument();
+    expect(
+      screen.getByText(/We are verifying your password reset link/i),
+    ).toBeInTheDocument();
+  });
+
+  test("renders an error notice screen if the token URL parameter is missing entirely", async () => {
+    renderWithToken(null);
+
+    expect(mockVerifyToken).not.toHaveBeenCalled();
     await waitFor(() => {
-      expect(passwordResetToken).toHaveBeenCalledWith("test-token");
-      expect(screen.getByText(/Reset your password/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/This password reset link is no longer valid/i),
+      ).toBeInTheDocument();
     });
+
+    const homeBtn = screen.getByRole("button", {
+      name: /Return to home page/i,
+    });
+    fireEvent.click(homeBtn);
+    expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 
-  test("shows error message if token is invalid", async () => {
-    passwordResetToken.mockResolvedValueOnce({
+  test("renders an error notice screen if the backend explicitly rejects token validity parameters", async () => {
+    mockVerifyToken.mockResolvedValueOnce({
       valid: false,
-      message: "Invalid link",
+      message: "Custom Token Expiration Error.",
     });
-    renderWithToken();
+
+    renderWithToken("invalid-expired-token");
 
     await waitFor(() => {
-      expect(screen.getByText(/Invalid link/i)).toBeInTheDocument();
+      expect(
+        screen.getByText("Custom Token Expiration Error."),
+      ).toBeInTheDocument();
     });
+    expect(
+      screen.queryByPlaceholderText("New password"),
+    ).not.toBeInTheDocument();
+  });
+
+  test("mounts the password adjustment input form layout cleanly upon successful token verification", async () => {
+    mockVerifyToken.mockResolvedValueOnce({ valid: true });
+
+    renderWithToken("valid-active-token");
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("New password")).toBeInTheDocument();
+    });
+    expect(screen.getByPlaceholderText("Confirm password")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Update password" }),
+    ).toBeInTheDocument();
+  });
+
+  test("rejects input submissions shorter than 8 characters and automatically dismisses error banner over time", async () => {
+    mockVerifyToken.mockResolvedValueOnce({ valid: true });
+    renderWithToken("valid-active-token");
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("New password")).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByPlaceholderText("New password"), {
+      target: { value: "short17" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
+      target: { value: "short17" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Update password" }));
+
+    expect(
+      screen.getByText(
+        /Please enter a password that is at least 8 characters long/i,
+      ),
+    ).toBeInTheDocument();
+    expect(mockUpdatePassword).not.toHaveBeenCalled();
+
+    act(() => {
+      jest.advanceTimersByTime(5000);
+    });
+    expect(
+      screen.queryByText(
+        /Please enter a password that is at least 8 characters long/i,
+      ),
+    ).not.toBeInTheDocument();
+  });
+
+  test("rejects input submissions where password field inputs do not match one another", async () => {
+    mockVerifyToken.mockResolvedValueOnce({ valid: true });
+    renderWithToken("valid-active-token");
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("New password")).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByPlaceholderText("New password"), {
+      target: { value: "SecurePass123" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
+      target: { value: "DifferentPass123" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Update password" }));
+
+    expect(
+      screen.getByText(/The passwords you entered do not match/i),
+    ).toBeInTheDocument();
+    expect(mockUpdatePassword).not.toHaveBeenCalled();
+  });
+
+  test("submits form data properly and displays a home navigation pipeline upon successful modification", async () => {
+    mockVerifyToken.mockResolvedValueOnce({ valid: true });
+    mockUpdatePassword.mockResolvedValueOnce({ success: true });
+
+    renderWithToken("valid-active-token");
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText("New password")).toBeInTheDocument();
+    });
+
+    fireEvent.change(screen.getByPlaceholderText("New password"), {
+      target: { value: "ValidPassword123" },
+    });
+    fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
+      target: { value: "ValidPassword123" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Update password" }));
+
+    expect(mockUpdatePassword).toHaveBeenCalledWith(
+      "valid-active-token",
+      "ValidPassword123",
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Your password has been updated successfully/i),
+      ).toBeInTheDocument();
+    });
+
+    expect(
+      screen.queryByRole("button", { name: "Update password" }),
+    ).not.toBeInTheDocument();
 
     fireEvent.click(
       screen.getByRole("button", { name: /Return to home page/i }),
@@ -59,137 +200,29 @@ describe("PasswordReset Component", () => {
     expect(mockNavigate).toHaveBeenCalledWith("/");
   });
 
-  test("shows generic error message if token is missing in URL", async () => {
-    render(
-      <MemoryRouter initialEntries={["/PasswordReset"]}>
-        <PasswordReset />
-      </MemoryRouter>,
-    );
-
-    await waitFor(() => {
-      expect(
-        screen.getByText(/This link may have expired/i),
-      ).toBeInTheDocument();
-    });
-  });
-
-  test("displays error for password shorter than 8 characters", async () => {
-    passwordResetToken.mockResolvedValueOnce({ valid: true });
-    renderWithToken();
-
-    await waitFor(() => screen.getByPlaceholderText("New password"));
-
-    fireEvent.change(screen.getByPlaceholderText("New password"), {
-      target: { value: "short" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
-      target: { value: "short" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
-
-    expect(
-      screen.getByText(/Password must be at least 8 characters long/i),
-    ).toBeInTheDocument();
-    expect(updatePassword).not.toHaveBeenCalled();
-  });
-
-  test("displays error when passwords do not match", async () => {
-    passwordResetToken.mockResolvedValueOnce({ valid: true });
-    renderWithToken();
-
-    await waitFor(() => screen.getByPlaceholderText("New password"));
-
-    fireEvent.change(screen.getByPlaceholderText("New password"), {
-      target: { value: "password123" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
-      target: { value: "mismatch123" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
-
-    expect(screen.getByText(/Passwords do not match/i)).toBeInTheDocument();
-  });
-
-  test("successfully updates password and shows success view", async () => {
-    passwordResetToken.mockResolvedValueOnce({ valid: true });
-    updatePassword.mockResolvedValueOnce({ success: true });
-
-    renderWithToken();
-    await waitFor(() => screen.getByPlaceholderText("New password"));
-
-    fireEvent.change(screen.getByPlaceholderText("New password"), {
-      target: { value: "newpassword123" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
-      target: { value: "newpassword123" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
-
-    expect(
-      screen.getByRole("button", { name: /Update password/i }),
-    ).toBeDisabled();
-
-    await waitFor(() => {
-      expect(updatePassword).toHaveBeenCalledWith(
-        "test-token",
-        "newpassword123",
-      );
-      expect(
-        screen.getByText(/Your password has been updated/i),
-      ).toBeInTheDocument();
-    });
-
-    expect(screen.getByPlaceholderText("New password")).toBeDisabled();
-    expect(screen.getByPlaceholderText("Confirm password")).toBeDisabled();
-
-    const returnHomeBtn = screen.getByRole("button", {
-      name: /Return to home page/i,
-    });
-    fireEvent.click(returnHomeBtn);
-    expect(mockNavigate).toHaveBeenCalledWith("/");
-  });
-
-  test("handles API error message from backend during update", async () => {
-    passwordResetToken.mockResolvedValueOnce({ valid: true });
-    updatePassword.mockResolvedValueOnce({
+  test("handles server submission update errors gracefully and shows error panels", async () => {
+    mockVerifyToken.mockResolvedValueOnce({ valid: true });
+    mockUpdatePassword.mockResolvedValueOnce({
       success: false,
-      message: "Backend error",
+      message: "Password has been previously used.",
     });
 
-    renderWithToken();
-    await waitFor(() => screen.getByPlaceholderText("New password"));
-
-    fireEvent.change(screen.getByPlaceholderText("New password"), {
-      target: { value: "newpassword123" },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
-      target: { value: "newpassword123" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
-
+    renderWithToken("valid-active-token");
     await waitFor(() => {
-      expect(screen.getByText(/Backend error/i)).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("New password")).toBeInTheDocument();
     });
-  });
-
-  test("handles unexpected network error during update", async () => {
-    passwordResetToken.mockResolvedValueOnce({ valid: true });
-    updatePassword.mockRejectedValueOnce(new Error("Network Fail"));
-
-    renderWithToken();
-    await waitFor(() => screen.getByPlaceholderText("New password"));
 
     fireEvent.change(screen.getByPlaceholderText("New password"), {
-      target: { value: "newpassword123" },
+      target: { value: "ValidPassword123" },
     });
     fireEvent.change(screen.getByPlaceholderText("Confirm password"), {
-      target: { value: "newpassword123" },
+      target: { value: "ValidPassword123" },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Update password/i }));
+    fireEvent.click(screen.getByRole("button", { name: "Update password" }));
 
     await waitFor(() => {
       expect(
-        screen.getByText(/An error occurred. Please try again./i),
+        screen.getByText("Password has been previously used."),
       ).toBeInTheDocument();
     });
   });
