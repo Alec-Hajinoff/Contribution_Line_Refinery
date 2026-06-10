@@ -7,8 +7,12 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     const verify = async () => {
-      const data = await checkSession();
-      setAuth(data.authenticated === true);
+      try {
+        const data = await checkSession();
+        setAuth(data.authenticated === true);
+      } catch (error) {
+        setAuth(false);
+      }
     };
 
     verify();
