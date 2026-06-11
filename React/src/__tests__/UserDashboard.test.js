@@ -1,47 +1,102 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import UserDashboard from "../UserDashboard";
 
-jest.mock("../LogoutComponent", () => () => (
-  <div data-testid="logout">Mock Logout</div>
-));
+jest.mock("../ProjectSubmission", () => {
+  return function MockProjectSubmission({ onProjectSubmitted }) {
+    return (
+      <div data-testid="mock-project-submission">
+        <button
+          data-testid="simulate-submit-trigger"
+          onClick={onProjectSubmitted}
+        >
+          Simulate Submission Dispatch
+        </button>
+      </div>
+    );
+  };
+});
 
-jest.mock("../AddContribution", () => ({ onContributionAdded }) => (
-  <div data-testid="add-contribution">
-    Mock AddContribution
-    <button onClick={onContributionAdded}>Trigger Add</button>
-  </div>
-));
+jest.mock("../GetProjects", () => {
+  return function MockGetProjects({ refreshTrigger }) {
+    return (
+      <div data-testid="mock-get-projects">
+        Active Refresh ID:{" "}
+        <span data-testid="refresh-count-display">{refreshTrigger}</span>
+      </div>
+    );
+  };
+});
 
-const mockTimeline = jest.fn(() => (
-  <div data-testid="timeline">Mock Timeline</div>
-));
+if (typeof window !== "undefined") {
+  if (!window.getSelection) {
+    const mockSelection = () => ({
+      removeAllRanges: () => {},
+      addRange: () => {},
+      getRangeAt: () => ({
+        setStart: () => {},
+        setEnd: () => {},
+        cloneRange: () => ({ collapse: () => {} }),
+        collapse: () => {},
+      }),
+    });
+    window.getSelection = mockSelection;
+    document.getSelection = mockSelection;
+  }
 
-jest.mock("../ContributionsTimeline", () => ({
-  __esModule: true,
-  default: (props) => mockTimeline(props),
-}));
+  if (!document.createRange) {
+    document.createRange = () => ({
+      setStart: () => {},
+      setEnd: () => {},
+      cloneRange: function () {
+        return this;
+      },
+      collapse: () => {},
+      getClientRects: () => [],
+      getBoundingClientRect: () => ({
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+      }),
+      commonAncestorContainer: { nodeName: "#document", type: "ELEMENT_NODE" },
+    });
+  }
+}
 
-describe("UserDashboard", () => {
-  beforeEach(() => {
-    mockTimeline.mockClear();
-  });
-
-  test("renders LogoutComponent, AddContribution, and ContributionsTimeline", () => {
+describe("UserDashboard Component Lifecycle Integration Tests", () => {
+  test("The Static Layer: renders layout structures and dashboard introductory instructions", () => {
     render(<UserDashboard />);
 
-    expect(screen.getByTestId("logout")).toBeInTheDocument();
-    expect(screen.getByTestId("add-contribution")).toBeInTheDocument();
-    expect(screen.getByTestId("timeline")).toBeInTheDocument();
+    const welcomeMessage = screen.getByText(/Welcome to your dashboard\./i);
+    expect(welcomeMessage).toBeInTheDocument();
+    expect(welcomeMessage.tagName).toBe("P");
   });
 
-  test("re-mounts ContributionsTimeline when a contribution is added", () => {
+  test("Composition Layer: renders nested component wrappers inside the visual DOM tree", () => {
     render(<UserDashboard />);
 
-    expect(mockTimeline).toHaveBeenCalledTimes(1);
+    expect(screen.getByTestId("mock-project-submission")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-get-projects")).toBeInTheDocument();
+  });
 
-    fireEvent.click(screen.getByText("Trigger Add"));
+  test("The Event Bridge: passes initial states and increments dependency counter properties on submission loops", () => {
+    render(<UserDashboard />);
 
-    expect(mockTimeline).toHaveBeenCalledTimes(2);
+    const counterDisplay = screen.getByTestId("refresh-count-display");
+    const simulatedActionBtn = screen.getByTestId("simulate-submit-trigger");
+
+    expect(counterDisplay).toHaveTextContent("0");
+
+    fireEvent.click(simulatedActionBtn);
+
+    expect(counterDisplay).toHaveTextContent("1");
+
+    fireEvent.click(simulatedActionBtn);
+
+    expect(counterDisplay).toHaveTextContent("2");
   });
 });
