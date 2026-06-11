@@ -1,74 +1,111 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import userEvent from "@testing-library/user-event";
 import UserRegistration from "../UserRegistration";
 import { registerUser } from "../ApiService";
+
+if (typeof window !== "undefined") {
+  if (!window.getSelection) {
+    const mockSelection = () => ({
+      removeAllRanges: () => {},
+      addRange: () => {},
+      getRangeAt: () => ({
+        setStart: () => {},
+        setEnd: () => {},
+        cloneRange: () => ({ collapse: () => {} }),
+        collapse: () => {},
+      }),
+    });
+    window.getSelection = mockSelection;
+    document.getSelection = mockSelection;
+  }
+
+  if (!document.createRange) {
+    document.createRange = () => ({
+      setStart: () => {},
+      setEnd: () => {},
+      cloneRange: function () {
+        return this;
+      },
+      collapse: () => {},
+      getClientRects: () => [],
+      getBoundingClientRect: () => ({
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        width: 0,
+        height: 0,
+      }),
+      commonAncestorContainer: { nodeName: "#document", type: "ELEMENT_NODE" },
+    });
+  }
+}
+
+const mockNavigate = jest.fn();
+jest.mock("react-router-dom", () => ({
+  useNavigate: () => mockNavigate,
+}));
 
 jest.mock("../ApiService", () => ({
   registerUser: jest.fn(),
 }));
 
-const mockNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockNavigate,
-}));
-
-describe("UserRegistration", () => {
+describe("UserRegistration Component Interaction and Lifecycle Tests", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.useFakeTimers();
   });
 
-  const fillForm = (
-    name = "John Doe",
-    email = "john@example.com",
-    password = "password123",
-  ) => {
-    fireEvent.change(screen.getByPlaceholderText("Your full name"), {
-      target: { value: name },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Email address"), {
-      target: { value: email },
-    });
-    fireEvent.change(screen.getByPlaceholderText("Choose a strong password"), {
-      target: { value: password },
-    });
-  };
+  afterEach(() => {
+    jest.useRealTimers();
+  });
 
-  it("renders the registration form with all required fields", () => {
+  test("The Static Layer: renders registration inputs and active action buttons correctly", () => {
     render(<UserRegistration />);
 
-    expect(screen.getByPlaceholderText("Your full name")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Email address")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Your full name/i)).toBeInTheDocument();
+    expect(screen.getByPlaceholderText(/Email address/i)).toBeInTheDocument();
     expect(
-      screen.getByPlaceholderText("Choose a strong password"),
+      screen.getByPlaceholderText(/Choose a strong password/i),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /register/i }),
+      screen.getByRole("button", { name: /Register/i }),
     ).toBeInTheDocument();
   });
 
-  it("updates form data when input values change", () => {
+  test("Validation Layer: catches invalid character inputs in name values", async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<UserRegistration />);
-    const nameInput = screen.getByPlaceholderText("Your full name");
-    fireEvent.change(nameInput, { target: { value: "Jane Smith" } });
-    expect(nameInput.value).toBe("Jane Smith");
-  });
 
-  it("displays an error if the name contains invalid characters", () => {
-    render(<UserRegistration />);
-    fillForm("John123");
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+    const nameInput = screen.getByPlaceholderText(/Your full name/i);
+    const registerButton = screen.getByRole("button", { name: /Register/i });
 
-    expect(
-      screen.getByText("Name can only contain letters and spaces"),
-    ).toBeInTheDocument();
+    await user.type(nameInput, "Jane Doe 123");
+    await user.click(registerButton);
+
+    const errorContainer = screen.getByText(
+      /Please enter a name using letters and spaces only\./i,
+    );
+    expect(errorContainer).toBeInTheDocument();
     expect(registerUser).not.toHaveBeenCalled();
+
+    jest.advanceTimersByTime(5000);
+    expect(errorContainer).not.toHaveTextContent();
   });
 
-  it("displays an error for an invalid email address", () => {
+  test("Validation Layer: intercepts invalid email formatting structures", async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<UserRegistration />);
-    fillForm("John Doe", "invalid-email");
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+
+    const nameInput = screen.getByPlaceholderText(/Your full name/i);
+    const emailInput = screen.getByPlaceholderText(/Email address/i);
+    const registerButton = screen.getByRole("button", { name: /Register/i });
+
+    await user.type(nameInput, "Jane Doe");
+    await user.type(emailInput, "missing-at-sign.com");
+    await user.click(registerButton);
 
     expect(
       screen.getByText(/Please enter a valid email address/i),
@@ -76,60 +113,122 @@ describe("UserRegistration", () => {
     expect(registerUser).not.toHaveBeenCalled();
   });
 
-  it("displays an error for a password shorter than 8 characters", () => {
+  test("Validation Layer: enforces password baseline length restrictions", async () => {
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<UserRegistration />);
-    fillForm("John Doe", "john@example.com", "short");
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+
+    const nameInput = screen.getByPlaceholderText(/Your full name/i);
+    const emailInput = screen.getByPlaceholderText(/Email address/i);
+    const passwordInput = screen.getByPlaceholderText(
+      /Choose a strong password/i,
+    );
+    const registerButton = screen.getByRole("button", { name: /Register/i });
+
+    await user.type(nameInput, "Jane Doe");
+    await user.type(emailInput, "jane@example.com");
+    await user.type(passwordInput, "short");
+    await user.click(registerButton);
 
     expect(
-      screen.getByText("Password must be at least 8 characters long"),
+      screen.getByText(
+        /Please choose a password with at least 8 characters\./i,
+      ),
     ).toBeInTheDocument();
     expect(registerUser).not.toHaveBeenCalled();
   });
 
-  it("submits the form successfully and shows a success message", async () => {
+  test("Branch A (Happy Path Success): updates status UI, wipes input forms, and triggers delayed clear routines", async () => {
     registerUser.mockResolvedValueOnce({ success: true });
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<UserRegistration />);
 
-    fillForm("John Doe", "john@example.com", "password123");
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+    const nameInput = screen.getByPlaceholderText(/Your full name/i);
+    const emailInput = screen.getByPlaceholderText(/Email address/i);
+    const passwordInput = screen.getByPlaceholderText(
+      /Choose a strong password/i,
+    );
+    const registerButton = screen.getByRole("button", { name: /Register/i });
+
+    await user.type(nameInput, "Jane Doe");
+    await user.type(emailInput, "jane@example.com");
+    await user.type(passwordInput, "secureSecretPassword123");
+
+    await user.click(registerButton);
+
+    expect(screen.getByRole("button")).toHaveTextContent(/Registering/i);
 
     await waitFor(() => {
       expect(registerUser).toHaveBeenCalledWith({
-        name: "John Doe",
-        email: "john@example.com",
-        password: "password123",
+        name: "Jane Doe",
+        email: "jane@example.com",
+        password: "secureSecretPassword123",
       });
     });
 
-    expect(
-      await screen.findByText(/Check your email to sign in/i),
-    ).toBeInTheDocument();
+    const successBanner = await screen.findByText(
+      /Please check your email for a link to confirm your address/i,
+    );
+    expect(successBanner).toBeInTheDocument();
 
-    expect(screen.getByPlaceholderText("Your full name").value).toBe("");
-    expect(screen.getByPlaceholderText("Email address").value).toBe("");
+    expect(nameInput).toHaveValue("");
+    expect(emailInput).toHaveValue("");
+    expect(passwordInput).toHaveValue("");
+
+    jest.advanceTimersByTime(5000);
+    expect(successBanner).not.toHaveTextContent();
   });
 
-  it("displays an error message when the API registration fails", async () => {
+  test("Branch B (API Operational Rejection): yields explicit rejection string feedback and wipes credentials", async () => {
     registerUser.mockResolvedValueOnce({
       success: false,
-      message: "Email already exists",
+      message:
+        "This specific email address is already connected to an active account.",
     });
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<UserRegistration />);
 
-    fillForm();
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+    const nameInput = screen.getByPlaceholderText(/Your full name/i);
+    const emailInput = screen.getByPlaceholderText(/Email address/i);
+    const passwordInput = screen.getByPlaceholderText(
+      /Choose a strong password/i,
+    );
 
-    expect(await screen.findByText("Email already exists")).toBeInTheDocument();
+    await user.type(nameInput, "Jane Doe");
+    await user.type(emailInput, "duplicate@example.com");
+    await user.type(passwordInput, "securePass9988");
+    await user.click(screen.getByRole("button", { name: /Register/i }));
+
+    const backendFeedback = await screen.findByText(
+      /This specific email address is already connected/i,
+    );
+    expect(backendFeedback).toBeInTheDocument();
+
+    expect(nameInput).toHaveValue("");
+    expect(emailInput).toHaveValue("");
+    expect(passwordInput).toHaveValue("");
   });
 
-  it("displays an error message when the API call throws an exception", async () => {
-    registerUser.mockRejectedValueOnce(new Error("Server error"));
+  test("Branch C (Asynchronous Error Catching): logs unexpected network thrown exceptions inside error slots", async () => {
+    registerUser.mockRejectedValueOnce(
+      new Error("Cloud network connection drops or standard server failures."),
+    );
+    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     render(<UserRegistration />);
 
-    fillForm();
-    fireEvent.click(screen.getByRole("button", { name: /register/i }));
+    await user.type(screen.getByPlaceholderText(/Your full name/i), "Jane Doe");
+    await user.type(
+      screen.getByPlaceholderText(/Email address/i),
+      "jane@example.com",
+    );
+    await user.type(
+      screen.getByPlaceholderText(/Choose a strong password/i),
+      "passwordStringVal",
+    );
+    await user.click(screen.getByRole("button", { name: /Register/i }));
 
-    expect(await screen.findByText("Server error")).toBeInTheDocument();
+    const standardExceptionBlock = await screen.findByText(
+      /Cloud network connection drops or standard server failures\./i,
+    );
+    expect(standardExceptionBlock).toBeInTheDocument();
   });
 });
