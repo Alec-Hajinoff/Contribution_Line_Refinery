@@ -8,7 +8,7 @@ function TermsOfService() {
         <div className="col-12 col-lg-9 clearfix-custom">
           <h1 className="tos-main-title h5">Terms of Service</h1>
           <p className="tos-text">
-            Effective Date: {new Date().toLocaleDateString()}
+            Effective Date: {new Date().toLocaleDateString("en-GB")}
           </p>
 
           <h2 className="tos-heading h5 mt-4">1. Introduction</h2>
