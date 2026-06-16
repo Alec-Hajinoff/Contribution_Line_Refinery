@@ -3,9 +3,10 @@ if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'lifetime' => 86400,
         'path' => '/',
-        'secure' => false,
+        'domain' => '.hertfordstandard.com',
+        'secure' => true,
         'httponly' => true,
-        'samesite' => 'Lax'
+        'samesite' => 'Strict'
     ]);
 
     session_name('hertford_standard');
