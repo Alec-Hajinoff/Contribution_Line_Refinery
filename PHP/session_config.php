@@ -2,11 +2,11 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'lifetime' => 86400,
-        'path' => '/',
-        'domain' => '.hertfordstandard.com',
-        'secure' => true,
+        'path'     => '/',
+        'domain'   => '.hertfordstandard.com',
+        'secure'   => true,
         'httponly' => true,
-        'samesite' => 'Strict'
+        'samesite' => 'Strict',
     ]);
 
     session_name('hertford_standard');
@@ -21,7 +21,7 @@ if (isset($_SESSION['LAST_ACTIVITY']) && (time() - $_SESSION['LAST_ACTIVITY'] > 
 }
 $_SESSION['LAST_ACTIVITY'] = time();
 
-if (!isset($_SESSION['CREATED'])) {
+if (! isset($_SESSION['CREATED'])) {
     $_SESSION['CREATED'] = time();
 } elseif (time() - $_SESSION['CREATED'] > $timeout) {
     session_regenerate_id(true);
