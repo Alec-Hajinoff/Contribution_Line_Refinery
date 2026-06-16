@@ -3,7 +3,7 @@
 export const registerUser = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/form_capture.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/form_capture.php",
       {
         method: "POST",
         headers: {
@@ -25,7 +25,7 @@ export const registerUser = async (formData) => {
 export const loginUser = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/login_capture.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/login_capture.php",
       {
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ export const loginUser = async (formData) => {
 export const logoutUser = async () => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/logout_component.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/logout_component.php",
       {
         method: "POST",
         credentials: "include",
@@ -68,7 +68,7 @@ export const logoutUser = async () => {
 export const verifyEmail = async (token) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/verify_email.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/verify_email.php",
       {
         method: "POST",
         headers: {
@@ -92,7 +92,7 @@ export const verifyEmail = async (token) => {
 export const passwordResetLink = async (email) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/password_reset_link.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/password_reset_link.php",
       {
         method: "POST",
         headers: {
@@ -117,7 +117,7 @@ export const passwordResetLink = async (email) => {
 export const passwordResetToken = async (token) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/password_reset_token.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/password_reset_token.php",
       {
         method: "POST",
         headers: {
@@ -144,7 +144,7 @@ export const passwordResetToken = async (token) => {
 export const updatePassword = async (token, newPassword) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/update_password.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/update_password.php",
       {
         method: "POST",
         headers: {
@@ -174,7 +174,7 @@ export const updatePassword = async (token, newPassword) => {
 export const checkSession = async () => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/check_session.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/check_session.php",
       {
         method: "GET",
         credentials: "include",
@@ -202,7 +202,7 @@ export const projectSubmission = async (formData) => {
     });
 
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/project_submission.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/project_submission.php",
       {
         method: "POST",
         credentials: "include",
@@ -229,7 +229,7 @@ export const projectSubmission = async (formData) => {
 export const getProjects = async () => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/get_projects.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/get_projects.php",
       {
         method: "GET",
         credentials: "include",
@@ -263,7 +263,7 @@ export const projectMessages = async (projectId, formData) => {
     });
 
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/project_messages.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/project_messages.php",
       {
         method: "POST",
         credentials: "include",
@@ -290,7 +290,7 @@ export const projectMessages = async (projectId, formData) => {
 export const projectTimeline = async (projectId) => {
   try {
     const response = await fetch(
-      `http://localhost:8001/Hertford_Standard/PHP/project_timeline.php?project_id=${projectId}`,
+      `https://hertfordstandard.com/Hertford_Standard/PHP/project_timeline.php?project_id=${projectId}`,
       {
         method: "GET",
         credentials: "include",
@@ -316,7 +316,7 @@ export const projectTimeline = async (projectId) => {
 export const statusUpdate = async (projectId, status) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/status_update.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/status_update.php",
       {
         method: "POST",
         headers: {
@@ -349,7 +349,7 @@ export const statusUpdate = async (projectId, status) => {
 export const getUsers = async () => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/get_users.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/get_users.php",
       {
         method: "GET",
         credentials: "include",
@@ -373,7 +373,7 @@ export const getUsers = async () => {
 export const manageUsers = async (userId) => {
   try {
     const response = await fetch(
-      `http://localhost:8001/Hertford_Standard/PHP/manage_users.php?user_id=${userId}`,
+      `https://hertfordstandard.com/Hertford_Standard/PHP/manage_users.php?user_id=${userId}`,
       {
         method: "GET",
         credentials: "include",
@@ -399,7 +399,7 @@ export const manageUsers = async (userId) => {
 export const updateUserName = async (userId, newName) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/update_user_name.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/update_user_name.php",
       {
         method: "POST",
         headers: {
@@ -432,7 +432,7 @@ export const updateUserName = async (userId, newName) => {
 export const userDeletion = async (userId) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/user_deletion.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/user_deletion.php",
       {
         method: "POST",
         headers: {
@@ -462,7 +462,7 @@ export const userDeletion = async (userId) => {
 export const contactForm = async (formData) => {
   try {
     const response = await fetch(
-      "http://localhost:8001/Hertford_Standard/PHP/contact_form.php",
+      "https://hertfordstandard.com/Hertford_Standard/PHP/contact_form.php",
       {
         method: "POST",
         headers: {
