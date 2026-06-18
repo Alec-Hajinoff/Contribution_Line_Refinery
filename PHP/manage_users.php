@@ -2,13 +2,16 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -23,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-if (!isset($_SESSION['id'])) {
+if (! isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo json_encode(['success' => false, 'message' => 'You must be logged in to view user data.']);
     exit;
@@ -35,20 +38,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-if (!isset($_GET['user_id']) || !is_numeric($_GET['user_id'])) {
+if (! isset($_GET['user_id']) || ! is_numeric($_GET['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'User ID is required.']);
     exit;
 }
 
 $target_user_id = (int) $_GET['user_id'];
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -58,26 +62,26 @@ try {
 }
 
 try {
-    $sql = 'SELECT id, name, email 
-            FROM users 
+    $sql = 'SELECT id, name, email
+            FROM users
             WHERE id = :target_user_id';
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([':target_user_id' => $target_user_id]);
     $targetUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$targetUser) {
+    if (! $targetUser) {
         echo json_encode(['success' => false, 'message' => 'User not found.']);
         exit;
     }
 
     echo json_encode([
         'success' => true,
-        'user' => [
-            'id' => $targetUser['id'],
-            'name' => $targetUser['name'],
-            'email' => $targetUser['email']
-        ]
+        'user'    => [
+            'id'    => $targetUser['id'],
+            'name'  => $targetUser['name'],
+            'email' => $targetUser['email'],
+        ],
     ]);
 } catch (PDOException $e) {
     error_log('Manage users error: ' . $e->getMessage());
