@@ -8,30 +8,17 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-$config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
-if ($config === false) {
-    error_log('password_reset_link.php: Failed to parse .env file');
-    echo json_encode(['success' => false, 'message' => 'Server configuration error']);
-    exit;
-}
-
-$mailUsername = $config['MAIL_USERNAME'];
-$mailPassword = $config['MAIL_PASSWORD'];
-
-if (empty($mailUsername) || empty($mailPassword)) {
-    error_log('password_reset_link.php: Gmail credentials not found in .env file');
-    echo json_encode(['success' => false, 'message' => 'Server configuration error']);
-    exit;
-}
-
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -46,13 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -77,14 +65,14 @@ if (empty($email)) {
     exit;
 }
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
     error_log('password_reset_link.php: Invalid email format: ' . $email);
     echo json_encode(['success' => true]);
     exit;
 }
 
 try {
-    $checkSql = 'SELECT id, name FROM users WHERE email = :email AND is_verified = 1 LIMIT 1';
+    $checkSql  = 'SELECT id, name FROM users WHERE email = :email AND is_verified = 1 LIMIT 1';
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bindParam(':email', $email);
     $checkStmt->execute();
@@ -95,7 +83,7 @@ try {
         error_log('password_reset_link.php: Verified user found - ID: ' . $user['id'] . ', Name: ' . $user['name']);
 
         $resetToken = bin2hex(random_bytes(32));
-        $expiresAt = date('Y-m-d H:i:s', strtotime('+1 hour'));
+        $expiresAt  = date('Y-m-d H:i:s', strtotime('+1 hour'));
 
         error_log('password_reset_link.php: Generated token: ' . $resetToken . ' for user ID: ' . $user['id']);
 
@@ -112,7 +100,7 @@ try {
             error_log('password_reset_link.php: Failed to store token in database for user ID: ' . $user['id']);
         }
 
-        $resetLink = 'http://localhost:3000/PasswordReset?token=' . urlencode($resetToken);
+        $resetLink = 'https://hertfordstandard.com/PasswordReset?token=' . urlencode($resetToken);
 
         $mail = new PHPMailer(true);
 
@@ -121,20 +109,18 @@ try {
 
             $mail->SMTPDebug = SMTP::DEBUG_OFF;
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = $mailUsername;
-            $mail->Password = $mailPassword;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
-            $mail->Timeout = 30;
+            $mail->Host       = 'localhost';
+            $mail->SMTPAuth   = false;
+            $mail->SMTPSecure = false;
+            $mail->Port       = 25;
+            $mail->Timeout    = 30;
 
-            $mail->setFrom($mailUsername, 'Hertford Standard');
+            $mail->setFrom('alec@hertfordstandard.com', 'Hertford Standard');
             $mail->addAddress($email, $user['name']);
 
             $mail->isHTML(false);
             $mail->Subject = 'Reset your password - Hertford Standard';
-            $mail->Body = "We received a request to reset your password for your Hertford Standard account.\n\n"
+            $mail->Body    = "We received a request to reset your password for your Hertford Standard account.\n\n"
                 . "Please click the link below to reset your password:\n"
                 . $resetLink . "\n\n"
                 . "This link will expire in 1 hour.\n\n"
