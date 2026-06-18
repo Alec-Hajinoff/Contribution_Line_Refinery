@@ -2,13 +2,16 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -23,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-if (!isset($_SESSION['id'])) {
+if (! isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo json_encode(['success' => false, 'message' => 'You must be logged in to update user names.']);
     exit;
@@ -42,31 +45,32 @@ if ($input === null) {
     exit;
 }
 
-if (!isset($input['user_id']) || !is_numeric($input['user_id'])) {
+if (! isset($input['user_id']) || ! is_numeric($input['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'User ID is required.']);
     exit;
 }
 
-if (!isset($input['name']) || empty(trim($input['name']))) {
+if (! isset($input['name']) || empty(trim($input['name']))) {
     echo json_encode(['success' => false, 'message' => 'Name cannot be empty.']);
     exit;
 }
 
 $target_user_id = (int) $input['user_id'];
-$new_name = trim($input['name']);
+$new_name       = trim($input['name']);
 
 if (strlen($new_name) > 255) {
     echo json_encode(['success' => false, 'message' => 'Name cannot exceed 255 characters.']);
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -76,7 +80,7 @@ try {
 }
 
 try {
-    $checkSql = 'SELECT id FROM users WHERE id = :target_user_id';
+    $checkSql  = 'SELECT id FROM users WHERE id = :target_user_id';
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->execute([':target_user_id' => $target_user_id]);
 
@@ -85,18 +89,18 @@ try {
         exit;
     }
 
-    $updateSql = 'UPDATE users SET name = :name WHERE id = :target_user_id';
+    $updateSql  = 'UPDATE users SET name = :name WHERE id = :target_user_id';
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->execute([
-        ':name' => $new_name,
-        ':target_user_id' => $target_user_id
+        ':name'           => $new_name,
+        ':target_user_id' => $target_user_id,
     ]);
 
     echo json_encode([
-        'success' => true,
-        'message' => 'User name updated successfully.',
-        'user_id' => $target_user_id,
-        'new_name' => $new_name
+        'success'  => true,
+        'message'  => 'User name updated successfully.',
+        'user_id'  => $target_user_id,
+        'new_name' => $new_name,
     ]);
 } catch (PDOException $e) {
     error_log('Update user name error: ' . $e->getMessage());
