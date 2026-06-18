@@ -2,13 +2,16 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -23,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit(0);
 }
 
-if (!isset($_SESSION['id'])) {
+if (! isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo json_encode(['success' => false, 'message' => 'You must be logged in to update project status.']);
     exit;
@@ -44,12 +47,12 @@ if ($input === null) {
     exit;
 }
 
-if (!isset($input['project_id']) || !is_numeric($input['project_id'])) {
+if (! isset($input['project_id']) || ! is_numeric($input['project_id'])) {
     echo json_encode(['success' => false, 'message' => 'Project ID is required.']);
     exit;
 }
 
-if (!isset($input['status']) || !in_array($input['status'], ['in_progress', 'completed'])) {
+if (! isset($input['status']) || ! in_array($input['status'], ['in_progress', 'completed'])) {
     echo json_encode(['success' => false, 'message' => 'Valid status (in_progress or completed) is required.']);
     exit;
 }
@@ -57,13 +60,14 @@ if (!isset($input['status']) || !in_array($input['status'], ['in_progress', 'com
 $project_id = (int) $input['project_id'];
 $new_status = $input['status'];
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -73,18 +77,18 @@ try {
 }
 
 try {
-    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminSql  = 'SELECT is_admin FROM users WHERE id = :user_id';
     $adminStmt = $conn->prepare($adminSql);
     $adminStmt->execute([':user_id' => $user_id]);
-    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $user     = $adminStmt->fetch(PDO::FETCH_ASSOC);
     $is_admin = ($user && $user['is_admin'] == 1);
 
-    if (!$is_admin) {
+    if (! $is_admin) {
         echo json_encode(['success' => false, 'message' => 'Access denied. Only administrators can update project status.']);
         exit;
     }
 
-    $verifySql = 'SELECT id FROM projects WHERE id = :project_id';
+    $verifySql  = 'SELECT id FROM projects WHERE id = :project_id';
     $verifyStmt = $conn->prepare($verifySql);
     $verifyStmt->execute([':project_id' => $project_id]);
 
@@ -93,21 +97,21 @@ try {
         exit;
     }
 
-    $updateSql = 'UPDATE projects 
-                  SET status = :status, updated_at = NOW() 
+    $updateSql = 'UPDATE projects
+                  SET status = :status, updated_at = NOW()
                   WHERE id = :project_id';
 
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->execute([
-        ':status' => $new_status,
-        ':project_id' => $project_id
+        ':status'     => $new_status,
+        ':project_id' => $project_id,
     ]);
 
     echo json_encode([
-        'success' => true,
-        'message' => 'Project status updated successfully.',
+        'success'    => true,
+        'message'    => 'Project status updated successfully.',
         'project_id' => $project_id,
-        'new_status' => $new_status
+        'new_status' => $new_status,
     ]);
 } catch (PDOException $e) {
     error_log('Status update error: ' . $e->getMessage());
