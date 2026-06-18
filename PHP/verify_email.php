@@ -2,13 +2,16 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -23,13 +26,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -45,7 +49,7 @@ if ($input === null) {
 
 $token = $input['token'] ?? null;
 
-if (!$token) {
+if (! $token) {
     echo json_encode(['success' => false, 'message' => 'It looks like the verification link is incomplete. Please use the full link from your email.']);
     exit;
 }
@@ -53,15 +57,15 @@ if (!$token) {
 try {
     $conn->beginTransaction();
 
-    $checkSql = 'SELECT id, email, is_verified FROM users 
-                 WHERE verification_token = :token AND verification_token_expires_at > NOW() 
+    $checkSql = 'SELECT id, email, is_verified FROM users
+                 WHERE verification_token = :token AND verification_token_expires_at > NOW()
                  LIMIT 1';
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bindParam(':token', $token);
     $checkStmt->execute();
 
     if ($checkStmt->rowCount() === 0) {
-        $expiredSql = 'SELECT id FROM users WHERE verification_token = :token AND verification_token_expires_at <= NOW() LIMIT 1';
+        $expiredSql  = 'SELECT id FROM users WHERE verification_token = :token AND verification_token_expires_at <= NOW() LIMIT 1';
         $expiredStmt = $conn->prepare($expiredSql);
         $expiredStmt->bindParam(':token', $token);
         $expiredStmt->execute();
@@ -83,10 +87,10 @@ try {
         exit;
     }
 
-    $updateSql = 'UPDATE users 
-                  SET is_verified = 1, 
-                      verification_token = NULL, 
-                      verification_token_expires_at = NULL 
+    $updateSql = 'UPDATE users
+                  SET is_verified = 1,
+                      verification_token = NULL,
+                      verification_token_expires_at = NULL
                   WHERE id = :id';
     $updateStmt = $conn->prepare($updateSql);
     $updateStmt->bindParam(':id', $user['id']);
