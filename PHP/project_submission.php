@@ -4,7 +4,7 @@ require_once 'session_config.php';
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-if (!isset($_SESSION['id'])) {
+if (! isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo json_encode(['success' => false, 'message' => 'You must be logged in to submit a project.']);
     exit;
@@ -13,13 +13,16 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -40,30 +43,31 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if (!isset($_POST['title']) || empty(trim($_POST['title']))) {
+if (! isset($_POST['title']) || empty(trim($_POST['title']))) {
     echo json_encode(['success' => false, 'message' => 'Project title is required.']);
     exit;
 }
 
-if (!isset($_POST['description']) || empty(trim($_POST['description']))) {
+if (! isset($_POST['description']) || empty(trim($_POST['description']))) {
     echo json_encode(['success' => false, 'message' => 'Project description is required.']);
     exit;
 }
 
-$title = trim($_POST['title']);
+$title       = trim($_POST['title']);
 $description = trim($_POST['description']);
 
 $allowed_types = ['image/png', 'image/jpeg', 'application/pdf'];
-$max_file_size = 10 * 1024 * 1024;  // 10MB
-$max_files = 5;
+$max_file_size = 10 * 1024 * 1024;
+$max_files     = 5;
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -75,25 +79,25 @@ try {
 try {
     $conn->beginTransaction();
 
-    $sql = 'INSERT INTO projects (user_id, title, description, status, created_at, updated_at) 
+    $sql = 'INSERT INTO projects (user_id, title, description, status, created_at, updated_at)
             VALUES (:user_id, :title, :description, :status, NOW(), NOW())';
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([
-        ':user_id' => $user_id,
-        ':title' => $title,
+        ':user_id'     => $user_id,
+        ':title'       => $title,
         ':description' => $description,
-        ':status' => 'in_progress'
+        ':status'      => 'in_progress',
     ]);
 
     $project_id = $conn->lastInsertId();
 
     $uploaded_files = 0;
-    $skipped_files = 0;
-    $file_errors = [];
+    $skipped_files  = 0;
+    $file_errors    = [];
 
-    if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
-        $files = $_FILES['attachments'];
+    if (isset($_FILES['attachments']) && ! empty($_FILES['attachments']['name'][0])) {
+        $files      = $_FILES['attachments'];
         $file_count = count($files['name']);
 
         if ($file_count > $max_files) {
@@ -116,9 +120,9 @@ try {
             $file_name = $files['name'][$i];
             $file_type = $files['type'][$i];
             $file_size = $files['size'][$i];
-            $file_tmp = $files['tmp_name'][$i];
+            $file_tmp  = $files['tmp_name'][$i];
 
-            if (!in_array($file_type, $allowed_types)) {
+            if (! in_array($file_type, $allowed_types)) {
                 $skipped_files++;
                 $file_errors[] = "File '{$file_name}' skipped: Invalid file type. Allowed: PNG, JPEG, PDF";
                 continue;
@@ -137,8 +141,8 @@ try {
                 continue;
             }
 
-            $sql_attachment = 'INSERT INTO project_attachments 
-                              (project_id, attachment, attachment_name, attachment_type, uploaded_by, uploaded_at) 
+            $sql_attachment = 'INSERT INTO project_attachments
+                              (project_id, attachment, attachment_name, attachment_type, uploaded_by, uploaded_at)
                               VALUES (:project_id, :attachment, :attachment_name, :attachment_type, :uploaded_by, NOW())';
 
             $stmt_attachment = $conn->prepare($sql_attachment);
@@ -160,84 +164,69 @@ try {
     $conn->commit();
 
     try {
-        $adminSql = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
+        $adminSql  = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
         $adminStmt = $conn->prepare($adminSql);
         $adminStmt->execute();
         $adminUsers = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
 
-        if (!empty($adminUsers)) {
-            $userSql = 'SELECT name, email FROM users WHERE id = :user_id';
+        if (! empty($adminUsers)) {
+            $userSql  = 'SELECT name, email FROM users WHERE id = :user_id';
             $userStmt = $conn->prepare($userSql);
             $userStmt->execute([':user_id' => $user_id]);
             $submittingUser = $userStmt->fetch(PDO::FETCH_ASSOC);
 
-            $config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
+            $urlLink = 'https://hertfordstandard.com';
+            $subject = 'New Project Submission - Hertford Standard';
 
-            if ($config === false) {
-                error_log('Admin notification: Failed to parse .env file for mail credentials');
-            } else {
-                $mailUsername = $config['MAIL_USERNAME'] ?? '';
-                $mailPassword = $config['MAIL_PASSWORD'] ?? '';
+            $emailBody  = "A new project has been submitted to Hertford Standard.\n\n";
+            $emailBody .= 'Project Title: ' . $title . "\n";
+            $emailBody .= 'Project ID: ' . $project_id . "\n\n";
+            $emailBody .= 'Submitted by: ' . ($submittingUser['name'] ?? 'Unknown') . "\n";
+            $emailBody .= "Submitter's Email: " . ($submittingUser['email'] ?? 'Unknown') . "\n\n";
+            $emailBody .= "Please log in to the admin dashboard to review this project " . $urlLink;
 
-                if (empty($mailUsername) || empty($mailPassword)) {
-                    error_log('Admin notification: Gmail credentials not found in .env file');
-                } else {
-                    $urlLink = 'https://hertfordstandard.com';
-                    $subject = 'New Project Submission - Hertford Standard';
+            $successCount = 0;
+            $failureCount = 0;
 
-                    $emailBody = "A new project has been submitted to Hertford Standard.\n\n";
-                    $emailBody .= 'Project Title: ' . $title . "\n";
-                    $emailBody .= 'Project ID: ' . $project_id . "\n\n";
-                    $emailBody .= 'Submitted by: ' . ($submittingUser['name'] ?? 'Unknown') . "\n";
-                    $emailBody .= "Submitter's Email: " . ($submittingUser['email'] ?? 'Unknown') . "\n\n";
-                    $emailBody .= "Please log in to the admin dashboard to review this project " . $urlLink;
+            foreach ($adminUsers as $admin) {
+                $adminEmail = $admin['email'];
+                $adminName  = $admin['name'];
 
-                    $successCount = 0;
-                    $failureCount = 0;
-
-                    foreach ($adminUsers as $admin) {
-                        $adminEmail = $admin['email'];
-                        $adminName = $admin['name'];
-
-                        if (empty($adminEmail) || !filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
-                            error_log("Admin notification: Invalid admin email address for user: {$adminName}");
-                            $failureCount++;
-                            continue;
-                        }
-
-                        $mail = new PHPMailer\PHPMailer\PHPMailer(true);
-
-                        try {
-                            $mail->SMTPDebug = PHPMailer\PHPMailer\SMTP::DEBUG_OFF;  // Disable debug output
-                            $mail->isSMTP();
-                            $mail->Host = 'smtp.gmail.com';
-                            $mail->SMTPAuth = true;
-                            $mail->Username = $mailUsername;
-                            $mail->Password = $mailPassword;
-                            $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-                            $mail->Port = 587;
-
-                            $mail->setFrom($mailUsername, 'Hertford Standard');
-                            $mail->addAddress($adminEmail, $adminName);
-
-                            $mail->isHTML(false);  // Using plain text email
-                            $mail->Subject = $subject;
-                            $mail->Body = $emailBody;
-
-                            $mail->send();
-                            $successCount++;
-                        } catch (PHPMailer\PHPMailer\Exception $e) {
-                            $failureCount++;
-                            error_log("Admin notification failed for {$adminEmail}: " . $mail->ErrorInfo);
-                        }
-                    }
-
-                    if ($successCount > 0) {
-                        error_log("Admin notification: Sent {$successCount} new project alert(s) successfully. Failures: {$failureCount}");
-                    } else {
-                        error_log("Admin notification: Failed to send any admin notifications. All {$failureCount} attempts failed.");
-                    }
+                if (empty($adminEmail) || ! filter_var($adminEmail, FILTER_VALIDATE_EMAIL)) {
+                    error_log("Admin notification: Invalid admin email address for user: {$adminName}");
+                    $failureCount++;
+                    continue;
                 }
+
+                $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
+                try {
+                    $mail->SMTPDebug = PHPMailer\PHPMailer\SMTP::DEBUG_OFF;
+                    $mail->isSMTP();
+                    $mail->Host       = 'localhost';
+                    $mail->SMTPAuth   = false;
+                    $mail->SMTPSecure = false;
+                    $mail->Port       = 25;
+
+                    $mail->setFrom('alec@hertfordstandard.com', 'Hertford Standard');
+                    $mail->addAddress($adminEmail, $adminName);
+
+                    $mail->isHTML(false);
+                    $mail->Subject = $subject;
+                    $mail->Body    = $emailBody;
+
+                    $mail->send();
+                    $successCount++;
+                } catch (PHPMailer\PHPMailer\Exception $e) {
+                    $failureCount++;
+                    error_log("Admin notification failed for {$adminEmail}: " . $mail->ErrorInfo);
+                }
+            }
+
+            if ($successCount > 0) {
+                error_log("Admin notification: Sent {$successCount} new project alert(s) successfully. Failures: {$failureCount}");
+            } else {
+                error_log("Admin notification: Failed to send any admin notifications. All {$failureCount} attempts failed.");
             }
         } else {
             error_log('Admin notification: No admin users found in database to notify about new project submission');
@@ -255,14 +244,14 @@ try {
     }
 
     $response = [
-        'success' => true,
-        'message' => $response_message,
-        'project_id' => $project_id,
+        'success'        => true,
+        'message'        => $response_message,
+        'project_id'     => $project_id,
         'files_uploaded' => $uploaded_files,
-        'files_skipped' => $skipped_files
+        'files_skipped'  => $skipped_files,
     ];
 
-    if (!empty($file_errors)) {
+    if (! empty($file_errors)) {
         $response['file_errors'] = $file_errors;
     }
 
