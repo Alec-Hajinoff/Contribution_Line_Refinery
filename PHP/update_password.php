@@ -5,13 +5,16 @@ require_once 'session_config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -26,13 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -45,7 +49,7 @@ if ($input === null) {
     exit;
 }
 
-$token = $input['token'] ?? '';
+$token       = $input['token'] ?? '';
 $newPassword = $input['password'] ?? '';
 
 if (empty($token) || empty($newPassword)) {
@@ -61,9 +65,9 @@ if (strlen($newPassword) < 8) {
 try {
     $conn->beginTransaction();
 
-    $verifySql = 'SELECT id FROM users 
-                  WHERE password_reset_token = :token 
-                  AND password_token_expires_at > NOW() 
+    $verifySql = 'SELECT id FROM users
+                  WHERE password_reset_token = :token
+                  AND password_token_expires_at > NOW()
                   LIMIT 1';
 
     $verifyStmt = $conn->prepare($verifySql);
@@ -73,7 +77,7 @@ try {
     if ($verifyStmt->rowCount() === 0) {
         echo json_encode([
             'success' => false,
-            'message' => 'This link has expired or is invalid. Please request a new password reset link.'
+            'message' => 'This link has expired or is invalid. Please request a new password reset link.',
         ]);
         exit;
     }
@@ -82,10 +86,10 @@ try {
 
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    $updateSql = 'UPDATE users 
-                  SET password = :password, 
-                      password_reset_token = NULL, 
-                      password_token_expires_at = NULL 
+    $updateSql = 'UPDATE users
+                  SET password = :password,
+                      password_reset_token = NULL,
+                      password_token_expires_at = NULL
                   WHERE id = :id';
 
     $updateStmt = $conn->prepare($updateSql);
