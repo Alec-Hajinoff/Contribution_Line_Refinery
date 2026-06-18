@@ -5,13 +5,16 @@ require_once 'session_config.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -26,13 +29,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -55,9 +59,9 @@ if (empty($token)) {
 }
 
 try {
-    $sql = 'SELECT id FROM users 
-            WHERE password_reset_token = :token 
-            AND password_token_expires_at > NOW() 
+    $sql = 'SELECT id FROM users
+            WHERE password_reset_token = :token
+            AND password_token_expires_at > NOW()
             LIMIT 1';
 
     $stmt = $conn->prepare($sql);
@@ -68,8 +72,8 @@ try {
         echo json_encode(['valid' => true]);
     } else {
         echo json_encode([
-            'valid' => false,
-            'message' => 'This link may have expired or been used already. For your security, password reset links only work once and for a limited time.'
+            'valid'   => false,
+            'message' => 'This link may have expired or been used already. For your security, password reset links only work once and for a limited time.',
         ]);
     }
 } catch (Exception $e) {
