@@ -3,7 +3,7 @@ require_once 'session_config.php';
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-if (!isset($_SESSION['id'])) {
+if (! isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo json_encode(['success' => false, 'message' => 'You must be logged in to submit a message.']);
     exit;
@@ -12,13 +12,16 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -39,30 +42,31 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-if (!isset($_POST['project_id']) || !is_numeric($_POST['project_id'])) {
+if (! isset($_POST['project_id']) || ! is_numeric($_POST['project_id'])) {
     echo json_encode(['success' => false, 'message' => 'Project ID is required.']);
     exit;
 }
 
-if (!isset($_POST['message']) || empty(trim($_POST['message']))) {
+if (! isset($_POST['message']) || empty(trim($_POST['message']))) {
     echo json_encode(['success' => false, 'message' => 'Message is required.']);
     exit;
 }
 
 $project_id = (int) $_POST['project_id'];
-$message = trim($_POST['message']);
+$message    = trim($_POST['message']);
 
 $allowed_types = ['image/png', 'image/jpeg', 'application/pdf'];
-$max_file_size = 10 * 1024 * 1024;  // 10MB
-$max_files = 5;
+$max_file_size = 10 * 1024 * 1024; // 10MB
+$max_files     = 5;
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -72,30 +76,30 @@ try {
 }
 
 try {
-    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminSql  = 'SELECT is_admin FROM users WHERE id = :user_id';
     $adminStmt = $conn->prepare($adminSql);
     $adminStmt->execute([':user_id' => $user_id]);
-    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $user     = $adminStmt->fetch(PDO::FETCH_ASSOC);
     $is_admin = ($user && $user['is_admin'] == 1);
 
-    $verifySql = 'SELECT p.id, p.title, u.email AS owner_email, u.name AS owner_name 
-              FROM projects p 
-              INNER JOIN users u ON p.user_id = u.id 
+    $verifySql = 'SELECT p.id, p.title, u.email AS owner_email, u.name AS owner_name
+              FROM projects p
+              INNER JOIN users u ON p.user_id = u.id
               WHERE p.id = :project_id';
 
-    if (!$is_admin) {
+    if (! $is_admin) {
         $verifySql .= ' AND p.user_id = :user_id';
     }
 
     $verifyStmt = $conn->prepare($verifySql);
-    $params = [':project_id' => $project_id];
-    if (!$is_admin) {
+    $params     = [':project_id' => $project_id];
+    if (! $is_admin) {
         $params[':user_id'] = $user_id;
     }
     $verifyStmt->execute($params);
     $projectData = $verifyStmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$projectData) {
+    if (! $projectData) {
         echo json_encode(['success' => false, 'message' => 'Project not found or access denied.']);
         exit;
     }
@@ -109,24 +113,24 @@ try {
 
     $conn->beginTransaction();
 
-    $sql = 'INSERT INTO project_messages (project_id, message, created_by, created_at) 
+    $sql = 'INSERT INTO project_messages (project_id, message, created_by, created_at)
             VALUES (:project_id, :message, :created_by, NOW())';
 
     $stmt = $conn->prepare($sql);
     $stmt->execute([
         ':project_id' => $project_id,
-        ':message' => $message,
-        ':created_by' => $user_id
+        ':message'    => $message,
+        ':created_by' => $user_id,
     ]);
 
     $message_id = $conn->lastInsertId();
 
     $uploaded_files = 0;
-    $skipped_files = 0;
-    $file_errors = [];
+    $skipped_files  = 0;
+    $file_errors    = [];
 
-    if (isset($_FILES['attachments']) && !empty($_FILES['attachments']['name'][0])) {
-        $files = $_FILES['attachments'];
+    if (isset($_FILES['attachments']) && ! empty($_FILES['attachments']['name'][0])) {
+        $files      = $_FILES['attachments'];
         $file_count = count($files['name']);
 
         if ($file_count > $max_files) {
@@ -149,9 +153,9 @@ try {
             $file_name = $files['name'][$i];
             $file_type = $files['type'][$i];
             $file_size = $files['size'][$i];
-            $file_tmp = $files['tmp_name'][$i];
+            $file_tmp  = $files['tmp_name'][$i];
 
-            if (!in_array($file_type, $allowed_types)) {
+            if (! in_array($file_type, $allowed_types)) {
                 $skipped_files++;
                 $file_errors[] = "File '{$file_name}' skipped: Invalid file type. Allowed: PNG, JPEG, PDF";
                 continue;
@@ -170,8 +174,8 @@ try {
                 continue;
             }
 
-            $sql_attachment = 'INSERT INTO message_attachments 
-                              (project_message_id, attachment, attachment_name, attachment_type, uploaded_by, uploaded_at) 
+            $sql_attachment = 'INSERT INTO message_attachments
+                              (project_message_id, attachment, attachment_name, attachment_type, uploaded_by, uploaded_at)
                               VALUES (:project_message_id, :attachment, :attachment_name, :attachment_type, :uploaded_by, NOW())';
 
             $stmt_attachment = $conn->prepare($sql_attachment);
@@ -193,93 +197,79 @@ try {
     $conn->commit();
 
     try {
-        $userSql = 'SELECT name, email FROM users WHERE id = :user_id';
+        $userSql  = 'SELECT name, email FROM users WHERE id = :user_id';
         $userStmt = $conn->prepare($userSql);
         $userStmt->execute([':user_id' => $user_id]);
         $messagingUser = $userStmt->fetch(PDO::FETCH_ASSOC);
 
-        $config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
+        $recipients = [];
 
-        if ($config === false) {
-            error_log('Notification system: Failed to parse .env file for mail credentials');
+        if ($is_admin) {
+            $recipients[] = [
+                'email' => $projectData['owner_email'],
+                'name'  => $projectData['owner_name'],
+            ];
         } else {
-            $mailUsername = $config['MAIL_USERNAME'] ?? '';
-            $mailPassword = $config['MAIL_PASSWORD'] ?? '';
+            $adminSql  = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
+            $adminStmt = $conn->prepare($adminSql);
+            $adminStmt->execute();
+            $recipients = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
+        }
 
-            if (empty($mailUsername) || empty($mailPassword)) {
-                error_log('Notification system: Gmail credentials not found in .env file');
-            } else {
-                $recipients = [];
+        $urlLink = 'https://hertfordstandard.com';
+        $subject = 'New Message Added to Project - Hertford Standard';
 
-                if ($is_admin) {
-                    $recipients[] = [
-                        'email' => $projectData['owner_email'],
-                        'name' => $projectData['owner_name']
-                    ];
-                } else {
-                    $adminSql = 'SELECT email, name FROM users WHERE is_admin = 1 AND is_verified = 1';
-                    $adminStmt = $conn->prepare($adminSql);
-                    $adminStmt->execute();
-                    $recipients = $adminStmt->fetchAll(PDO::FETCH_ASSOC);
+        $emailBody  = "A new message has been added to a project on Hertford Standard.\n\n";
+        $emailBody .= 'Project Title: ' . $projectTitle . "\n";
+        $emailBody .= 'Project ID: ' . $project_id . "\n";
+        $emailBody .= 'Message ID: ' . $message_id . "\n\n";
+        $emailBody .= 'Submitted by: ' . ($messagingUser['name'] ?? 'Unknown') . "\n";
+        $emailBody .= "Submitter's Email: " . ($messagingUser['email'] ?? 'Unknown') . "\n\n";
+        $emailBody .= "Message Content:\n\"" . $message . "\"\n\n";
+        $emailBody .= 'Please log in to your dashboard to review this message ' . $urlLink;
+
+        $successCount = 0;
+        $failureCount = 0;
+
+        if (! empty($recipients)) {
+            foreach ($recipients as $recipient) {
+                $targetEmail = $recipient['email'];
+                $targetName  = $recipient['name'];
+
+                if (empty($targetEmail) || ! filter_var($targetEmail, FILTER_VALIDATE_EMAIL)) {
+                    error_log("Notification: Invalid email address for user: {$targetName}");
+                    $failureCount++;
+                    continue;
                 }
-                $urlLink = 'https://hertfordstandard.com';
-                $subject = 'New Message Added to Project - Hertford Standard';
 
-                $emailBody = "A new message has been added to a project on Hertford Standard.\n\n";
-                $emailBody .= 'Project Title: ' . $projectTitle . "\n";
-                $emailBody .= 'Project ID: ' . $project_id . "\n";
-                $emailBody .= 'Message ID: ' . $message_id . "\n\n";
-                $emailBody .= 'Submitted by: ' . ($messagingUser['name'] ?? 'Unknown') . "\n";
-                $emailBody .= "Submitter's Email: " . ($messagingUser['email'] ?? 'Unknown') . "\n\n";
-                $emailBody .= "Message Content:\n\"" . $message . "\"\n\n";
-                $emailBody .= 'Please log in to your dashboard to review this message ' . $urlLink;
+                $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 
-                $successCount = 0;
-                $failureCount = 0;
+                try {
+                    $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_OFF;
+                    $mail->isSMTP();
+                    $mail->Host       = 'localhost';
+                    $mail->SMTPAuth   = false;
+                    $mail->SMTPSecure = false;
+                    $mail->Port       = 25;
 
-                if (!empty($recipients)) {
-                    foreach ($recipients as $recipient) {
-                        $targetEmail = $recipient['email'];
-                        $targetName = $recipient['name'];
+                    $mail->setFrom('alec@hertfordstandard.com', 'Hertford Standard');
+                    $mail->addAddress($targetEmail, $targetName);
 
-                        if (empty($targetEmail) || !filter_var($targetEmail, FILTER_VALIDATE_EMAIL)) {
-                            error_log("Notification: Invalid email address for user: {$targetName}");
-                            $failureCount++;
-                            continue;
-                        }
+                    $mail->isHTML(false);
+                    $mail->Subject = $subject;
+                    $mail->Body    = $emailBody;
 
-                        $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
-
-                        try {
-                            $mail->SMTPDebug = \PHPMailer\PHPMailer\SMTP::DEBUG_OFF;
-                            $mail->isSMTP();
-                            $mail->Host = 'smtp.gmail.com';
-                            $mail->SMTPAuth = true;
-                            $mail->Username = $mailUsername;
-                            $mail->Password = $mailPassword;
-                            $mail->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-                            $mail->Port = 587;
-
-                            $mail->setFrom($mailUsername, 'Hertford Standard');
-                            $mail->addAddress($targetEmail, $targetName);
-
-                            $mail->isHTML(false);
-                            $mail->Subject = $subject;
-                            $mail->Body = $emailBody;
-
-                            $mail->send();
-                            $successCount++;
-                        } catch (\PHPMailer\PHPMailer\Exception $e) {
-                            $failureCount++;
-                            error_log("Notification failed for {$targetEmail}: " . $mail->ErrorInfo);
-                        }
-                    }
-
-                    error_log("Notification system: Sent {$successCount} alert(s) successfully. Failures: {$failureCount}");
-                } else {
-                    error_log('Notification system: No valid recipients found to notify.');
+                    $mail->send();
+                    $successCount++;
+                } catch (\PHPMailer\PHPMailer\Exception $e) {
+                    $failureCount++;
+                    error_log("Notification failed for {$targetEmail}: " . $mail->ErrorInfo);
                 }
             }
+
+            error_log("Notification system: Sent {$successCount} alert(s) successfully. Failures: {$failureCount}");
+        } else {
+            error_log('Notification system: No valid recipients found to notify.');
         }
     } catch (Exception $e) {
         error_log('Notification system unexpected error: ' . $e->getMessage());
@@ -294,14 +284,14 @@ try {
     }
 
     $response = [
-        'success' => true,
-        'message' => $response_message,
-        'message_id' => $message_id,
+        'success'        => true,
+        'message'        => $response_message,
+        'message_id'     => $message_id,
         'files_uploaded' => $uploaded_files,
-        'files_skipped' => $skipped_files
+        'files_skipped'  => $skipped_files,
     ];
 
-    if (!empty($file_errors)) {
+    if (! empty($file_errors)) {
         $response['file_errors'] = $file_errors;
     }
 
