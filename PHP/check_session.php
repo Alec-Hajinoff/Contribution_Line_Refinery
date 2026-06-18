@@ -2,15 +2,16 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if ($origin === null || $origin === '') {
-} elseif (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
-    header('Access-Control-Allow-Credentials: true');
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -26,10 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $isAuthenticated = isset($_SESSION['id']);
-$isAdmin = $isAuthenticated && isset($_SESSION['is_admin']) ? (bool) $_SESSION['is_admin'] : false;
+$isAdmin         = $isAuthenticated && isset($_SESSION['is_admin']) ? (bool) $_SESSION['is_admin'] : false;
 
 echo json_encode([
     'authenticated' => $isAuthenticated,
-    'userId' => $isAuthenticated ? $_SESSION['id'] : null,
-    'is_admin' => $isAdmin
+    'userId'        => $isAuthenticated ? $_SESSION['id'] : null,
+    'is_admin'      => $isAdmin,
 ]);
