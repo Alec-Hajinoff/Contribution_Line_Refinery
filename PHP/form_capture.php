@@ -7,30 +7,17 @@ use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 
-$config = parse_ini_file(__DIR__ . '/../.env', false, INI_SCANNER_RAW);
-if ($config === false) {
-    error_log('Failed to parse .env file');
-    echo json_encode(['success' => false, 'message' => 'Server configuration error']);
-    exit;
-}
-
-$mailUsername = $config['MAIL_USERNAME'];
-$mailPassword = $config['MAIL_PASSWORD'];
-
-if (empty($mailUsername) || empty($mailPassword)) {
-    error_log('Gmail credentials not found in .env file');
-    echo json_encode(['success' => false, 'message' => 'Server configuration error']);
-    exit;
-}
-
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -45,13 +32,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -64,22 +52,22 @@ if ($input === null) {
     exit;
 }
 
-$name = $input['name'] ?? null;
-$email = filter_var($input['email'] ?? '', FILTER_SANITIZE_EMAIL);
+$name     = $input['name'] ?? null;
+$email    = filter_var($input['email'] ?? '', FILTER_SANITIZE_EMAIL);
 $password = $input['password'] ?? null;
 
-if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+if (! filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo json_encode(['success' => false, 'message' => 'Invalid email format']);
     exit;
 }
 
-if (!$name || !$email || !$password) {
+if (! $name || ! $email || ! $password) {
     echo json_encode(['success' => false, 'message' => 'Missing required fields']);
     exit;
 }
 
 try {
-    $checkSql = 'SELECT id FROM users WHERE email = :email LIMIT 1';
+    $checkSql  = 'SELECT id FROM users WHERE email = :email LIMIT 1';
     $checkStmt = $conn->prepare($checkSql);
     $checkStmt->bindParam(':email', $email);
     $checkStmt->execute();
@@ -87,14 +75,14 @@ try {
     if ($checkStmt->rowCount() > 0) {
         echo json_encode([
             'success' => false,
-            'message' => 'We couldn’t use this email. Please try a different one.'
+            'message' => 'We couldn’t use this email. Please try a different one.',
         ]);
         exit;
     }
 } catch (Exception $e) {
     echo json_encode([
         'success' => false,
-        'message' => 'Database error during email verification'
+        'message' => 'Database error during email verification',
     ]);
     exit;
 }
@@ -119,26 +107,24 @@ try {
 
         $userId = $conn->lastInsertId();
 
-        $verificationLink = 'http://localhost:3000/VerifyEmail?token=' . urlencode($verificationToken);
+        $verificationLink = 'https://hertfordstandard.com/VerifyEmail?token=' . urlencode($verificationToken);
 
         $mail = new PHPMailer(true);
 
         try {
             $mail->SMTPDebug = SMTP::DEBUG_OFF;
             $mail->isSMTP();
-            $mail->Host = 'smtp.gmail.com';
-            $mail->SMTPAuth = true;
-            $mail->Username = $mailUsername;
-            $mail->Password = $mailPassword;
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port = 587;
+            $mail->Host       = 'localhost';
+            $mail->SMTPAuth   = false;
+            $mail->SMTPSecure = false;
+            $mail->Port       = 25;
 
-            $mail->setFrom($mailUsername, 'Hertford Standard');
+            $mail->setFrom('alec@hertfordstandard.com', 'Hertford Standard');
             $mail->addAddress($email, $name);
 
             $mail->isHTML(false);
             $mail->Subject = 'Verify your email address - Hertford Standard';
-            $mail->Body = "Thank you for creating an account with Hertford Standard.\n\n"
+            $mail->Body    = "Thank you for creating an account with Hertford Standard.\n\n"
                 . "Please click the link below to verify your email address:\n"
                 . $verificationLink . "\n\n"
                 . "Once verified, you will be able to sign in to your account.\n\n"
@@ -154,7 +140,7 @@ try {
             error_log('PHPMailer Error: ' . $e->getMessage());
             echo json_encode([
                 'success' => false,
-                'message' => 'Registration completed but failed to send verification email. Please contact support.'
+                'message' => 'Registration completed but failed to send verification email. Please contact support.',
             ]);
         }
     } else {
