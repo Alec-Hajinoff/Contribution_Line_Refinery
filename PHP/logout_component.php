@@ -2,13 +2,16 @@
 require_once 'session_config.php';
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -43,13 +46,13 @@ try {
 
     http_response_code(200);
     echo json_encode([
-        'ok' => true,
-        'message' => 'Successfully logged out'
+        'ok'      => true,
+        'message' => 'Successfully logged out',
     ]);
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode([
-        'ok' => false,
-        'message' => 'Error during logout: ' . $e->getMessage()
+        'ok'      => false,
+        'message' => 'Error during logout: ' . $e->getMessage(),
     ]);
 }
