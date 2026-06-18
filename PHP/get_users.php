@@ -1,7 +1,7 @@
 <?php
 require_once 'session_config.php';
 
-if (!isset($_SESSION['id'])) {
+if (! isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo json_encode(['success' => false, 'message' => 'You must be logged in to view users.']);
     exit;
@@ -10,13 +10,16 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 
 $allowed_origins = [
-    'http://localhost:3000'
+    'http://localhost:3000',
+    'https://hertfordstandard.com',
+    'https://www.hertfordstandard.com',
 ];
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+$origin = $_SERVER['HTTP_ORIGIN'] ?? null;
 
-if (in_array($origin, $allowed_origins)) {
+if ($origin !== null && in_array($origin, $allowed_origins)) {
     header("Access-Control-Allow-Origin: $origin");
+} elseif ($origin === null) {
 } else {
     header('HTTP/1.1 403 Forbidden');
     exit;
@@ -37,13 +40,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
     exit;
 }
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch (PDOException $e) {
@@ -53,19 +57,19 @@ try {
 }
 
 try {
-    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminSql  = 'SELECT is_admin FROM users WHERE id = :user_id';
     $adminStmt = $conn->prepare($adminSql);
     $adminStmt->execute([':user_id' => $user_id]);
-    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $user     = $adminStmt->fetch(PDO::FETCH_ASSOC);
     $is_admin = ($user && $user['is_admin'] == 1);
 
-    if (!$is_admin) {
+    if (! $is_admin) {
         echo json_encode(['success' => false, 'message' => 'Access denied. Only administrators can view users.']);
         exit;
     }
 
-    $sql = 'SELECT id, name, email, is_admin, is_verified 
-            FROM users 
+    $sql = 'SELECT id, name, email, is_admin, is_verified
+            FROM users
             ORDER BY name ASC';
 
     $stmt = $conn->prepare($sql);
@@ -74,7 +78,7 @@ try {
 
     echo json_encode([
         'success' => true,
-        'users' => $users
+        'users'   => $users,
     ]);
 } catch (PDOException $e) {
     error_log('Get users error: ' . $e->getMessage());
