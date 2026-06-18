@@ -1,7 +1,7 @@
 <?php
 require_once 'session_config.php';
 
-if (!isset($_SESSION['id'])) {
+if (! isset($_SESSION['id'])) {
     header('HTTP/1.1 401 Unauthorized');
     echo 'You must be logged in to download attachments.';
     exit;
@@ -11,32 +11,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     exit;
 }
 
-if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+if (! isset($_GET['id']) || ! is_numeric($_GET['id'])) {
     header('HTTP/1.1 400 Bad Request');
     echo 'Invalid attachment ID.';
     exit;
 }
 
 $attachment_id = $_GET['id'];
-$user_id = $_SESSION['id'];
+$user_id       = $_SESSION['id'];
 
-$servername = '127.0.0.1';
-$username = 'root';
-$passwordServer = '';
-$dbname = 'hertford_standard';
+$servername     = 'localhost';
+$username       = 'hertford_standard_user';
+$passwordServer = 'T6hhZ2Lz3UQbXBK';
+$dbname         = 'hertford_standard';
+$port           = 3306;
 
 try {
-    $conn = new PDO("mysql:host=$servername;dbname=$dbname", $username, $passwordServer);
+    $conn = new PDO("mysql:host=$servername;port=$port;dbname=$dbname", $username, $passwordServer);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $adminSql = 'SELECT is_admin FROM users WHERE id = :user_id';
+    $adminSql  = 'SELECT is_admin FROM users WHERE id = :user_id';
     $adminStmt = $conn->prepare($adminSql);
     $adminStmt->execute([':user_id' => $user_id]);
-    $user = $adminStmt->fetch(PDO::FETCH_ASSOC);
+    $user     = $adminStmt->fetch(PDO::FETCH_ASSOC);
     $is_admin = ($user && $user['is_admin'] == 1);
 
     if ($is_admin) {
-        $sql = 'SELECT ma.attachment, ma.attachment_name, ma.attachment_type 
+        $sql = 'SELECT ma.attachment, ma.attachment_name, ma.attachment_type
                 FROM message_attachments ma
                 JOIN project_messages pm ON ma.project_message_id = pm.id
                 JOIN projects p ON pm.project_id = p.id
@@ -44,7 +45,7 @@ try {
         $stmt = $conn->prepare($sql);
         $stmt->execute([':attachment_id' => $attachment_id]);
     } else {
-        $sql = 'SELECT ma.attachment, ma.attachment_name, ma.attachment_type 
+        $sql = 'SELECT ma.attachment, ma.attachment_name, ma.attachment_type
                 FROM message_attachments ma
                 JOIN project_messages pm ON ma.project_message_id = pm.id
                 JOIN projects p ON pm.project_id = p.id
@@ -52,13 +53,13 @@ try {
         $stmt = $conn->prepare($sql);
         $stmt->execute([
             ':attachment_id' => $attachment_id,
-            ':user_id' => $user_id
+            ':user_id'       => $user_id,
         ]);
     }
 
     $attachment = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!$attachment) {
+    if (! $attachment) {
         header('HTTP/1.1 404 Not Found');
         echo 'Attachment not found.';
         exit;
