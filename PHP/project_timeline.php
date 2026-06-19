@@ -109,8 +109,8 @@ try {
         $attachments = $attachmentStmt->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($attachments as &$attachment) {
-            $attachment['view_url']     = 'https://hertfordstandard.com/PHP/view_message_attachment.php?id=' . $attachment['id'];
-            $attachment['download_url'] = 'https://hertfordstandard.com/PHP/download_message_attachment.php?id=' . $attachment['id'];
+            $attachment['view_url']     = 'https://hertfordstandard.com/Hertford_Standard/PHP/view_message_attachment.php?id=' . $attachment['id'];
+            $attachment['download_url'] = 'https://hertfordstandard.com/Hertford_Standard/PHP/download_message_attachment.php?id=' . $attachment['id'];
         }
 
         $message['attachments'] = $attachments;
