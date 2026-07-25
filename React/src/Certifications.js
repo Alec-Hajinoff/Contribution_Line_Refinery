@@ -37,7 +37,7 @@ function Certifications() {
 
   return (
     <div className="certifications-container">
-      <h2 className="h5 mt-4">Certifications</h2>
+      <h2 className="h5 mt-4 mb-4">Certifications</h2>
 
       <div className="certifications-list-horizontal">
         {certificationsList.map((cert, index) => (
