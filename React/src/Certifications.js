@@ -29,6 +29,10 @@ function Certifications() {
       name: "Bootstrap",
       path: "/Certifications/Completion_Certificate_Learn_Bootstrap.pdf",
     },
+    {
+      name: "Affinity Designer",
+      path: "/Certifications/Completion_Certificate_Affinity_Designer.pdf",
+    },
   ];
 
   return (
