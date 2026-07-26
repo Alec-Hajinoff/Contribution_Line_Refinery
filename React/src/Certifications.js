@@ -29,11 +29,15 @@ function Certifications() {
       name: "Bootstrap",
       path: "/Certifications/Completion_Certificate_Learn_Bootstrap.pdf",
     },
+        {
+      name: "Affinity Designer",
+      path: "/Certifications/Completion_Certificate_Affinity_Designer.pdf",
+    },
   ];
 
   return (
     <div className="certifications-container">
-      <h2 className="h5 mt-4">Certifications</h2>
+      <h2 className="h5 mt-4 mb-4">Certifications</h2>
 
       <div className="certifications-list-horizontal">
         {certificationsList.map((cert, index) => (
