@@ -7,6 +7,7 @@ import htmlLogo from "./Images/html5.svg";
 import jsLogo from "./Images/javascript.svg";
 import mysqlLogo from "./Images/mysql-wordmark-light.svg";
 import phpLogo from "./Images/php.svg";
+import affinityDesignerLogo from "./Images/affinity_designer.svg";
 
 function TechnologyStack() {
   const techCategories = [
@@ -18,6 +19,7 @@ function TechnologyStack() {
         { name: "JavaScript", logo: jsLogo },
         { name: "React", logo: reactLogo },
         { name: "Bootstrap", logo: bootstrapLogo },
+        { name: "Affinity Designer", logo: affinityDesignerLogo },
       ],
     },
     {
